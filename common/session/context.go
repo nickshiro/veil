@@ -2,15 +2,11 @@ package session
 
 import (
 	"context"
-	_ "unsafe"
 
 	"github.com/nickshiro/veil/common/ctx"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/features/outbound"
 )
-
-//go:linkname IndependentCancelCtx context.newCancelCtx
-func IndependentCancelCtx(parent context.Context) context.Context
 
 const (
 	inboundSessionKey         ctx.SessionKey = 1
