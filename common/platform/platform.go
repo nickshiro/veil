@@ -1,8 +1,6 @@
 package platform // import "github.com/nickshiro/veil/common/platform"
 
 import (
-	"errors"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -90,27 +88,4 @@ func GetConfigurationPath() string {
 func GetConfDirPath() string {
 	configPath := NewEnvFlag(ConfdirLocation).GetValue(func() string { return "" })
 	return configPath
-}
-
-func resolveFile(paths []string) (string, error) {
-	var tried []string
-	for _, path := range paths {
-		path, err := filepath.Abs(path)
-		if err != nil {
-			return "", fmt.Errorf("failed to resolve file path: %w", err)
-		}
-		tried = append(tried, path)
-		info, err := os.Stat(path)
-		if errors.Is(err, os.ErrNotExist) {
-			continue
-		}
-		if err != nil {
-			return "", fmt.Errorf("failed to inspect file %q: %w", path, err)
-		}
-		if !info.Mode().IsRegular() {
-			return "", fmt.Errorf("file is not a regular file: %s", path)
-		}
-		return path, nil
-	}
-	return "", fmt.Errorf("file not found; tried %q: %w", tried, os.ErrNotExist)
 }
