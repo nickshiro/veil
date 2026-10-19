@@ -22,7 +22,6 @@ import (
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/retry"
 	"github.com/nickshiro/veil/common/serial"
-	"github.com/nickshiro/veil/common/units"
 	core "github.com/nickshiro/veil/core"
 	"google.golang.org/protobuf/proto"
 )
@@ -208,9 +207,9 @@ func testTCPConn2(conn net.Conn, payloadSize int, timeout time.Duration) func() 
 			runtime.ReadMemStats(&m)
 			// For info on each, see: https://golang.org/pkg/runtime/#MemStats
 			fmt.Println("testConn finishes:", time.Since(start).Milliseconds(), "ms\t",
-				err1, "\tAlloc =", units.ByteSize(m.Alloc).String(),
-				"\tTotalAlloc =", units.ByteSize(m.TotalAlloc).String(),
-				"\tSys =", units.ByteSize(m.Sys).String(),
+				err1, "\tAlloc =", m.Alloc, "bytes",
+				"\tTotalAlloc =", m.TotalAlloc, "bytes",
+				"\tSys =", m.Sys, "bytes",
 				"\tNumGC =", m.NumGC)
 		}()
 		singleWrite := func(length int) error {
