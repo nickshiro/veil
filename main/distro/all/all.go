@@ -73,7 +73,4 @@ import (
 
 	// Load config from file or http(s)
 	_ "github.com/nickshiro/veil/main/confloader/external"
-
-	// Commands
-	_ "github.com/nickshiro/veil/main/commands/all"
 )
