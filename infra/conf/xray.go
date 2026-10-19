@@ -467,7 +467,7 @@ type Config struct {
 	API              *APIConfig              `json:"api"`
 	Metrics          *MetricsConfig          `json:"metrics"`
 	Stats            *StatsConfig            `json:"stats"`
-	Reverse          *ReverseConfig          `json:"reverse"`
+	Reverse          json.RawMessage         `json:"reverse"` // Retained to reject removed legacy reverse configuration.
 	FakeDNS          *FakeDNSConfig          `json:"fakeDns"`
 	Observatory      *ObservatoryConfig      `json:"observatory"`
 	BurstObservatory *BurstObservatoryConfig `json:"burstObservatory"`
