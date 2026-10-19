@@ -125,6 +125,7 @@ end
 }
 
 func TestDNSScriptGeoIPFallback(t *testing.T) {
+	t.Skip("requires resources/geoip.dat")
 	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 	script := `
 local servers = require("xray.dns").Servers

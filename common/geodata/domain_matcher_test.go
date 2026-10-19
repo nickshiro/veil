@@ -31,6 +31,7 @@ func TestCompactDomainMatcher_PreservesCustomRuleIndices(t *testing.T) {
 }
 
 func TestCompactDomainMatcher_PreservesMixedRuleIndices(t *testing.T) {
+	t.Skip("requires resources/geosite.dat")
 	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 
 	factory := &CompactMphDomainMatcherFactory{shared: utils.NewWeakCacheMap[string, strmatcher.MphValueMatcher]()}
@@ -77,6 +78,7 @@ func TestMphDomainMatcher_MatchReturnsDetachedSlice(t *testing.T) {
 // DNS sorts every Match result in place, so a matcher must never hand out a
 // slice it keeps, also when only its keyword or regex part matches.
 func TestDomainMatcher_MatchResultsCanBeSortedConcurrently(t *testing.T) {
+	t.Skip("requires resources/geosite.dat")
 	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 
 	rules := []*DomainRule{

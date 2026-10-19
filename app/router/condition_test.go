@@ -303,6 +303,7 @@ func TestRoutingRule(t *testing.T) {
 }
 
 func TestChinaSites(t *testing.T) {
+	t.Skip("requires resources/geosite.dat")
 	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 	rules, err := geodata.ParseDomainRules([]string{"geosite:cn"}, geodata.Domain_Substr)
 	common.Must(err)
@@ -371,6 +372,7 @@ func TestLocalOSRule(t *testing.T) {
 }
 
 func BenchmarkMphDomainMatcher(b *testing.B) {
+	b.Skip("requires resources/geosite.dat")
 	b.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 	rules, err := geodata.ParseDomainRules([]string{"geosite:cn"}, geodata.Domain_Substr)
 	common.Must(err)
@@ -414,6 +416,7 @@ func BenchmarkMphDomainMatcher(b *testing.B) {
 }
 
 func BenchmarkMultiGeoIPMatcher(b *testing.B) {
+	b.Skip("requires resources/geoip.dat")
 	b.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 	rules, err := geodata.ParseIPRules([]string{"geoip:cn", "geoip:jp", "geoip:ca", "geoip:us"})
 	common.Must(err)

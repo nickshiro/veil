@@ -9,6 +9,7 @@ import (
 )
 
 func TestGeodataConfig(t *testing.T) {
+	t.Skip("requires resources/geoip.dat and resources/geosite.dat")
 	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 
 	creator := func() Buildable {
@@ -39,6 +40,7 @@ func TestGeodataConfig(t *testing.T) {
 }
 
 func TestGeodataAssetConfig(t *testing.T) {
+	t.Skip("requires resources/geoip.dat")
 	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
 
 	if _, err := (&GeodataAssetConfig{
