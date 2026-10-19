@@ -15,7 +15,3 @@ func (b *Byte) Set(bb Byte) {
 func (b *Byte) Clear(bb Byte) {
 	*b &= ^bb
 }
-
-func (b *Byte) Toggle(bb Byte) {
-	*b ^= bb
-}

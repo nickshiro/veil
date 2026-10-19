@@ -28,9 +28,4 @@ func TestBitmaskByte(t *testing.T) {
 	if b.Has(1) {
 		t.Fatal("expected ", b, " to not contain 1, but actually did")
 	}
-
-	b.Toggle(Byte(2))
-	if b.Has(2) {
-		t.Fatal("expected ", b, " to not contain 2, but actually did")
-	}
 }
