@@ -3,6 +3,7 @@ package encoding
 import (
 	"bytes"
 	"context"
+	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
@@ -233,7 +234,7 @@ func (c *ClientSession) DecodeResponseHeader(reader io.Reader) (*protocol.Respon
 		}
 	}
 	aesStream := crypto.NewAesDecryptionStream(c.responseBodyKey[:], c.responseBodyIV[:])
-	c.responseReader = crypto.NewCryptionReader(aesStream, reader)
+	c.responseReader = &cipher.StreamReader{S: aesStream, R: reader}
 	return header, nil
 }
 

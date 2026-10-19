@@ -7,26 +7,6 @@ import (
 	"github.com/nickshiro/veil/common/buf"
 )
 
-type CryptionReader struct {
-	stream cipher.Stream
-	reader io.Reader
-}
-
-func NewCryptionReader(stream cipher.Stream, reader io.Reader) *CryptionReader {
-	return &CryptionReader{
-		stream: stream,
-		reader: reader,
-	}
-}
-
-func (r *CryptionReader) Read(data []byte) (int, error) {
-	nBytes, err := r.reader.Read(data)
-	if nBytes > 0 {
-		r.stream.XORKeyStream(data[:nBytes], data[:nBytes])
-	}
-	return nBytes, err
-}
-
 var _ buf.Writer = (*CryptionWriter)(nil)
 
 type CryptionWriter struct {
