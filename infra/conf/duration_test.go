@@ -1,20 +1,20 @@
-package duration_test
+package conf_test
 
 import (
 	"encoding/json"
 	"testing"
 	"time"
 
-	"github.com/nickshiro/veil/infra/conf/cfgcommon/duration"
+	"github.com/nickshiro/veil/infra/conf"
 )
 
 type testWithDuration struct {
-	Duration duration.Duration
+	Duration conf.Duration
 }
 
 func TestDurationJSON(t *testing.T) {
 	expected := &testWithDuration{
-		Duration: duration.Duration(time.Hour),
+		Duration: conf.Duration(time.Hour),
 	}
 	data, err := json.Marshal(expected)
 	if err != nil {

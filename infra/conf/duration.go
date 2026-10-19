@@ -1,4 +1,4 @@
-package duration
+package conf
 
 import (
 	"encoding/json"

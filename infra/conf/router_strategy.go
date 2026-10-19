@@ -7,7 +7,6 @@ import (
 
 	"github.com/nickshiro/veil/app/observatory/burst"
 	"github.com/nickshiro/veil/app/router"
-	"github.com/nickshiro/veil/infra/conf/cfgcommon/duration"
 )
 
 const (
@@ -34,23 +33,23 @@ type strategyLeastLoadConfig struct {
 	// weight settings
 	Costs []*router.StrategyWeight `json:"costs,omitempty"`
 	// ping rtt baselines
-	Baselines []duration.Duration `json:"baselines,omitempty"`
+	Baselines []Duration `json:"baselines,omitempty"`
 	// expected nodes count to select
 	Expected int32 `json:"expected,omitempty"`
 	// max acceptable rtt, filter away high delay nodes. default 0
-	MaxRTT duration.Duration `json:"maxRTT,omitempty"`
+	MaxRTT Duration `json:"maxRTT,omitempty"`
 	// acceptable failure rate
 	Tolerance float64 `json:"tolerance,omitempty"`
 }
 
 // HealthCheckSettings holds settings for health Checker
 type HealthCheckSettings struct {
-	Destination   string            `json:"destination"`
-	Connectivity  string            `json:"connectivity"`
-	Interval      duration.Duration `json:"interval"`
-	SamplingCount int               `json:"sampling"`
-	Timeout       duration.Duration `json:"timeout"`
-	HttpMethod    string            `json:"httpMethod"`
+	Destination   string   `json:"destination"`
+	Connectivity  string   `json:"connectivity"`
+	Interval      Duration `json:"interval"`
+	SamplingCount int      `json:"sampling"`
+	Timeout       Duration `json:"timeout"`
+	HttpMethod    string   `json:"httpMethod"`
 }
 
 func (h HealthCheckSettings) Build() (proto.Message, error) {

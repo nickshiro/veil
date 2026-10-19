@@ -6,14 +6,13 @@ import (
 	"github.com/nickshiro/veil/app/observatory"
 	"github.com/nickshiro/veil/app/observatory/burst"
 	"github.com/nickshiro/veil/common/errors"
-	"github.com/nickshiro/veil/infra/conf/cfgcommon/duration"
 )
 
 type ObservatoryConfig struct {
-	SubjectSelector   []string          `json:"subjectSelector"`
-	ProbeURL          string            `json:"probeURL"`
-	ProbeInterval     duration.Duration `json:"probeInterval"`
-	EnableConcurrency bool              `json:"enableConcurrency"`
+	SubjectSelector   []string `json:"subjectSelector"`
+	ProbeURL          string   `json:"probeURL"`
+	ProbeInterval     Duration `json:"probeInterval"`
+	EnableConcurrency bool     `json:"enableConcurrency"`
 }
 
 func (o *ObservatoryConfig) Build() (proto.Message, error) {
