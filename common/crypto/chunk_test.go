@@ -13,7 +13,7 @@ import (
 func TestChunkStreamReader(t *testing.T) {
 	// Two length-prefixed chunks followed by the zero-length end marker.
 	cache := bytes.NewReader([]byte{0, 4, 'a', 'b', 'c', 'd', 0, 3, 'e', 'f', 'g', 0, 0})
-	reader := NewChunkStreamReader(PlainChunkSizeParser{}, cache)
+	reader := NewChunkStreamReaderWithChunkCount(PlainChunkSizeParser{}, cache, 0)
 
 	mb, err := reader.ReadMultiBuffer()
 	common.Must(err)
