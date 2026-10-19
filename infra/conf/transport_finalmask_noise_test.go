@@ -134,12 +134,3 @@ func TestNoiseExpFromJSON(t *testing.T) {
 		t.Errorf("item 3 = %+v", items[3])
 	}
 }
-
-func buildNoiseMask(t *testing.T, mask *NoiseMask) *noise.Config {
-	t.Helper()
-	msg, err := mask.Build()
-	if err != nil {
-		t.Fatal(err)
-	}
-	return msg.(*noise.Config)
-}

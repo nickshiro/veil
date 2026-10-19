@@ -34,17 +34,6 @@ func xor(b []byte) []byte {
 	return r
 }
 
-func readFrom(conn net.Conn, timeout time.Duration, length int) []byte {
-	b := make([]byte, length)
-	deadline := time.Now().Add(timeout)
-	conn.SetReadDeadline(deadline)
-	n, err := io.ReadFull(conn, b[:length])
-	if err != nil {
-		fmt.Println("Unexpected error from readFrom:", err)
-	}
-	return b[:n]
-}
-
 func readFrom2(conn net.Conn, timeout time.Duration, length int) ([]byte, error) {
 	b := make([]byte, length)
 	deadline := time.Now().Add(timeout)

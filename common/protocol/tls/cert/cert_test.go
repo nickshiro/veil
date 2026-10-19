@@ -13,13 +13,13 @@ import (
 )
 
 func TestGenerate(t *testing.T) {
-	err := generate(nil, true, true, "ca")
+	err := generate(nil, true, true)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
-func generate(domainNames []string, isCA bool, jsonOutput bool, fileOutput string) error {
+func generate(domainNames []string, isCA bool, jsonOutput bool) error {
 	commonName := "Xray Root CA"
 	organization := "Xray Inc"
 

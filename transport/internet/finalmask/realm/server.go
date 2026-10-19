@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/netip"
 	"slices"
-	"strings"
 	"sync"
 	"time"
 
@@ -51,9 +50,8 @@ type realmConnServer struct {
 	stun   chan STUNPacketEvent
 	mu     sync.Mutex
 
-	locals     []netip.AddrPort
-	localsMu   sync.Mutex
-	localsLast time.Time
+	locals   []netip.AddrPort
+	localsMu sync.Mutex
 }
 
 func NewConnServer(config *Config, raw net.PacketConn) (net.PacketConn, error) {
@@ -156,57 +154,8 @@ func (c *realmConnServer) waitctx(ctx context.Context, t time.Duration) bool {
 	}
 }
 
-func (c *realmConnServer) discover(servers []*net.UDPAddr) []netip.AddrPort {
-	transactionIDs := make(map[[stun.TransactionIDSize]byte]struct{}, len(servers))
-	for _, server := range servers {
-		msg := common.Must2(stun.Build(stun.TransactionID, stun.BindingRequest))
-		transactionIDs[msg.TransactionID] = struct{}{}
-		_, _ = c.PacketConn.WriteTo(msg.Raw, server)
-	}
-
-	deadline := time.NewTimer(c.stunTimeout)
-	results := make([]netip.AddrPort, 0, len(servers))
-	for len(transactionIDs) > 0 {
-		select {
-		case <-c.ctx.Done():
-			goto end
-		case <-deadline.C:
-			goto end
-		case ev := <-c.stun:
-			if _, ok := transactionIDs[ev.Message.TransactionID]; ok {
-				delete(transactionIDs, ev.Message.TransactionID)
-				results = append(results, ev.Addr)
-			}
-		}
-	}
-end:
-	deadline.Stop()
-	if c.mapper != nil {
-		results = insertAddr(results, c.mapper.ExternalAddr())
-	}
-	slices.SortFunc(results, func(a, b netip.AddrPort) int {
-		return strings.Compare(a.String(), b.String())
-	})
-
-	return results
-}
-
-func (c *realmConnServer) getlocals(force bool) []netip.AddrPort {
+func (c *realmConnServer) getlocals() []netip.AddrPort {
 	c.localsMu.Lock()
-	if force || time.Since(c.localsLast) > defaultStunCacheTTL {
-		start := time.Now()
-		servers := resolveSTUNServers(c.PacketConn.LocalAddr().(*net.UDPAddr).IP, c.stunServers, c.family)
-		errors.LogDebug(context.Background(), "[realm] update stun servers ", servers, " with ", time.Since(start))
-		if len(servers) > 0 {
-			start = time.Now()
-			locals := c.discover(servers)
-			errors.LogDebug(context.Background(), "[realm] update stun locals ", locals, " with ", time.Since(start))
-			if len(locals) > 0 {
-				c.locals = locals
-				c.localsLast = time.Now()
-			}
-		}
-	}
 	locals := append([]netip.AddrPort(nil), c.locals...)
 	c.localsMu.Unlock()
 	return locals
@@ -264,7 +213,7 @@ end:
 func (c *realmConnServer) run() {
 	backoff := time.Second
 retry:
-	resp, err := c.realmClient.Register(c.ctx, c.realmID, addrPortStrings(c.getlocals(false)))
+	resp, err := c.realmClient.Register(c.ctx, c.realmID, addrPortStrings(c.getlocals()))
 	if err != nil {
 		errors.LogErrorInner(context.Background(), err, "[realm] ", c.realmID, " register session err retry in ", backoff)
 		if c.waitctx(c.ctx, backoff) {
@@ -309,7 +258,7 @@ func (c *realmConnServer) heartbeatLoop(ctx context.Context, sid string, ttl int
 	}
 
 	last := time.Now()
-	cur := c.getlocals(false)
+	cur := c.getlocals()
 	ticker := time.NewTicker(interval)
 	defer ticker.Stop()
 	for {
@@ -319,7 +268,7 @@ func (c *realmConnServer) heartbeatLoop(ctx context.Context, sid string, ttl int
 			return
 		case <-ticker.C:
 			req := HeartbeatRequest{}
-			if new := c.getlocals(false); !slices.Equal(cur, new) {
+			if new := c.getlocals(); !slices.Equal(cur, new) {
 				cur = new
 				req.Addresses = addrPortStrings(cur)
 			}
@@ -392,7 +341,7 @@ func (c *realmConnServer) eventsLoop(ctx context.Context, sid string, ttl int, e
 func (c *realmConnServer) punchEvent(ctx context.Context, sid string, ev *PunchEvent) {
 	errors.LogDebug(context.Background(), "[realm] start punch event ", ev.Nonce, " ", ev.Addresses)
 
-	locals := c.getlocals(false)
+	locals := c.getlocals()
 
 	peers, _ := parseAddrPorts(ev.Addresses)
 	errors.LogDebug(context.Background(), "[realm] ", ev.Nonce, " update peers ", peers)

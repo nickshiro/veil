@@ -8,8 +8,6 @@ import (
 
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/features/dns"
-	"github.com/nickshiro/veil/features/outbound"
 )
 
 var (
@@ -23,10 +21,7 @@ type SystemDialer interface {
 	DestIpAddress() net.IP
 }
 
-type DefaultSystemDialer struct {
-	dns dns.Client
-	obm outbound.Manager
-}
+type DefaultSystemDialer struct{}
 
 func resolveSrcAddr(network net.Network, src net.Address) net.Addr {
 	if src == nil || src == net.AnyIP {

@@ -28,7 +28,7 @@ func envUint(name string, def uint32) uint32 {
 	return def
 }
 
-func liveYandexSettings(t *testing.T) (*internet.MemoryStreamConfig, string, func()) {
+func liveYandexSettings(t *testing.T) (*internet.MemoryStreamConfig, func()) {
 	t.Helper()
 
 	user := os.Getenv("XDRIVE_YANDEX_USER")
@@ -81,11 +81,11 @@ func liveYandexSettings(t *testing.T) (*internet.MemoryStreamConfig, string, fun
 		},
 	}
 	cleanup := func() { dav("DELETE", "/"+folder) }
-	return settings, folder, cleanup
+	return settings, cleanup
 }
 
 func TestLiveYandexStorage(t *testing.T) {
-	settings, _, cleanup := liveYandexSettings(t)
+	settings, cleanup := liveYandexSettings(t)
 	defer cleanup()
 
 	storage, err := newTemplateStorage(settings, settings.ProtocolSettings.(*Config))
@@ -133,7 +133,7 @@ func TestLiveYandexStorage(t *testing.T) {
 }
 
 func TestLiveYandexTransport(t *testing.T) {
-	settings, _, cleanup := liveYandexSettings(t)
+	settings, cleanup := liveYandexSettings(t)
 	defer cleanup()
 
 	client, server, done := pairWith(t, settings)

@@ -275,13 +275,6 @@ type bbrSender struct {
 	endRecoveryAt congestion.PacketNumber
 	// A window used to limit the number of bytes in flight during loss recovery.
 	recoveryWindow congestion.ByteCount
-	// If true, consider all samples in recovery app-limited.
-	isAppLimitedRecovery bool // not used
-
-	// When true, pace at 1.5x and disable packet conservation in STARTUP.
-	slowerStartup bool // not used
-	// When true, disables packet conservation in STARTUP.
-	rateBasedStartup bool // not used
 
 	// When true, add the most recent ack aggregation measurement during STARTUP.
 	enableAckAggregationDuringStartup bool
@@ -374,7 +367,7 @@ func newBbrSender(
 		b.debugPrint("Profile: %s", b.profile)
 	}
 
-	b.enterStartupMode(b.clock.Now())
+	b.enterStartupMode()
 
 	return b
 }
@@ -647,14 +640,6 @@ func (b *bbrSender) PacingRate() Bandwidth {
 	return b.pacingRate
 }
 
-// Sets the CWND gain used in STARTUP.  Must be greater than 1.
-func (b *bbrSender) setHighCwndGain(highCwndGain float64) {
-	b.highCwndGain = highCwndGain
-	if b.mode == bbrModeStartup {
-		b.congestionWindowGain = highCwndGain
-	}
-}
-
 // Get the current bandwidth estimate. Note that Bandwidth is in bits per second.
 func (b *bbrSender) bandwidthEstimate() Bandwidth {
 	return b.maxBandwidth.GetBest()
@@ -718,7 +703,7 @@ func (b *bbrSender) maybeUpdateMinRtt(now monotime.Time, sampleMinRtt time.Durat
 }
 
 // Enters the STARTUP mode.
-func (b *bbrSender) enterStartupMode(now monotime.Time) {
+func (b *bbrSender) enterStartupMode() {
 	b.mode = bbrModeStartup
 	// b.maybeTraceStateChange(logging.CongestionStateStartup)
 	b.pacingGain = b.highGain
@@ -886,7 +871,7 @@ func (b *bbrSender) maybeEnterOrExitProbeRtt(now monotime.Time, isRoundStart, mi
 					b.debugPrint("MinRTT: %s", b.getMinRtt())
 				}
 				if !b.isAtFullBandwidth {
-					b.enterStartupMode(now)
+					b.enterStartupMode()
 				} else {
 					b.enterProbeBandwidthMode(now)
 				}

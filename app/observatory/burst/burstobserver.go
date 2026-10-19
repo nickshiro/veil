@@ -2,7 +2,6 @@ package burst
 
 import (
 	"context"
-	"sync"
 
 	"github.com/nickshiro/veil/app/observatory"
 	"github.com/nickshiro/veil/common"
@@ -19,8 +18,7 @@ type Observer struct {
 	config *Config
 	ctx    context.Context
 
-	statusLock sync.Mutex
-	hp         *HealthPing
+	hp *HealthPing
 
 	finished *done.Instance
 

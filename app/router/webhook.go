@@ -18,9 +18,6 @@ import (
 	routing_session "github.com/nickshiro/veil/features/routing/session"
 )
 
-//go:fix inline
-func ptr[T any](v T) *T { return new(v) }
-
 type event struct {
 	Email          *string `json:"email"`
 	Level          *uint32 `json:"level"`

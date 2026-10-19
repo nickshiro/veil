@@ -55,11 +55,6 @@ func (*Server) Network() []net.Network {
 	return []net.Network{net.Network_TCP, net.Network_UNIX}
 }
 
-func isTimeout(err error) bool {
-	nerr, ok := errors.Cause(err).(net.Error)
-	return ok && nerr.Timeout()
-}
-
 func parseBasicAuth(auth string) (username, password string, ok bool) {
 	const prefix = "Basic "
 	if !strings.HasPrefix(auth, prefix) {
