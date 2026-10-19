@@ -7,7 +7,6 @@ import (
 	"github.com/nickshiro/veil/common/ctx"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/features/outbound"
-	"github.com/nickshiro/veil/features/routing"
 )
 
 //go:linkname IndependentCancelCtx context.newCancelCtx
@@ -20,7 +19,6 @@ const (
 	isReverseMuxKey           ctx.SessionKey = 4  // is reverse mux
 	sockoptSessionKey         ctx.SessionKey = 5  // used by dokodemo to only receive sockopt.Mark
 	trackedConnectionErrorKey ctx.SessionKey = 6  // used by observer to get outbound error
-	dispatcherKey             ctx.SessionKey = 7  // used by ss2022 inbounds to get dispatcher
 	timeoutOnlyKey            ctx.SessionKey = 8  // mux context's child contexts to only cancel when its own traffic times out
 	allowedNetworkKey         ctx.SessionKey = 9  // muxcool server control incoming request tcp/udp
 	fullHandlerKey            ctx.SessionKey = 10 // outbound gets full handler
@@ -127,17 +125,6 @@ func SubmitOutboundErrorToOriginator(ctx context.Context, err error) {
 
 func TrackedConnectionError(ctx context.Context, tracker TrackedRequestErrorFeedback) context.Context {
 	return context.WithValue(ctx, trackedConnectionErrorKey, tracker)
-}
-
-func ContextWithDispatcher(ctx context.Context, dispatcher routing.Dispatcher) context.Context {
-	return context.WithValue(ctx, dispatcherKey, dispatcher)
-}
-
-func DispatcherFromContext(ctx context.Context) routing.Dispatcher {
-	if dispatcher, ok := ctx.Value(dispatcherKey).(routing.Dispatcher); ok {
-		return dispatcher
-	}
-	return nil
 }
 
 func ContextWithTimeoutOnly(ctx context.Context, only bool) context.Context {
