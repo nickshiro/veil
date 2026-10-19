@@ -16,7 +16,6 @@ func main() {
 	base.RootCommand.Commands = append(
 		[]*base.Command{
 			cmdRun,
-			cmdVersion,
 		},
 		base.RootCommand.Commands...,
 	)
@@ -30,18 +29,13 @@ func getArgsV4Compatible() []string {
 	if os.Args[1][0] != '-' {
 		return os.Args
 	}
-	version := false
 	fs := flag.NewFlagSet("", flag.ContinueOnError)
-	fs.BoolVar(&version, "version", false, "")
 	// parse silently, no usage, no error output
 	fs.Usage = func() {}
 	fs.SetOutput(io.Discard)
 	err := fs.Parse(os.Args[1:])
 	if err == flag.ErrHelp {
 		return []string{os.Args[0], "help"}
-	}
-	if version {
-		return []string{os.Args[0], "version"}
 	}
 	return append([]string{os.Args[0], "run"}, os.Args[1:]...)
 }

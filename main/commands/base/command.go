@@ -15,7 +15,7 @@ import (
 )
 
 // A Command is an implementation of a xray command
-// like xray run or xray version.
+// like xray run.
 type Command struct {
 	// Run runs the command.
 	// The args are the arguments after the command name.

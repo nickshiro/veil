@@ -73,7 +73,6 @@ func executeRun(cmd *base.Command, args []string) {
 		os.Exit(errCode)
 	}
 
-	printVersion()
 	server, err := startXray()
 	if err != nil {
 		fmt.Println("Failed to start:", err)
