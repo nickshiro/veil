@@ -59,7 +59,6 @@ var ReaderDecoderByFormat = make(map[string]readerDecoder)
 
 func init() {
 	ReaderDecoderByFormat["json"] = DecodeJSONConfig
-	ReaderDecoderByFormat["yaml"] = DecodeYAMLConfig
 
 	core.ConfigBuilderForFiles = BuildConfig
 	core.ConfigMergedFormFiles = MergeConfigFromFiles

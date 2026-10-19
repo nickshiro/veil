@@ -67,7 +67,7 @@ func readConfigFile(file *os.File) ([]byte, error) {
 			return nil, err
 		}
 		switch strings.ToLower(filepath.Ext(path)) {
-		case ".json", ".yml", ".yaml", ".pb", ".protobuf":
+		case ".json", ".pb", ".protobuf":
 		default:
 			return nil, errors.New("unsupported config file extension: ", path)
 		}

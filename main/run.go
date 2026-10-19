@@ -10,7 +10,6 @@ import (
 	"regexp"
 	"runtime"
 	"runtime/debug"
-	"strings"
 	"syscall"
 	"time"
 
@@ -135,14 +134,7 @@ func dirExists(file string) bool {
 }
 
 func getRegepxByFormat() string {
-	switch strings.ToLower(*format) {
-	case "json":
-		return `^.+\.json$`
-	case "yaml", "yml":
-		return `^.+\.(yaml|yml)$`
-	default:
-		return `^.+\.(json|yaml|yml)$`
-	}
+	return `^.+\.json$`
 }
 
 func readConfDir(dirPath string) {
@@ -179,7 +171,7 @@ func getConfigFilePath(verbose bool) cmdarg.Arg {
 	}
 
 	if workingDir, err := os.Getwd(); err == nil {
-		suffixes := []string{".json", ".yaml", ".yml"}
+		suffixes := []string{".json"}
 		for _, suffix := range suffixes {
 			configFile := filepath.Join(workingDir, "config"+suffix)
 			if fileExists(configFile) {

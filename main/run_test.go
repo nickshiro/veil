@@ -19,7 +19,7 @@ func TestRunConfigCommands(t *testing.T) {
 		return
 	}
 	dir := t.TempDir()
-	config := filepath.Join(dir, "config.yaml")
+	config := filepath.Join(dir, "config.json")
 	script := filepath.Join(dir, "config.lua")
 	binary := filepath.Join(dir, "config.pb")
 	message := filepath.Join(dir, "user.tmsg")
