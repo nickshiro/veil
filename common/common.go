@@ -26,11 +26,6 @@ func Must2[T any](v T, err error) T {
 	return v
 }
 
-// Error2 returns the err from the 2nd parameter.
-func Error2(v any, err error) error {
-	return err
-}
-
 // CloseIfExists call obj.Close() if obj is not nil.
 func CloseIfExists(obj any) error {
 	if obj != nil {

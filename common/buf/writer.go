@@ -92,7 +92,8 @@ func NewBufferedWriter(writer Writer) *BufferedWriter {
 
 // WriteByte implements io.ByteWriter.
 func (w *BufferedWriter) WriteByte(c byte) error {
-	return common.Error2(w.Write([]byte{c}))
+	_, err := w.Write([]byte{c})
+	return err
 }
 
 // Write implements io.Writer.

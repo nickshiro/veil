@@ -113,7 +113,7 @@ func SniffQUIC(b []byte) (*SniffHeader, error) {
 
 		if l, err := buffer.ReadByte(); err != nil {
 			return nil, errNotQUIC
-		} else if common.Error2(buffer.ReadBytes(int32(l))) != nil {
+		} else if _, err := buffer.ReadBytes(int32(l)); err != nil {
 			return nil, errNotQUIC
 		}
 

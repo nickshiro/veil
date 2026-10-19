@@ -3,7 +3,6 @@ package protocol
 import (
 	"io"
 
-	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
@@ -149,7 +148,8 @@ func readPort(b *buf.Buffer, reader io.Reader) (net.Port, error) {
 }
 
 func writePort(writer io.Writer, port net.Port) error {
-	return common.Error2(serial.WriteUint16(writer, port.Value()))
+	_, err := serial.WriteUint16(writer, port.Value())
+	return err
 }
 
 func maybeIPPrefix(b byte) bool {
