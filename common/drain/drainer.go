@@ -2,9 +2,9 @@ package drain
 
 import (
 	"io"
+	"math/rand"
 	randv2 "math/rand/v2"
 
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 )
 
@@ -13,12 +13,20 @@ type BehaviorSeedLimitedDrainer struct {
 }
 
 func NewBehaviorSeedLimitedDrainer(behaviorSeed int64, drainFoundation, maxBaseDrainSize, maxRandDrain int) (Drainer, error) {
-	behaviorRand := dice.NewDeterministicDice(behaviorSeed)
-	BaseDrainSize := behaviorRand.Roll(maxBaseDrainSize)
-	RandDrainMax := behaviorRand.Roll(maxRandDrain) + 1
+	behaviorRand := rand.New(rand.NewSource(behaviorSeed))
+	BaseDrainSize := roll(behaviorRand, maxBaseDrainSize)
+	RandDrainMax := roll(behaviorRand, maxRandDrain) + 1
 	RandDrainRolled := randv2.IntN(RandDrainMax)
 	DrainSize := drainFoundation + BaseDrainSize + RandDrainRolled
 	return &BehaviorSeedLimitedDrainer{DrainSize: DrainSize}, nil
+}
+
+// roll preserves the seeded sequence by not advancing it when n is 1.
+func roll(r *rand.Rand, n int) int {
+	if n == 1 {
+		return 0
+	}
+	return r.Intn(n)
 }
 
 func (d *BehaviorSeedLimitedDrainer) AcknowledgeReceive(size int) {
