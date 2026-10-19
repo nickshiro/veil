@@ -3,9 +3,9 @@ package stats
 import (
 	"context"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/features"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/features"
 )
 
 // Counter is the interface for stats counters.

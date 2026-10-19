@@ -12,11 +12,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/main/commands/base"
-	"github.com/xtls/xray-core/main/confloader"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/main/commands/base"
+	"github.com/nickshiro/veil/main/confloader"
 )
 
 func ConfigLoader(arg string) (out io.Reader, err error) {

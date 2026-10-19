@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/xtls/xray-core/common/net"
-	feature_dns "github.com/xtls/xray-core/features/dns"
+	"github.com/nickshiro/veil/common/net"
+	feature_dns "github.com/nickshiro/veil/features/dns"
 )
 
 // fakeServer stands in for any name server that is not the system resolver.

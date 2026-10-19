@@ -1,11 +1,11 @@
 package all
 
 import (
-	"github.com/xtls/xray-core/main/commands/all/api"
-	"github.com/xtls/xray-core/main/commands/all/base64"
-	"github.com/xtls/xray-core/main/commands/all/convert"
-	"github.com/xtls/xray-core/main/commands/all/tls"
-	"github.com/xtls/xray-core/main/commands/base"
+	"github.com/nickshiro/veil/main/commands/all/api"
+	"github.com/nickshiro/veil/main/commands/all/base64"
+	"github.com/nickshiro/veil/main/commands/all/convert"
+	"github.com/nickshiro/veil/main/commands/all/tls"
+	"github.com/nickshiro/veil/main/commands/base"
 )
 
 func init() {

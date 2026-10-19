@@ -7,7 +7,7 @@
 package realm
 
 import (
-	tls "github.com/xtls/xray-core/transport/internet/tls"
+	tls "github.com/nickshiro/veil/transport/internet/tls"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -263,7 +263,7 @@ const file_transport_internet_finalmask_realm_config_proto_rawDesc = "" +
 	"\x04Dual\x10\x00\x12\x06\n" +
 	"\x02V4\x10\x01\x12\x06\n" +
 	"\x02V6\x10\x02B\x97\x01\n" +
-	"+com.xray.transport.internet.finalmask.realmP\x01Z<github.com/xtls/xray-core/transport/internet/finalmask/realm\xaa\x02'Xray.Transport.Internet.Finalmask.Realmb\x06proto3"
+	"+com.xray.transport.internet.finalmask.realmP\x01Z<github.com/nickshiro/veil/transport/internet/finalmask/realm\xaa\x02'Xray.Transport.Internet.Finalmask.Realmb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_realm_config_proto_rawDescOnce sync.Once

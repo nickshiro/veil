@@ -8,12 +8,12 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/transport"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/transport"
 )
 
 // stackConn is a TCP connection as the stack hands it over: it is its own buf.Writer.

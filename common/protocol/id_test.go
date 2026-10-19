@@ -4,7 +4,7 @@ import (
 	"testing"
 	"uuid"
 
-	. "github.com/xtls/xray-core/common/protocol"
+	. "github.com/nickshiro/veil/common/protocol"
 )
 
 func TestIdEquals(t *testing.T) {

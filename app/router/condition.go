@@ -9,11 +9,11 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/geodata"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/features/routing/dns"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/features/routing/dns"
 )
 
 type Condition interface {

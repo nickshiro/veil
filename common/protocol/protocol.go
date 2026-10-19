@@ -1,4 +1,4 @@
-package protocol // import "github.com/xtls/xray-core/common/protocol"
+package protocol // import "github.com/nickshiro/veil/common/protocol"
 
 import (
 	"errors"

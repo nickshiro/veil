@@ -7,8 +7,8 @@
 package shadowsocks_2022
 
 import (
-	net "github.com/xtls/xray-core/common/net"
-	protocol "github.com/xtls/xray-core/common/protocol"
+	net "github.com/nickshiro/veil/common/net"
+	protocol "github.com/nickshiro/veil/common/protocol"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -457,7 +457,7 @@ const file_proxy_shadowsocks_2022_config_proto_rawDesc = "" +
 	"\x04port\x18\x02 \x01(\rR\x04port\x12\x16\n" +
 	"\x06method\x18\x03 \x01(\tR\x06method\x12\x10\n" +
 	"\x03key\x18\x04 \x01(\tR\x03keyBr\n" +
-	"\x1fcom.xray.proxy.shadowsocks_2022P\x01Z0github.com/xtls/xray-core/proxy/shadowsocks_2022\xaa\x02\x1aXray.Proxy.Shadowsocks2022b\x06proto3"
+	"\x1fcom.xray.proxy.shadowsocks_2022P\x01Z0github.com/nickshiro/veil/proxy/shadowsocks_2022\xaa\x02\x1aXray.Proxy.Shadowsocks2022b\x06proto3"
 
 var (
 	file_proxy_shadowsocks_2022_config_proto_rawDescOnce sync.Once

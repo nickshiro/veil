@@ -7,12 +7,12 @@ import (
 	"net"
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/geodata"
-	xnet "github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/proxy/freedom"
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/geodata"
+	xnet "github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/proxy/freedom"
+	"github.com/nickshiro/veil/transport/internet"
 	"google.golang.org/protobuf/proto"
 )
 

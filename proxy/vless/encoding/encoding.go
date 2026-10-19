@@ -5,14 +5,14 @@ import (
 	"io"
 	"uuid"
 
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/common/signal"
-	"github.com/xtls/xray-core/proxy"
-	"github.com/xtls/xray-core/proxy/vless"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/common/session"
+	"github.com/nickshiro/veil/common/signal"
+	"github.com/nickshiro/veil/proxy"
+	"github.com/nickshiro/veil/proxy/vless"
 )
 
 const (

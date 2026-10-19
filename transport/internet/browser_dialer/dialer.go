@@ -12,8 +12,8 @@ import (
 	"uuid"
 
 	"github.com/gorilla/websocket"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/platform"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/platform"
 )
 
 //go:embed dialer.html

@@ -20,8 +20,8 @@ import (
 	"golang.org/x/net/route"
 	"golang.org/x/sys/unix"
 
-	"github.com/xtls/xray-core/common/buf"
-	xerrors "github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/buf"
+	xerrors "github.com/nickshiro/veil/common/errors"
 )
 
 const (

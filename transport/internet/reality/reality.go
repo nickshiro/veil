@@ -24,14 +24,14 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/nickshiro/veil/common/crypto"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/transport/internet/tls"
 	utls "github.com/refraction-networking/utls"
 	"github.com/xtls/reality"
-	"github.com/xtls/xray-core/common/crypto"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/transport/internet/tls"
 	"golang.org/x/net/http2"
 )
 

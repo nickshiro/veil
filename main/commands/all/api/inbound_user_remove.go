@@ -3,10 +3,10 @@ package api
 import (
 	"fmt"
 
-	handlerService "github.com/xtls/xray-core/app/proxyman/command"
-	cserial "github.com/xtls/xray-core/common/serial"
+	handlerService "github.com/nickshiro/veil/app/proxyman/command"
+	cserial "github.com/nickshiro/veil/common/serial"
 
-	"github.com/xtls/xray-core/main/commands/base"
+	"github.com/nickshiro/veil/main/commands/base"
 )
 
 var cmdRemoveInboundUsers = &base.Command{

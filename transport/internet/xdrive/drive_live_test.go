@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/transport/internet"
 )
 
 const liveSecretsEnv = "XRAY_XDRIVE_DRIVE_SECRETS"

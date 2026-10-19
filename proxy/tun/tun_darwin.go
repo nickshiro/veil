@@ -15,9 +15,9 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/xtls/xray-core/common/buf"
-	xerrors "github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/platform"
+	"github.com/nickshiro/veil/common/buf"
+	xerrors "github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/platform"
 	"golang.org/x/net/route"
 	"golang.org/x/sys/unix"
 )

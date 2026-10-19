@@ -3,10 +3,10 @@ package dns
 import (
 	"context"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/features/dns"
-	"github.com/xtls/xray-core/features/routing"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/features/dns"
+	"github.com/nickshiro/veil/features/routing"
 )
 
 // ResolvableContext is an implementation of routing.Context, with domain resolving capability.

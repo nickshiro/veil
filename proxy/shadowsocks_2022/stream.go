@@ -11,16 +11,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/antireplay"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/signal"
-	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/features/policy"
-	"github.com/xtls/xray-core/transport"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/antireplay"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/common/signal"
+	"github.com/nickshiro/veil/common/task"
+	"github.com/nickshiro/veil/features/policy"
+	"github.com/nickshiro/veil/transport"
 )
 
 var addrParser = protocol.NewAddressParser(

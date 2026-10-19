@@ -13,9 +13,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xtls/xray-core/common/dice"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/common/dice"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/transport/internet"
 )
 
 const (

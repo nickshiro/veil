@@ -5,11 +5,11 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/serial"
+	"github.com/nickshiro/veil/transport/internet"
+	"github.com/nickshiro/veil/transport/internet/tls"
 	utls "github.com/refraction-networking/utls"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/transport/internet"
-	"github.com/xtls/xray-core/transport/internet/tls"
 )
 
 type TransportProtocol string

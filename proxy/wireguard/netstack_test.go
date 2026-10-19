@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xtls/xray-core/common/net"
+	"github.com/nickshiro/veil/common/net"
 	"golang.org/x/net/dns/dnsmessage"
 	"golang.zx2c4.com/wireguard/tun"
 )

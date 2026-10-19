@@ -7,7 +7,7 @@
 package wireguard
 
 import (
-	protocol "github.com/xtls/xray-core/common/protocol"
+	protocol "github.com/nickshiro/veil/common/protocol"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -233,7 +233,7 @@ const file_proxy_wireguard_config_proto_rawDesc = "" +
 	"\rno_kernel_tun\x18\t \x01(\bR\vnoKernelTun\x12\x10\n" +
 	"\x03DNS\x18\n" +
 	" \x03(\tR\x03DNSB^\n" +
-	"\x18com.xray.proxy.wireguardP\x01Z)github.com/xtls/xray-core/proxy/wireguard\xaa\x02\x14Xray.Proxy.WireGuardb\x06proto3"
+	"\x18com.xray.proxy.wireguardP\x01Z)github.com/nickshiro/veil/proxy/wireguard\xaa\x02\x14Xray.Proxy.WireGuardb\x06proto3"
 
 var (
 	file_proxy_wireguard_config_proto_rawDescOnce sync.Once

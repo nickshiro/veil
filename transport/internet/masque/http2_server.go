@@ -18,7 +18,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/xtls/xray-core/transport/internet/masque/connectip"
+	"github.com/nickshiro/veil/transport/internet/masque/connectip"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/hpack"
 )

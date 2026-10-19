@@ -4,76 +4,76 @@ import (
 	// The following are necessary as they register handlers in their init functions.
 
 	// Mandatory features. Can't remove unless there are replacements.
-	_ "github.com/xtls/xray-core/app/dispatcher"
-	_ "github.com/xtls/xray-core/app/proxyman/inbound"
-	_ "github.com/xtls/xray-core/app/proxyman/outbound"
+	_ "github.com/nickshiro/veil/app/dispatcher"
+	_ "github.com/nickshiro/veil/app/proxyman/inbound"
+	_ "github.com/nickshiro/veil/app/proxyman/outbound"
 
 	// Default commander and all its services. This is an optional feature.
-	_ "github.com/xtls/xray-core/app/commander"
-	_ "github.com/xtls/xray-core/app/log/command"
-	_ "github.com/xtls/xray-core/app/proxyman/command"
-	_ "github.com/xtls/xray-core/app/stats/command"
+	_ "github.com/nickshiro/veil/app/commander"
+	_ "github.com/nickshiro/veil/app/log/command"
+	_ "github.com/nickshiro/veil/app/proxyman/command"
+	_ "github.com/nickshiro/veil/app/stats/command"
 
 	// Developer preview services
-	_ "github.com/xtls/xray-core/app/observatory/command"
+	_ "github.com/nickshiro/veil/app/observatory/command"
 
 	// Other optional features.
-	_ "github.com/xtls/xray-core/app/dns"
-	_ "github.com/xtls/xray-core/app/dns/fakedns"
-	_ "github.com/xtls/xray-core/app/geodata"
-	_ "github.com/xtls/xray-core/app/log"
-	_ "github.com/xtls/xray-core/app/metrics"
-	_ "github.com/xtls/xray-core/app/policy"
-	_ "github.com/xtls/xray-core/app/reverse"
-	_ "github.com/xtls/xray-core/app/router"
-	_ "github.com/xtls/xray-core/app/stats"
+	_ "github.com/nickshiro/veil/app/dns"
+	_ "github.com/nickshiro/veil/app/dns/fakedns"
+	_ "github.com/nickshiro/veil/app/geodata"
+	_ "github.com/nickshiro/veil/app/log"
+	_ "github.com/nickshiro/veil/app/metrics"
+	_ "github.com/nickshiro/veil/app/policy"
+	_ "github.com/nickshiro/veil/app/reverse"
+	_ "github.com/nickshiro/veil/app/router"
+	_ "github.com/nickshiro/veil/app/stats"
 
 	// Fix dependency cycle caused by core import in internet package
-	_ "github.com/xtls/xray-core/transport/internet/tagged/taggedimpl"
+	_ "github.com/nickshiro/veil/transport/internet/tagged/taggedimpl"
 
 	// Developer preview features
-	_ "github.com/xtls/xray-core/app/observatory"
+	_ "github.com/nickshiro/veil/app/observatory"
 
 	// Inbound and outbound proxies.
-	_ "github.com/xtls/xray-core/proxy/blackhole"
-	_ "github.com/xtls/xray-core/proxy/dns"
-	_ "github.com/xtls/xray-core/proxy/dokodemo"
-	_ "github.com/xtls/xray-core/proxy/freedom"
-	_ "github.com/xtls/xray-core/proxy/http"
-	_ "github.com/xtls/xray-core/proxy/loopback"
-	_ "github.com/xtls/xray-core/proxy/masque"
-	_ "github.com/xtls/xray-core/proxy/shadowsocks"
-	_ "github.com/xtls/xray-core/proxy/socks"
-	_ "github.com/xtls/xray-core/proxy/trojan"
-	_ "github.com/xtls/xray-core/proxy/vless/inbound"
-	_ "github.com/xtls/xray-core/proxy/vless/outbound"
-	_ "github.com/xtls/xray-core/proxy/vmess/inbound"
-	_ "github.com/xtls/xray-core/proxy/vmess/outbound"
-	_ "github.com/xtls/xray-core/proxy/wireguard"
+	_ "github.com/nickshiro/veil/proxy/blackhole"
+	_ "github.com/nickshiro/veil/proxy/dns"
+	_ "github.com/nickshiro/veil/proxy/dokodemo"
+	_ "github.com/nickshiro/veil/proxy/freedom"
+	_ "github.com/nickshiro/veil/proxy/http"
+	_ "github.com/nickshiro/veil/proxy/loopback"
+	_ "github.com/nickshiro/veil/proxy/masque"
+	_ "github.com/nickshiro/veil/proxy/shadowsocks"
+	_ "github.com/nickshiro/veil/proxy/socks"
+	_ "github.com/nickshiro/veil/proxy/trojan"
+	_ "github.com/nickshiro/veil/proxy/vless/inbound"
+	_ "github.com/nickshiro/veil/proxy/vless/outbound"
+	_ "github.com/nickshiro/veil/proxy/vmess/inbound"
+	_ "github.com/nickshiro/veil/proxy/vmess/outbound"
+	_ "github.com/nickshiro/veil/proxy/wireguard"
 
 	// Transports
-	_ "github.com/xtls/xray-core/transport/internet/grpc"
-	_ "github.com/xtls/xray-core/transport/internet/httpupgrade"
-	_ "github.com/xtls/xray-core/transport/internet/kcp"
-	_ "github.com/xtls/xray-core/transport/internet/masque"
-	_ "github.com/xtls/xray-core/transport/internet/reality"
-	_ "github.com/xtls/xray-core/transport/internet/splithttp"
-	_ "github.com/xtls/xray-core/transport/internet/tcp"
-	_ "github.com/xtls/xray-core/transport/internet/tls"
-	_ "github.com/xtls/xray-core/transport/internet/udp"
-	_ "github.com/xtls/xray-core/transport/internet/websocket"
-	_ "github.com/xtls/xray-core/transport/internet/xdrive"
+	_ "github.com/nickshiro/veil/transport/internet/grpc"
+	_ "github.com/nickshiro/veil/transport/internet/httpupgrade"
+	_ "github.com/nickshiro/veil/transport/internet/kcp"
+	_ "github.com/nickshiro/veil/transport/internet/masque"
+	_ "github.com/nickshiro/veil/transport/internet/reality"
+	_ "github.com/nickshiro/veil/transport/internet/splithttp"
+	_ "github.com/nickshiro/veil/transport/internet/tcp"
+	_ "github.com/nickshiro/veil/transport/internet/tls"
+	_ "github.com/nickshiro/veil/transport/internet/udp"
+	_ "github.com/nickshiro/veil/transport/internet/websocket"
+	_ "github.com/nickshiro/veil/transport/internet/xdrive"
 
 	// Transport headers
-	_ "github.com/xtls/xray-core/transport/internet/headers/http"
-	_ "github.com/xtls/xray-core/transport/internet/headers/noop"
+	_ "github.com/nickshiro/veil/transport/internet/headers/http"
+	_ "github.com/nickshiro/veil/transport/internet/headers/noop"
 
 	// JSON
-	_ "github.com/xtls/xray-core/main/json"
+	_ "github.com/nickshiro/veil/main/json"
 
 	// Load config from file or http(s)
-	_ "github.com/xtls/xray-core/main/confloader/external"
+	_ "github.com/nickshiro/veil/main/confloader/external"
 
 	// Commands
-	_ "github.com/xtls/xray-core/main/commands/all"
+	_ "github.com/nickshiro/veil/main/commands/all"
 )

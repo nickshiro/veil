@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/errors"
 )
 
 const tempPrefix = ".xdrive-tmp-"

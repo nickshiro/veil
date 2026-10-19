@@ -7,8 +7,8 @@
 package internet
 
 import (
-	net "github.com/xtls/xray-core/common/net"
-	serial "github.com/xtls/xray-core/common/serial"
+	net "github.com/nickshiro/veil/common/net"
+	serial "github.com/nickshiro/veil/common/serial"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1022,7 +1022,7 @@ const file_transport_internet_config_proto_rawDesc = "" +
 	"\vTxtPortOnly\x10\x04\x12\x12\n" +
 	"\x0eTxtAddressOnly\x10\x05\x12\x15\n" +
 	"\x11TxtPortAndAddress\x10\x06Bg\n" +
-	"\x1bcom.xray.transport.internetP\x01Z,github.com/xtls/xray-core/transport/internet\xaa\x02\x17Xray.Transport.Internetb\x06proto3"
+	"\x1bcom.xray.transport.internetP\x01Z,github.com/nickshiro/veil/transport/internet\xaa\x02\x17Xray.Transport.Internetb\x06proto3"
 
 var (
 	file_transport_internet_config_proto_rawDescOnce sync.Once

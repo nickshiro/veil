@@ -20,9 +20,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xtls/xray-core/common/buf"
-	xnet "github.com/xtls/xray-core/common/net"
-	xtun "github.com/xtls/xray-core/proxy/tun"
+	"github.com/nickshiro/veil/common/buf"
+	xnet "github.com/nickshiro/veil/common/net"
+	xtun "github.com/nickshiro/veil/proxy/tun"
 	"golang.zx2c4.com/wireguard/tun"
 
 	"golang.org/x/net/dns/dnsmessage"

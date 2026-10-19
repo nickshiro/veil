@@ -20,8 +20,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/transport/internet"
 	"golang.org/x/sys/windows"
 	"golang.zx2c4.com/wintun"
 	"golang.zx2c4.com/wireguard/windows/tunnel/winipcfg"

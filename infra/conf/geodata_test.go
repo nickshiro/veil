@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/xtls/xray-core/app/geodata"
-	. "github.com/xtls/xray-core/infra/conf"
+	"github.com/nickshiro/veil/app/geodata"
+	. "github.com/nickshiro/veil/infra/conf"
 )
 
 func TestGeodataConfig(t *testing.T) {

@@ -11,14 +11,14 @@ import (
 	"slices"
 	"time"
 
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/platform/filesystem"
+	"github.com/nickshiro/veil/common/task"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/transport/internet/tagged"
 	utls "github.com/refraction-networking/utls"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/platform/filesystem"
-	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/transport/internet/tagged"
 	"golang.org/x/net/http2"
 )
 

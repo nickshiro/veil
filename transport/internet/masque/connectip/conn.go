@@ -21,7 +21,7 @@ import (
 	"github.com/apernet/quic-go"
 	"github.com/apernet/quic-go/http3"
 	"github.com/apernet/quic-go/quicvarint"
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/errors"
 	"golang.org/x/net/ipv4"
 	"golang.org/x/net/ipv6"
 )

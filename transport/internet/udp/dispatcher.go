@@ -7,15 +7,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol/udp"
-	"github.com/xtls/xray-core/common/signal"
-	"github.com/xtls/xray-core/common/signal/done"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/transport"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol/udp"
+	"github.com/nickshiro/veil/common/signal"
+	"github.com/nickshiro/veil/common/signal/done"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/transport"
 )
 
 type ResponseCallback func(ctx context.Context, packet *udp.Packet)

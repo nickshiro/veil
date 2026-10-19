@@ -7,8 +7,8 @@ import (
 	"io"
 	"time"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/crypto"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/crypto"
 )
 
 func SealVMessAEADHeader(key [16]byte, data []byte) []byte {

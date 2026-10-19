@@ -4,9 +4,9 @@ import (
 	"testing"
 	"uuid"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/protocol"
-	. "github.com/xtls/xray-core/proxy/vmess"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/protocol"
+	. "github.com/nickshiro/veil/proxy/vmess"
 )
 
 func toAccount(a *Account) protocol.Account {

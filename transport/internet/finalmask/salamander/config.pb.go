@@ -136,7 +136,7 @@ const file_transport_internet_finalmask_salamander_config_proto_rawDesc = "" +
 	"\bpassword\x18\x01 \x01(\tR\bpassword\x12$\n" +
 	"\rMinPacketSize\x18\x02 \x01(\x05R\rMinPacketSize\x12$\n" +
 	"\rMaxPacketSize\x18\x03 \x01(\x05R\rMaxPacketSizeB\xa6\x01\n" +
-	"0com.xray.transport.internet.finalmask.salamanderP\x01ZAgithub.com/xtls/xray-core/transport/internet/finalmask/salamander\xaa\x02,Xray.Transport.Internet.Finalmask.Salamanderb\x06proto3"
+	"0com.xray.transport.internet.finalmask.salamanderP\x01ZAgithub.com/nickshiro/veil/transport/internet/finalmask/salamander\xaa\x02,Xray.Transport.Internet.Finalmask.Salamanderb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_salamander_config_proto_rawDescOnce sync.Once

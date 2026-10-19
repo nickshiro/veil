@@ -7,8 +7,8 @@
 package dns
 
 import (
-	geodata "github.com/xtls/xray-core/common/geodata"
-	net "github.com/xtls/xray-core/common/net"
+	geodata "github.com/nickshiro/veil/common/geodata"
+	net "github.com/nickshiro/veil/common/net"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -500,7 +500,7 @@ const file_app_dns_config_proto_rawDesc = "" +
 	"\aUSE_IP4\x10\x01\x12\v\n" +
 	"\aUSE_IP6\x10\x02\x12\v\n" +
 	"\aUSE_SYS\x10\x03BF\n" +
-	"\x10com.xray.app.dnsP\x01Z!github.com/xtls/xray-core/app/dns\xaa\x02\fXray.App.Dnsb\x06proto3"
+	"\x10com.xray.app.dnsP\x01Z!github.com/nickshiro/veil/app/dns\xaa\x02\fXray.App.Dnsb\x06proto3"
 
 var (
 	file_app_dns_config_proto_rawDescOnce sync.Once

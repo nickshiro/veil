@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 )

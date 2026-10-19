@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/platform/filesystem"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/platform/filesystem"
 	"golang.org/x/crypto/ocsp"
 )
 

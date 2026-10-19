@@ -3,8 +3,8 @@ package conf
 import (
 	"strings"
 
-	"github.com/xtls/xray-core/app/log"
-	clog "github.com/xtls/xray-core/common/log"
+	"github.com/nickshiro/veil/app/log"
+	clog "github.com/nickshiro/veil/common/log"
 )
 
 func DefaultLogConfig() *log.Config {

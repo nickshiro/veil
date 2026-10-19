@@ -4,7 +4,7 @@ import (
 	"net/netip"
 	"testing"
 
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/transport/internet"
 )
 
 func TestSkipDNSServers(t *testing.T) {

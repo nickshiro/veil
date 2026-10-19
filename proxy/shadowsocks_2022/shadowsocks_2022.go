@@ -3,18 +3,18 @@ package shadowsocks_2022
 import (
 	"context"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/log"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/common/signal"
-	"github.com/xtls/xray-core/features/policy"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/proxy"
-	"github.com/xtls/xray-core/transport"
-	"github.com/xtls/xray-core/transport/internet/stat"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/log"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/session"
+	"github.com/nickshiro/veil/common/signal"
+	"github.com/nickshiro/veil/features/policy"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/proxy"
+	"github.com/nickshiro/veil/transport"
+	"github.com/nickshiro/veil/transport/internet/stat"
 )
 
 func (s *ServerUDPSession) UpdateConn(conn stat.Connection) {

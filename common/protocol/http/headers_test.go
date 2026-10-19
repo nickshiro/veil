@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/net"
-	. "github.com/xtls/xray-core/common/protocol/http"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/net"
+	. "github.com/nickshiro/veil/common/protocol/http"
 )
 
 func TestApplyTrustedXForwardedFor(t *testing.T) {

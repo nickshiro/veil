@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
 	"github.com/pion/stun/v3"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
 )
 
 type realmConnClient struct {

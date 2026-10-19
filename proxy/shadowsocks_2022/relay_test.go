@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/features/routing"
-	. "github.com/xtls/xray-core/proxy/shadowsocks_2022"
-	"github.com/xtls/xray-core/transport"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/features/routing"
+	. "github.com/nickshiro/veil/proxy/shadowsocks_2022"
+	"github.com/nickshiro/veil/transport"
 	"lukechampine.com/blake3"
 )
 

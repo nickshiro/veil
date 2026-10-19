@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/xtls/xray-core/common/buf"
+	"github.com/nickshiro/veil/common/buf"
 )
 
 const benchBatch = 64

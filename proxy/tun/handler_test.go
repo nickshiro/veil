@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	xnet "github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/transport"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	xnet "github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/transport"
 )
 
 type testCounter struct {

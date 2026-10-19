@@ -7,9 +7,9 @@
 package xdns
 
 import (
-	_ "github.com/xtls/xray-core/common/serial"
-	internet "github.com/xtls/xray-core/transport/internet"
-	tls "github.com/xtls/xray-core/transport/internet/tls"
+	_ "github.com/nickshiro/veil/common/serial"
+	internet "github.com/nickshiro/veil/transport/internet"
+	tls "github.com/nickshiro/veil/transport/internet/tls"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -261,7 +261,7 @@ const file_transport_internet_finalmask_xdns_config_proto_rawDesc = "" +
 	"\tresolvers\x18\x02 \x03(\v25.xray.transport.internet.finalmask.xdns.ResolverProtoR\tresolvers\x12\x1d\n" +
 	"\n" +
 	"extra_poll\x18\x03 \x01(\x05R\textraPollB\x94\x01\n" +
-	"*com.xray.transport.internet.finalmask.xdnsP\x01Z;github.com/xtls/xray-core/transport/internet/finalmask/xdns\xaa\x02&Xray.Transport.Internet.Finalmask.Xdnsb\x06proto3"
+	"*com.xray.transport.internet.finalmask.xdnsP\x01Z;github.com/nickshiro/veil/transport/internet/finalmask/xdns\xaa\x02&Xray.Transport.Internet.Finalmask.Xdnsb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_xdns_config_proto_rawDescOnce sync.Once

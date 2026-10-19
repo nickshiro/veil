@@ -5,10 +5,10 @@ import (
 	"testing"
 	"uuid"
 
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/features/dns"
 	"github.com/stretchr/testify/assert"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/features/dns"
 	"golang.org/x/sync/errgroup"
 )
 

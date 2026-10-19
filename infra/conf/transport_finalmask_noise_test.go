@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/xtls/xray-core/transport/internet/finalmask/noise"
+	"github.com/nickshiro/veil/transport/internet/finalmask/noise"
 )
 
 func expPacket(exp string) json.RawMessage {

@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/xtls/xray-core/common"
-	. "github.com/xtls/xray-core/common/geodata/strmatcher"
+	"github.com/nickshiro/veil/common"
+	. "github.com/nickshiro/veil/common/geodata/strmatcher"
 )
 
 func BenchmarkFullMatcher(b *testing.B) {

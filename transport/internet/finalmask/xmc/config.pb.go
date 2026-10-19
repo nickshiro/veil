@@ -185,7 +185,7 @@ const file_transport_internet_finalmask_xmc_config_proto_rawDesc = "" +
 	"\bhostname\x18\n" +
 	" \x01(\tR\bhostname\x12J\n" +
 	"\bprofiles\x18\v \x03(\v2..xray.transport.internet.finalmask.xmc.ProfileR\bprofilesJ\x04\b\x02\x10\x03B\x91\x01\n" +
-	")com.xray.transport.internet.finalmask.xmcP\x01Z:github.com/xtls/xray-core/transport/internet/finalmask/xmc\xaa\x02%Xray.Transport.Internet.Finalmask.XMCb\x06proto3"
+	")com.xray.transport.internet.finalmask.xmcP\x01Z:github.com/nickshiro/veil/transport/internet/finalmask/xmc\xaa\x02%Xray.Transport.Internet.Finalmask.XMCb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_xmc_config_proto_rawDescOnce sync.Once

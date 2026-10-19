@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/proxy/wireguard"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/common/serial"
+	"github.com/nickshiro/veil/common/task"
+	"github.com/nickshiro/veil/proxy/wireguard"
 	"google.golang.org/protobuf/proto"
 )
 

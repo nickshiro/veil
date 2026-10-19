@@ -3,10 +3,10 @@ package conf
 import (
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/geodata"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/proxy/dns"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/proxy/dns"
 	"google.golang.org/protobuf/proto"
 )
 

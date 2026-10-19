@@ -4,13 +4,13 @@ import (
 	"context"
 	"io"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/cmdarg"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/infra/conf"
-	"github.com/xtls/xray-core/infra/conf/serial"
-	"github.com/xtls/xray-core/main/confloader"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/cmdarg"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/infra/conf"
+	"github.com/nickshiro/veil/infra/conf/serial"
+	"github.com/nickshiro/veil/main/confloader"
 )
 
 func init() {

@@ -145,7 +145,7 @@ const file_app_geodata_config_proto_rawDesc = "" +
 	"\x04cron\x18\x01 \x01(\tR\x04cron\x12\x1a\n" +
 	"\boutbound\x18\x02 \x01(\tR\boutbound\x12/\n" +
 	"\x06assets\x18\x03 \x03(\v2\x17.xray.app.geodata.AssetR\x06assetsBR\n" +
-	"\x14com.xray.app.geodataP\x01Z%github.com/xtls/xray-core/app/geodata\xaa\x02\x10Xray.App.Geodatab\x06proto3"
+	"\x14com.xray.app.geodataP\x01Z%github.com/nickshiro/veil/app/geodata\xaa\x02\x10Xray.App.Geodatab\x06proto3"
 
 var (
 	file_app_geodata_config_proto_rawDescOnce sync.Once

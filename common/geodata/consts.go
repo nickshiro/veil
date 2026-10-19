@@ -3,7 +3,7 @@ package geodata
 import (
 	"sync"
 
-	"github.com/xtls/xray-core/common"
+	"github.com/nickshiro/veil/common"
 )
 
 var privateIPMatcher = sync.OnceValue(func() IPMatcher {

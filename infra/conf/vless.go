@@ -10,14 +10,14 @@ import (
 	"syscall"
 	"uuid"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/proxy/vless"
-	"github.com/xtls/xray-core/proxy/vless/inbound"
-	"github.com/xtls/xray-core/proxy/vless/outbound"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/common/serial"
+	"github.com/nickshiro/veil/common/task"
+	"github.com/nickshiro/veil/proxy/vless"
+	"github.com/nickshiro/veil/proxy/vless/inbound"
+	"github.com/nickshiro/veil/proxy/vless/outbound"
 	"google.golang.org/protobuf/proto"
 )
 

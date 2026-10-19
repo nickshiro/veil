@@ -5,8 +5,8 @@ import (
 	"sync"
 	"uuid"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/protocol"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/protocol"
 )
 
 type Validator interface {

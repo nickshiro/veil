@@ -13,12 +13,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/xtls/xray-core/common/cmdarg"
-	"github.com/xtls/xray-core/common/errors"
-	clog "github.com/xtls/xray-core/common/log"
-	"github.com/xtls/xray-core/common/platform"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/main/commands/base"
+	"github.com/nickshiro/veil/common/cmdarg"
+	"github.com/nickshiro/veil/common/errors"
+	clog "github.com/nickshiro/veil/common/log"
+	"github.com/nickshiro/veil/common/platform"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/main/commands/base"
 )
 
 var cmdRun = &base.Command{

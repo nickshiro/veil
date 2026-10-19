@@ -7,8 +7,8 @@ import (
 	"net"
 	"strconv"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/platform"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/platform"
 	"golang.org/x/sys/unix"
 )
 

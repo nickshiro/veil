@@ -171,7 +171,7 @@ const file_transport_internet_xdrive_config_proto_rawDesc = "" +
 	"\x0feager_window_ms\x18\n" +
 	" \x01(\rR\reagerWindowMs\x12&\n" +
 	"\x0fhole_timeout_ms\x18\v \x01(\rR\rholeTimeoutMs\x12\x1a\n" +
-	"\btemplate\x18\f \x01(\tR\btemplateB5Z3github.com/xtls/xray-core/transport/internet/xdriveb\x06proto3"
+	"\btemplate\x18\f \x01(\tR\btemplateB5Z3github.com/nickshiro/veil/transport/internet/xdriveb\x06proto3"
 
 var (
 	file_transport_internet_xdrive_config_proto_rawDescOnce sync.Once

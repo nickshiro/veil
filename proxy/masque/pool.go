@@ -4,7 +4,7 @@ import (
 	"net/netip"
 	"sync"
 
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/errors"
 )
 
 type addressPool struct {

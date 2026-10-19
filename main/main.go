@@ -4,8 +4,8 @@ import (
 	"flag"
 	"os"
 
-	"github.com/xtls/xray-core/main/commands/base"
-	_ "github.com/xtls/xray-core/main/distro/all"
+	"github.com/nickshiro/veil/main/commands/base"
+	_ "github.com/nickshiro/veil/main/distro/all"
 )
 
 func main() {

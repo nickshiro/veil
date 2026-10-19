@@ -6,10 +6,10 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/transport/internet/masque/connectip"
-	"github.com/xtls/xray-core/transport/internet/tls"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/transport/internet/masque/connectip"
+	"github.com/nickshiro/veil/transport/internet/tls"
 )
 
 func TestUsesHTTP2(t *testing.T) {

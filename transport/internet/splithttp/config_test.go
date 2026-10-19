@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	. "github.com/nickshiro/veil/transport/internet/splithttp"
 	"github.com/stretchr/testify/assert"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	. "github.com/xtls/xray-core/transport/internet/splithttp"
 )
 
 func Test_GetNormalizedPath(t *testing.T) {

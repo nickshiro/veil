@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
 	"github.com/pires/go-proxyproto"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
 )
 
 var effectiveListener = DefaultListener{}

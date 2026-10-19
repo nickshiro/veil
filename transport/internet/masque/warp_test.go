@@ -23,11 +23,11 @@ import (
 	"github.com/apernet/quic-go"
 	"github.com/apernet/quic-go/http3"
 	"github.com/apernet/quic-go/quicvarint"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/transport/internet"
-	"github.com/xtls/xray-core/transport/internet/masque/connectip"
-	"github.com/xtls/xray-core/transport/internet/stat"
-	"github.com/xtls/xray-core/transport/internet/tls"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/transport/internet"
+	"github.com/nickshiro/veil/transport/internet/masque/connectip"
+	"github.com/nickshiro/veil/transport/internet/stat"
+	"github.com/nickshiro/veil/transport/internet/tls"
 	"golang.org/x/net/http2"
 )
 

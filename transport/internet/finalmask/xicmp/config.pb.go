@@ -81,7 +81,7 @@ const file_transport_internet_finalmask_xicmp_config_proto_rawDesc = "" +
 	"\x06Config\x12\x14\n" +
 	"\x05DGRAM\x18\x01 \x01(\bR\x05DGRAM\x12\x10\n" +
 	"\x03IPs\x18\x02 \x03(\tR\x03IPsB\x97\x01\n" +
-	"+com.xray.transport.internet.finalmask.xicmpP\x01Z<github.com/xtls/xray-core/transport/internet/finalmask/xicmp\xaa\x02'Xray.Transport.Internet.Finalmask.Xicmpb\x06proto3"
+	"+com.xray.transport.internet.finalmask.xicmpP\x01Z<github.com/nickshiro/veil/transport/internet/finalmask/xicmp\xaa\x02'Xray.Transport.Internet.Finalmask.Xicmpb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_xicmp_config_proto_rawDescOnce sync.Once

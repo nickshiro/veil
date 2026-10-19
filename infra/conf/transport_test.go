@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xtls/xray-core/common/log"
-	. "github.com/xtls/xray-core/infra/conf"
-	"github.com/xtls/xray-core/transport/internet"
-	finalmaskcustom "github.com/xtls/xray-core/transport/internet/finalmask/header/custom"
-	"github.com/xtls/xray-core/transport/internet/xdrive"
+	"github.com/nickshiro/veil/common/log"
+	. "github.com/nickshiro/veil/infra/conf"
+	"github.com/nickshiro/veil/transport/internet"
+	finalmaskcustom "github.com/nickshiro/veil/transport/internet/finalmask/header/custom"
+	"github.com/nickshiro/veil/transport/internet/xdrive"
 	"google.golang.org/protobuf/proto"
 )
 

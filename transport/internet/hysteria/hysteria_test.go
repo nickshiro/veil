@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/apernet/quic-go"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/protocol/tls/cert"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/protocol/tls/cert"
 )
 
 func TestDatagram(t *testing.T) {

@@ -6,7 +6,7 @@ package udp
 import (
 	"encoding/binary"
 
-	"github.com/xtls/xray-core/common/net"
+	"github.com/nickshiro/veil/common/net"
 	"golang.org/x/sys/unix"
 )
 

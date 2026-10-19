@@ -10,15 +10,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/proxy"
-	"github.com/xtls/xray-core/transport/internet/finalmask"
-	"github.com/xtls/xray-core/transport/internet/finalmask/header/custom"
-	"github.com/xtls/xray-core/transport/internet/finalmask/mkcp/aes128gcm"
-	"github.com/xtls/xray-core/transport/internet/finalmask/mkcp/header"
-	"github.com/xtls/xray-core/transport/internet/finalmask/mkcp/original"
-	"github.com/xtls/xray-core/transport/internet/finalmask/salamander"
-	"github.com/xtls/xray-core/transport/internet/finalmask/sudoku"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/proxy"
+	"github.com/nickshiro/veil/transport/internet/finalmask"
+	"github.com/nickshiro/veil/transport/internet/finalmask/header/custom"
+	"github.com/nickshiro/veil/transport/internet/finalmask/mkcp/aes128gcm"
+	"github.com/nickshiro/veil/transport/internet/finalmask/mkcp/header"
+	"github.com/nickshiro/veil/transport/internet/finalmask/mkcp/original"
+	"github.com/nickshiro/veil/transport/internet/finalmask/salamander"
+	"github.com/nickshiro/veil/transport/internet/finalmask/sudoku"
 )
 
 func mustSendRecv(

@@ -6,11 +6,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/signal"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/transport"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/common/signal"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/transport"
 )
 
 const (

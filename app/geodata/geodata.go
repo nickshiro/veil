@@ -4,12 +4,12 @@ import (
 	"context"
 	"sync"
 
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	commongeodata "github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/features/routing"
 	"github.com/robfig/cron/v3"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	commongeodata "github.com/xtls/xray-core/common/geodata"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/features/routing"
 )
 
 type Instance struct {

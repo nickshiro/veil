@@ -7,8 +7,8 @@ import (
 	"io"
 
 	"github.com/apernet/quic-go/quicvarint"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/transport/internet/hysteria"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/transport/internet/hysteria"
 )
 
 const (

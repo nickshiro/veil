@@ -7,9 +7,9 @@ import (
 	"encoding/pem"
 	"testing"
 
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/protocol/tls/cert"
 	"github.com/stretchr/testify/assert"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/protocol/tls/cert"
 )
 
 func TestCalculateCertHash(t *testing.T) {

@@ -6,8 +6,8 @@ import (
 	"slices"
 	"testing"
 
-	. "github.com/xtls/xray-core/infra/conf"
-	"github.com/xtls/xray-core/proxy/tun"
+	. "github.com/nickshiro/veil/infra/conf"
+	"github.com/nickshiro/veil/proxy/tun"
 )
 
 func TestTunConfigAutoSystem(t *testing.T) {

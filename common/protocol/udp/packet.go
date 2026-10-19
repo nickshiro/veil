@@ -1,8 +1,8 @@
 package udp
 
 import (
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/net"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/net"
 )
 
 // Packet is a UDP packet together with its source and destination address.

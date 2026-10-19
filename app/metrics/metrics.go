@@ -10,15 +10,15 @@ import (
 	"net/http/pprof"
 	"strings"
 
-	"github.com/xtls/xray-core/app/observatory"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	xnet "github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/signal/done"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/features/extension"
-	"github.com/xtls/xray-core/features/outbound"
-	feature_stats "github.com/xtls/xray-core/features/stats"
+	"github.com/nickshiro/veil/app/observatory"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	xnet "github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/signal/done"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/features/extension"
+	"github.com/nickshiro/veil/features/outbound"
+	feature_stats "github.com/nickshiro/veil/features/stats"
 )
 
 type MetricsHandler struct {

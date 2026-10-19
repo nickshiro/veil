@@ -1,4 +1,4 @@
-module github.com/xtls/xray-core
+module github.com/nickshiro/veil
 
 go 1.27
 

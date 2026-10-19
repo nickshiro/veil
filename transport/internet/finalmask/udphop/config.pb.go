@@ -127,7 +127,7 @@ const file_transport_internet_finalmask_udphop_config_proto_rawDesc = "" +
 	"\finterval_max\x18\x06 \x01(\x03R\vintervalMax\x12\x1c\n" +
 	"\tremoteIPs\x18\a \x03(\tR\tremoteIPs\x12!\n" +
 	"\fremote_ports\x18\b \x03(\rR\vremotePortsJ\x04\b\x01\x10\x02B\x9a\x01\n" +
-	",com.xray.transport.internet.finalmask.udphopP\x01Z=github.com/xtls/xray-core/transport/internet/finalmask/udphop\xaa\x02(Xray.Transport.Internet.Finalmask.Udphopb\x06proto3"
+	",com.xray.transport.internet.finalmask.udphopP\x01Z=github.com/nickshiro/veil/transport/internet/finalmask/udphop\xaa\x02(Xray.Transport.Internet.Finalmask.Udphopb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_udphop_config_proto_rawDescOnce sync.Once

@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"uuid"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/utils"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/utils"
 )
 
 type DomainRegistry struct {

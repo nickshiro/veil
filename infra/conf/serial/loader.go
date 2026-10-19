@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"io"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/infra/conf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/infra/conf"
 )
 
 type offset struct {

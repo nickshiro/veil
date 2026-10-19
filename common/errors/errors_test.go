@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	. "github.com/xtls/xray-core/common/errors"
+	. "github.com/nickshiro/veil/common/errors"
 )
 
 func TestError(t *testing.T) {

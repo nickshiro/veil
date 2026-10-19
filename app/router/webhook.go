@@ -12,10 +12,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/features/routing"
-	routing_session "github.com/xtls/xray-core/features/routing/session"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/features/routing"
+	routing_session "github.com/nickshiro/veil/features/routing/session"
 )
 
 //go:fix inline

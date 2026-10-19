@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/proxy/loopback"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/proxy/loopback"
 	"google.golang.org/protobuf/proto"
 )
 

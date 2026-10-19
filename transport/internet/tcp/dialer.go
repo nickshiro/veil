@@ -6,14 +6,14 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/transport/internet"
-	"github.com/xtls/xray-core/transport/internet/reality"
-	"github.com/xtls/xray-core/transport/internet/stat"
-	"github.com/xtls/xray-core/transport/internet/tls"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/session"
+	"github.com/nickshiro/veil/transport/internet"
+	"github.com/nickshiro/veil/transport/internet/reality"
+	"github.com/nickshiro/veil/transport/internet/stat"
+	"github.com/nickshiro/veil/transport/internet/tls"
 )
 
 // Dial dials a new TCP connection to the given destination.

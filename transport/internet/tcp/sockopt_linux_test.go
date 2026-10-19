@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/testing/servers/tcp"
-	"github.com/xtls/xray-core/transport/internet"
-	. "github.com/xtls/xray-core/transport/internet/tcp"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/testing/servers/tcp"
+	"github.com/nickshiro/veil/transport/internet"
+	. "github.com/nickshiro/veil/transport/internet/tcp"
 )
 
 func TestGetOriginalDestination(t *testing.T) {

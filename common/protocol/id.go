@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"uuid"
 
-	"github.com/xtls/xray-core/common"
+	"github.com/nickshiro/veil/common"
 )
 
 const (

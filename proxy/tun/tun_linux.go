@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/platform"
 	"github.com/vishvananda/netlink"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/platform"
 	"golang.org/x/sys/unix"
 )
 

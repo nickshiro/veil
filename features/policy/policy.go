@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/xtls/xray-core/common/platform"
-	"github.com/xtls/xray-core/features"
+	"github.com/nickshiro/veil/common/platform"
+	"github.com/nickshiro/veil/features"
 )
 
 // Timeout contains limits for connection timeout.

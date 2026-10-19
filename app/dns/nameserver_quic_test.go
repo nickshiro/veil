@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	. "github.com/xtls/xray-core/app/dns"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/features/dns"
+	. "github.com/nickshiro/veil/app/dns"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/features/dns"
 )
 
 func TestQUICNameServer(t *testing.T) {

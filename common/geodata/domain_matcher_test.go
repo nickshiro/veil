@@ -7,8 +7,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/xtls/xray-core/common/geodata/strmatcher"
-	"github.com/xtls/xray-core/common/utils"
+	"github.com/nickshiro/veil/common/geodata/strmatcher"
+	"github.com/nickshiro/veil/common/utils"
 )
 
 func TestCompactDomainMatcher_PreservesCustomRuleIndices(t *testing.T) {

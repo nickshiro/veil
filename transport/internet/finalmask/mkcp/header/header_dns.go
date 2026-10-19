@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/xtls/xray-core/common/dice"
+	"github.com/nickshiro/veil/common/dice"
 )
 
 type dns struct {

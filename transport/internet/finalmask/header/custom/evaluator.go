@@ -5,8 +5,8 @@ import (
 	"maps"
 	"net"
 
-	"github.com/xtls/xray-core/common/crypto"
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/crypto"
+	"github.com/nickshiro/veil/common/errors"
 )
 
 type evalValue struct {

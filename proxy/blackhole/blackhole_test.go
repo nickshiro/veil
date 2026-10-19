@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/proxy/blackhole"
-	"github.com/xtls/xray-core/transport"
-	"github.com/xtls/xray-core/transport/pipe"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/session"
+	"github.com/nickshiro/veil/proxy/blackhole"
+	"github.com/nickshiro/veil/transport"
+	"github.com/nickshiro/veil/transport/pipe"
 )
 
 func TestBlackholeHTTPResponse(t *testing.T) {

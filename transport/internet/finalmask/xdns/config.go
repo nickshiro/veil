@@ -1,8 +1,8 @@
 package xdns
 
 import (
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/transport/internet/finalmask"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/transport/internet/finalmask"
 )
 
 func (c *Config) WrapPacketConnClient(conn net.PacketConn, dest *net.Destination, dialer *finalmask.Dialer) (net.PacketConn, error) {

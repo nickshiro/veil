@@ -7,10 +7,10 @@
 package freedom
 
 import (
-	geodata "github.com/xtls/xray-core/common/geodata"
-	net "github.com/xtls/xray-core/common/net"
-	protocol "github.com/xtls/xray-core/common/protocol"
-	internet "github.com/xtls/xray-core/transport/internet"
+	geodata "github.com/nickshiro/veil/common/geodata"
+	net "github.com/nickshiro/veil/common/net"
+	protocol "github.com/nickshiro/veil/common/protocol"
+	internet "github.com/nickshiro/veil/transport/internet"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -571,7 +571,7 @@ const file_proxy_freedom_config_proto_rawDesc = "" +
 	"RuleAction\x12\t\n" +
 	"\x05Allow\x10\x00\x12\t\n" +
 	"\x05Block\x10\x01BX\n" +
-	"\x16com.xray.proxy.freedomP\x01Z'github.com/xtls/xray-core/proxy/freedom\xaa\x02\x12Xray.Proxy.Freedomb\x06proto3"
+	"\x16com.xray.proxy.freedomP\x01Z'github.com/nickshiro/veil/proxy/freedom\xaa\x02\x12Xray.Proxy.Freedomb\x06proto3"
 
 var (
 	file_proxy_freedom_config_proto_rawDescOnce sync.Once

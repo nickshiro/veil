@@ -141,7 +141,7 @@ const file_transport_internet_finalmask_fragment_config_proto_rawDesc = "" +
 	"delays_min\x18\v \x03(\x03R\tdelaysMin\x12\x1d\n" +
 	"\n" +
 	"delays_max\x18\f \x03(\x03R\tdelaysMaxB\xa0\x01\n" +
-	".com.xray.transport.internet.finalmask.fragmentP\x01Z?github.com/xtls/xray-core/transport/internet/finalmask/fragment\xaa\x02*Xray.Transport.Internet.Finalmask.Fragmentb\x06proto3"
+	".com.xray.transport.internet.finalmask.fragmentP\x01Z?github.com/nickshiro/veil/transport/internet/finalmask/fragment\xaa\x02*Xray.Transport.Internet.Finalmask.Fragmentb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_fragment_config_proto_rawDescOnce sync.Once

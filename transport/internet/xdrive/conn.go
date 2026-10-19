@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xtls/xray-core/common/net"
+	"github.com/nickshiro/veil/common/net"
 )
 
 var placeholderAddr = &net.TCPAddr{IP: net.IP{127, 0, 0, 1}, Port: 0}

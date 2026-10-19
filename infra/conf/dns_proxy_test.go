@@ -4,10 +4,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/xtls/xray-core/common/geodata"
-	"github.com/xtls/xray-core/common/net"
-	. "github.com/xtls/xray-core/infra/conf"
-	"github.com/xtls/xray-core/proxy/dns"
+	"github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/common/net"
+	. "github.com/nickshiro/veil/infra/conf"
+	"github.com/nickshiro/veil/proxy/dns"
 )
 
 func TestDnsProxyConfig(t *testing.T) {

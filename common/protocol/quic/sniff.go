@@ -7,11 +7,11 @@ import (
 	"io"
 
 	"github.com/apernet/quic-go/quicvarint"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/protocol"
-	ptls "github.com/xtls/xray-core/common/protocol/tls"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/protocol"
+	ptls "github.com/nickshiro/veil/common/protocol/tls"
 	"golang.org/x/crypto/hkdf"
 )
 

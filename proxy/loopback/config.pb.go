@@ -7,7 +7,7 @@
 package loopback
 
 import (
-	proxyman "github.com/xtls/xray-core/app/proxyman"
+	proxyman "github.com/nickshiro/veil/app/proxyman"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -83,7 +83,7 @@ const file_proxy_loopback_config_proto_rawDesc = "" +
 	"\vinbound_tag\x18\x01 \x01(\tR\n" +
 	"inboundTag\x12=\n" +
 	"\bsniffing\x18\x02 \x01(\v2!.xray.app.proxyman.SniffingConfigR\bsniffingB[\n" +
-	"\x17com.xray.proxy.loopbackP\x01Z(github.com/xtls/xray-core/proxy/loopback\xaa\x02\x13Xray.Proxy.Loopbackb\x06proto3"
+	"\x17com.xray.proxy.loopbackP\x01Z(github.com/nickshiro/veil/proxy/loopback\xaa\x02\x13Xray.Proxy.Loopbackb\x06proto3"
 
 var (
 	file_proxy_loopback_config_proto_rawDescOnce sync.Once

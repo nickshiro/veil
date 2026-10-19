@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/transport/internet"
-	"github.com/xtls/xray-core/transport/internet/stat"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/transport/internet"
+	"github.com/nickshiro/veil/transport/internet/stat"
 )
 
 const testPatience = 30 * time.Second

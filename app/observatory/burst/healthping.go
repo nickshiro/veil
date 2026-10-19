@@ -9,9 +9,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/xtls/xray-core/common/dice"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/features/routing"
+	"github.com/nickshiro/veil/common/dice"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/features/routing"
 )
 
 // HealthPingSettings holds settings for health Checker

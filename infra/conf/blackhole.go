@@ -4,8 +4,8 @@ import (
 	"encoding/base64"
 	"strings"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/proxy/blackhole"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/proxy/blackhole"
 	"google.golang.org/protobuf/proto"
 )
 

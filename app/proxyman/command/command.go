@@ -3,14 +3,14 @@ package command
 import (
 	"context"
 
-	"github.com/xtls/xray-core/app/commander"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/features/inbound"
-	"github.com/xtls/xray-core/features/outbound"
-	"github.com/xtls/xray-core/proxy"
+	"github.com/nickshiro/veil/app/commander"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/features/inbound"
+	"github.com/nickshiro/veil/features/outbound"
+	"github.com/nickshiro/veil/proxy"
 	grpc "google.golang.org/grpc"
 )
 

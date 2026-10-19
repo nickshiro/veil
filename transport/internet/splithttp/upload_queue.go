@@ -8,8 +8,8 @@ import (
 	"io"
 	"sync/atomic"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/signal/done"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/signal/done"
 )
 
 type Packet struct {

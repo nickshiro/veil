@@ -13,12 +13,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/ocsp"
-	"github.com/xtls/xray-core/common/platform/filesystem"
-	"github.com/xtls/xray-core/common/protocol/tls/cert"
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/ocsp"
+	"github.com/nickshiro/veil/common/platform/filesystem"
+	"github.com/nickshiro/veil/common/protocol/tls/cert"
+	"github.com/nickshiro/veil/transport/internet"
 	"golang.org/x/crypto/x509roots/fallback/bundle"
 )
 

@@ -7,7 +7,7 @@ import (
 	"io"
 	"syscall"
 
-	"github.com/xtls/xray-core/features/stats"
+	"github.com/nickshiro/veil/features/stats"
 )
 
 func useReadV() bool {

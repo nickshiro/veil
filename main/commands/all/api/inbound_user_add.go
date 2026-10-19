@@ -4,23 +4,23 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/xtls/xray-core/common/protocol"
+	"github.com/nickshiro/veil/common/protocol"
 
-	handlerService "github.com/xtls/xray-core/app/proxyman/command"
-	cserial "github.com/xtls/xray-core/common/serial"
+	handlerService "github.com/nickshiro/veil/app/proxyman/command"
+	cserial "github.com/nickshiro/veil/common/serial"
 
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/infra/conf"
-	"github.com/xtls/xray-core/infra/conf/serial"
-	"github.com/xtls/xray-core/proxy/hysteria"
-	"github.com/xtls/xray-core/proxy/masque"
-	"github.com/xtls/xray-core/proxy/shadowsocks"
-	"github.com/xtls/xray-core/proxy/shadowsocks_2022"
-	"github.com/xtls/xray-core/proxy/trojan"
-	vlessin "github.com/xtls/xray-core/proxy/vless/inbound"
-	vmessin "github.com/xtls/xray-core/proxy/vmess/inbound"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/infra/conf"
+	"github.com/nickshiro/veil/infra/conf/serial"
+	"github.com/nickshiro/veil/proxy/hysteria"
+	"github.com/nickshiro/veil/proxy/masque"
+	"github.com/nickshiro/veil/proxy/shadowsocks"
+	"github.com/nickshiro/veil/proxy/shadowsocks_2022"
+	"github.com/nickshiro/veil/proxy/trojan"
+	vlessin "github.com/nickshiro/veil/proxy/vless/inbound"
+	vmessin "github.com/nickshiro/veil/proxy/vmess/inbound"
 
-	"github.com/xtls/xray-core/main/commands/base"
+	"github.com/nickshiro/veil/main/commands/base"
 )
 
 var cmdAddInboundUsers = &base.Command{

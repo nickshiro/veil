@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"net/netip"
 
-	"github.com/xtls/xray-core/common/protocol"
+	"github.com/nickshiro/veil/common/protocol"
 	"google.golang.org/protobuf/proto"
 )
 

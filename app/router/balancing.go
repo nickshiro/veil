@@ -4,12 +4,12 @@ import (
 	"context"
 	sync "sync"
 
-	"github.com/xtls/xray-core/app/observatory"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/features/extension"
-	"github.com/xtls/xray-core/features/outbound"
+	"github.com/nickshiro/veil/app/observatory"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/features/extension"
+	"github.com/nickshiro/veil/features/outbound"
 )
 
 type BalancingStrategy interface {

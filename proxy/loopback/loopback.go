@@ -3,14 +3,14 @@ package loopback
 import (
 	"context"
 
-	proxyman "github.com/xtls/xray-core/app/proxyman"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/features/routing"
-	"github.com/xtls/xray-core/transport"
-	"github.com/xtls/xray-core/transport/internet"
+	proxyman "github.com/nickshiro/veil/app/proxyman"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/session"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/features/routing"
+	"github.com/nickshiro/veil/transport"
+	"github.com/nickshiro/veil/transport/internet"
 )
 
 type Loopback struct {

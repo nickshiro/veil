@@ -6,11 +6,11 @@ import (
 	"time"
 	_ "unsafe"
 
-	"github.com/xtls/xray-core/app/router"
-	"github.com/xtls/xray-core/common/geodata"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/serial"
-	. "github.com/xtls/xray-core/infra/conf"
+	"github.com/nickshiro/veil/app/router"
+	"github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/serial"
+	. "github.com/nickshiro/veil/infra/conf"
 
 	"google.golang.org/protobuf/proto"
 )

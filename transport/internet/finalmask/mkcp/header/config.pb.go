@@ -81,7 +81,7 @@ const file_transport_internet_finalmask_mkcp_header_config_proto_rawDesc = "" +
 	"\x06Config\x12\x0e\n" +
 	"\x02ID\x18\x01 \x01(\x05R\x02ID\x12\x16\n" +
 	"\x06domain\x18\x02 \x01(\tR\x06domainB\xa9\x01\n" +
-	"1com.xray.transport.internet.finalmask.mkcp.headerP\x01ZBgithub.com/xtls/xray-core/transport/internet/finalmask/mkcp/header\xaa\x02-Xray.Transport.Internet.Finalmask.Mkcp.Headerb\x06proto3"
+	"1com.xray.transport.internet.finalmask.mkcp.headerP\x01ZBgithub.com/nickshiro/veil/transport/internet/finalmask/mkcp/header\xaa\x02-Xray.Transport.Internet.Finalmask.Mkcp.Headerb\x06proto3"
 
 var (
 	file_transport_internet_finalmask_mkcp_header_config_proto_rawDescOnce sync.Once

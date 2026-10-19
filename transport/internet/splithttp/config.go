@@ -10,11 +10,11 @@ import (
 	"strings"
 	"uuid"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/buf"
-	"github.com/xtls/xray-core/common/crypto"
-	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/transport/internet"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/buf"
+	"github.com/nickshiro/veil/common/crypto"
+	"github.com/nickshiro/veil/common/utils"
+	"github.com/nickshiro/veil/transport/internet"
 )
 
 func (c *Config) GetNormalizedPath() string {

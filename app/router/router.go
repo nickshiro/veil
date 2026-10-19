@@ -6,14 +6,14 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/core"
-	"github.com/xtls/xray-core/features/dns"
-	"github.com/xtls/xray-core/features/outbound"
-	"github.com/xtls/xray-core/features/routing"
-	routing_dns "github.com/xtls/xray-core/features/routing/dns"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
+	"github.com/nickshiro/veil/common/serial"
+	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/features/dns"
+	"github.com/nickshiro/veil/features/outbound"
+	"github.com/nickshiro/veil/features/routing"
+	routing_dns "github.com/nickshiro/veil/features/routing/dns"
 )
 
 // Router is an implementation of routing.Router.

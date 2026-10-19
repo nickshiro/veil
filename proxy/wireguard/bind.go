@@ -10,8 +10,8 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/errors"
 	"golang.zx2c4.com/wireguard/conn"
 )
 

@@ -7,15 +7,15 @@ import (
 	"strings"
 	"testing"
 
-	. "github.com/xtls/xray-core/app/router"
-	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/geodata"
-	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/protocol/http"
-	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/features/routing"
-	routing_session "github.com/xtls/xray-core/features/routing/session"
+	. "github.com/nickshiro/veil/app/router"
+	"github.com/nickshiro/veil/common"
+	"github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/common/net"
+	"github.com/nickshiro/veil/common/protocol"
+	"github.com/nickshiro/veil/common/protocol/http"
+	"github.com/nickshiro/veil/common/session"
+	"github.com/nickshiro/veil/features/routing"
+	routing_session "github.com/nickshiro/veil/features/routing/session"
 )
 
 func withBackground() routing.Context {

@@ -5,7 +5,7 @@ import (
 	"compress/gzip"
 	"encoding/base64"
 
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/errors"
 )
 
 // Encode returns prefixed Base64 text, optionally compressed with gzip at the highest level.

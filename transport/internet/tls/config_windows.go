@@ -6,7 +6,7 @@ package tls
 import (
 	"crypto/x509"
 
-	"github.com/xtls/xray-core/common/errors"
+	"github.com/nickshiro/veil/common/errors"
 )
 
 func (c *Config) getCertPool() (*x509.CertPool, error) {

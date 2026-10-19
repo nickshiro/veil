@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xtls/xray-core/common/net"
+	"github.com/nickshiro/veil/common/net"
 )
 
 func CalculateInterfaceName(name string) (tunName string) {

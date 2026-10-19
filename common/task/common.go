@@ -1,6 +1,6 @@
 package task
 
-import "github.com/xtls/xray-core/common"
+import "github.com/nickshiro/veil/common"
 
 // Close returns a func() that closes v.
 func Close(v any) func() error {
