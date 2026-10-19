@@ -62,7 +62,7 @@ func RegisterConfigLoader(format *ConfigFormat) error {
 
 func GetMergedConfig(args cmdarg.Arg) (string, error) {
 	var files []*ConfigSource
-	supported := []string{"json", "yaml", "toml"}
+	supported := []string{"json", "yaml"}
 	for _, file := range args {
 		format := "json"
 		if file != "stdin:" {
@@ -85,8 +85,6 @@ func GetFormatByExtension(ext string) string {
 		return "protobuf"
 	case "yaml", "yml":
 		return "yaml"
-	case "toml":
-		return "toml"
 	case "json", "jsonc":
 		return "json"
 	default:
