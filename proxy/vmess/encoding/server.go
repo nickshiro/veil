@@ -196,8 +196,8 @@ func (s *ServerSession) DecodeRequestHeader(reader io.Reader, isDrain bool) (*pr
 		return nil, errors.New("duplicated session id, possibly under replay attack, but this is a AEAD request")
 	}
 
-	s.responseHeader = buffer.Byte(33)     // 1 byte
-	request.Option = buffer.Byte(34) // 1 byte
+	s.responseHeader = buffer.Byte(33) // 1 byte
+	request.Option = buffer.Byte(34)   // 1 byte
 	paddingLen := int(buffer.Byte(35) >> 4)
 	request.Security = parseSecurityType(buffer.Byte(35) & 0x0F)
 	// 1 bytes reserved
