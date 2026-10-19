@@ -13,11 +13,5 @@ func init() {
 		api.CmdAPI,
 		convert.CmdConvert,
 		tls.CmdTLS,
-		cmdX25519,
-		// cmdEd25519,
-		cmdWG,
-		cmdMLDSA65,
-		cmdMLKEM768,
-		cmdVLESSEnc,
 	)
 }
