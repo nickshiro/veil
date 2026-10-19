@@ -181,8 +181,6 @@ func (d *SimpleSystemDialer) DestIpAddress() net.IP {
 
 // UseAlternativeSystemDialer replaces the current system dialer with a given one.
 // Caller must ensure there is no race condition.
-//
-// xray:api:stable
 func UseAlternativeSystemDialer(dialer SystemDialer) {
 	if dialer == nil {
 		dialer = &DefaultSystemDialer{}
@@ -193,8 +191,6 @@ func UseAlternativeSystemDialer(dialer SystemDialer) {
 // RegisterDialerController adds a controller to the effective system dialer.
 // The controller can be used to operate on file descriptors before they are put into use.
 // It only works when effective dialer is the default dialer.
-//
-// xray:api:beta
 func RegisterDialerController(ctl func(network, address string, c syscall.RawConn) error) error {
 	if ctl == nil {
 		return errors.New("nil listener controller")

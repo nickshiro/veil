@@ -64,8 +64,6 @@ type Session struct {
 }
 
 // Manager is a feature that provides Policy for the given user by its id or level.
-//
-// xray:api:stable
 type Manager interface {
 	features.Feature
 
@@ -77,8 +75,6 @@ type Manager interface {
 }
 
 // ManagerType returns the type of Manager interface. Can be used to implement common.HasType.
-//
-// xray:api:stable
 func ManagerType() any {
 	return (*Manager)(nil)
 }

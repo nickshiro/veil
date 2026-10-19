@@ -7,8 +7,6 @@ import (
 )
 
 // Router is a feature to choose an outbound tag for the given request.
-//
-// xray:api:stable
 type Router interface {
 	features.Feature
 
@@ -20,8 +18,6 @@ type Router interface {
 }
 
 // Route is the routing result of Router feature.
-//
-// xray:api:stable
 type Route interface {
 	// A Route is also a routing context.
 	Context
@@ -37,8 +33,6 @@ type Route interface {
 }
 
 // RouterType return the type of Router interface. Can be used to implement common.HasType.
-//
-// xray:api:stable
 func RouterType() any {
 	return (*Router)(nil)
 }

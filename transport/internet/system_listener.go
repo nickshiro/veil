@@ -183,8 +183,6 @@ func (dl *DefaultListener) ListenPacket(ctx context.Context, addr net.Addr, sock
 
 // RegisterListenerController adds a controller to the effective system listener.
 // The controller can be used to operate on file descriptors before they are put into use.
-//
-// xray:api:beta
 func RegisterListenerController(controller func(network, address string, c syscall.RawConn) error) error {
 	if controller == nil {
 		return errors.New("nil listener controller")

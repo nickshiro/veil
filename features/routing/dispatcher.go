@@ -10,8 +10,6 @@ import (
 
 // Dispatcher is a feature that dispatches inbound requests to outbound handlers based on rules.
 // Dispatcher is required to be registered in a Xray instance to make Xray function properly.
-//
-// xray:api:stable
 type Dispatcher interface {
 	features.Feature
 
@@ -21,8 +19,6 @@ type Dispatcher interface {
 }
 
 // DispatcherType returns the type of Dispatcher interface. Can be used to implement common.HasType.
-//
-// xray:api:stable
 func DispatcherType() any {
 	return (*Dispatcher)(nil)
 }

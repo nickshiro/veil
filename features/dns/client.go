@@ -15,8 +15,6 @@ type IPOption struct {
 }
 
 // Client is a Xray feature for querying DNS information.
-//
-// xray:api:stable
 type Client interface {
 	features.Feature
 
@@ -25,8 +23,6 @@ type Client interface {
 }
 
 // ClientType returns the type of Client interface. Can be used for implementing common.HasType.
-//
-// xray:api:beta
 func ClientType() any {
 	return (*Client)(nil)
 }

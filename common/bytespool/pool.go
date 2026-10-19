@@ -35,8 +35,6 @@ func init() {
 
 // GetPool returns a sync.Pool that generates bytes array with at least the given size.
 // It may return nil if no such pool exists.
-//
-// xray:api:stable
 func GetPool(size int32) *sync.Pool {
 	for idx, ps := range poolSize {
 		if size <= ps {
@@ -47,8 +45,6 @@ func GetPool(size int32) *sync.Pool {
 }
 
 // Alloc returns a byte slice with at least the given size. Minimum size of returned slice is 2048.
-//
-// xray:api:stable
 func Alloc(size int32) []byte {
 	pool := GetPool(size)
 	if pool != nil {
@@ -58,8 +54,6 @@ func Alloc(size int32) []byte {
 }
 
 // Free puts a byte slice into the internal pool.
-//
-// xray:api:stable
 func Free(b []byte) {
 	size := int32(cap(b))
 	b = b[0:cap(b)]

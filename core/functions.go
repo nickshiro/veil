@@ -23,8 +23,6 @@ func CreateObject(v *Instance, config interface{}) (interface{}, error) {
 
 // StartInstance starts a new Xray instance with given serialized config.
 // By default Xray only support config in protobuf format, i.e., configFormat = "protobuf". Caller need to load other packages to add JSON support.
-//
-// xray:api:stable
 func StartInstance(configFormat string, configBytes []byte) (*Instance, error) {
 	config, err := LoadConfig(configFormat, bytes.NewReader(configBytes))
 	if err != nil {
@@ -44,8 +42,6 @@ func StartInstance(configFormat string, configBytes []byte) (*Instance, error) {
 // It dispatches the request to the given destination by the given Xray instance.
 // Since it is under a proxy context, the LocalAddr() and RemoteAddr() in returned net.Conn
 // will not show real addresses being used for communication.
-//
-// xray:api:stable
 func Dial(ctx context.Context, v *Instance, dest net.Destination) (net.Conn, error) {
 	ctx = toContext(ctx, v)
 
@@ -71,8 +67,6 @@ func Dial(ctx context.Context, v *Instance, dest net.Destination) (net.Conn, err
 // Since it is under a proxy context, the LocalAddr() in returned PacketConn will not show the real address.
 //
 // TODO: SetDeadline() / SetReadDeadline() / SetWriteDeadline() are not implemented.
-//
-// xray:api:beta
 func DialUDP(ctx context.Context, v *Instance) (net.PacketConn, error) {
 	ctx = toContext(ctx, v)
 

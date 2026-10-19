@@ -384,8 +384,6 @@ func (s *Instance) GetFeature(featureType interface{}) features.Feature {
 
 // Start starts the Xray instance, including all registered features. When Start returns error, the state of the instance is unknown.
 // A Xray instance can be started only once. Upon closing, the instance is not guaranteed to start again.
-//
-// xray:api:stable
 func (s *Instance) Start() error {
 	s.statusLock.Lock()
 	defer s.statusLock.Unlock()

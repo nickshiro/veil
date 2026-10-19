@@ -5,8 +5,6 @@ import (
 )
 
 // Context is a feature to store connection information for routing.
-//
-// xray:api:stable
 type Context interface {
 	// GetInboundTag returns the tag of the inbound the connection was from.
 	GetInboundTag() string

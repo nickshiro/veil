@@ -7,15 +7,11 @@ import (
 )
 
 // Interruptible is an interface for objects that can be stopped before its completion.
-//
-// xray:api:beta
 type Interruptible interface {
 	Interrupt()
 }
 
 // Close closes obj if it implements io.Closer.
-//
-// xray:api:beta
 func Close(obj any) error {
 	if c, ok := obj.(io.Closer); ok {
 		return c.Close()
@@ -24,8 +20,6 @@ func Close(obj any) error {
 }
 
 // Interrupt calls Interrupt() if object implements Interruptible interface, or Close() if the object implements io.Closer interface.
-//
-// xray:api:beta
 func Interrupt(obj any) error {
 	if c, ok := obj.(Interruptible); ok {
 		c.Interrupt()

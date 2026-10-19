@@ -9,8 +9,6 @@ import (
 )
 
 // Handler is the interface for handlers that process inbound connections.
-//
-// xray:api:stable
 type Handler interface {
 	common.Runnable
 	// The tag of this handler.
@@ -22,8 +20,6 @@ type Handler interface {
 }
 
 // Manager is a feature that manages InboundHandlers.
-//
-// xray:api:stable
 type Manager interface {
 	features.Feature
 	// GetHandler returns an InboundHandler for the given tag.
@@ -39,8 +35,6 @@ type Manager interface {
 }
 
 // ManagerType returns the type of Manager interface. Can be used for implementing common.HasType.
-//
-// xray:api:stable
 func ManagerType() any {
 	return (*Manager)(nil)
 }

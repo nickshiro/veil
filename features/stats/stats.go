@@ -9,8 +9,6 @@ import (
 )
 
 // Counter is the interface for stats counters.
-//
-// xray:api:stable
 type Counter interface {
 	// Value is the current value of the counter.
 	Value() int64
@@ -21,8 +19,6 @@ type Counter interface {
 }
 
 // OnlineMap is the interface for tracking online IP addresses.
-//
-// xray:api:stable
 type OnlineMap interface {
 	// Count returns the number of unique online IPs.
 	Count() int
@@ -37,8 +33,6 @@ type OnlineMap interface {
 }
 
 // Channel is the interface for stats channel.
-//
-// xray:api:stable
 type Channel interface {
 	// Runnable implies that Channel is a runnable unit.
 	common.Runnable
@@ -74,8 +68,6 @@ func UnsubscribeClosableChannel(c Channel, sub chan any) error {
 }
 
 // Manager is the interface for stats manager.
-//
-// xray:api:stable
 type Manager interface {
 	features.Feature
 
@@ -117,8 +109,6 @@ type Manager interface {
 }
 
 // ManagerType returns the type of Manager interface. Can be used to implement common.HasType.
-//
-// xray:api:stable
 func ManagerType() any {
 	return (*Manager)(nil)
 }
