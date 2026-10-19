@@ -44,7 +44,7 @@ func (h *HappyEyeballsConfig) UnmarshalJSON(data []byte) error {
 
 type SocketConfig struct {
 	Mark                  int32                  `json:"mark"`
-	TFO                   interface{}            `json:"tcpFastOpen"`
+	TFO                   any                    `json:"tcpFastOpen"`
 	TProxy                string                 `json:"tproxy"`
 	AcceptProxyProtocol   bool                   `json:"acceptProxyProtocol"`
 	DomainStrategy        string                 `json:"domainStrategy"`

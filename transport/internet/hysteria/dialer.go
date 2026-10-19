@@ -3,6 +3,7 @@ package hysteria
 import (
 	"context"
 	gotls "crypto/tls"
+	"maps"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -303,9 +304,7 @@ func (m *clientManager) clean() {
 	for range ticker.C {
 		m.RLock()
 		entries := make(map[dialerConf]*client, len(m.m))
-		for k, c := range m.m {
-			entries[k] = c
-		}
+		maps.Copy(entries, m.m)
 		m.RUnlock()
 		for k, c := range entries {
 			force := c.instance != nil && !c.instance.IsRunning()

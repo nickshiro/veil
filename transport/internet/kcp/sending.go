@@ -315,10 +315,7 @@ func (w *SendingWorker) Flush(current uint32) {
 		return
 	}
 
-	cwnd := w.conn.Config.GetSendingInFlightSize()
-	if cwnd > w.remoteNextNumber-w.firstUnacknowledged {
-		cwnd = w.remoteNextNumber - w.firstUnacknowledged
-	}
+	cwnd := min(w.conn.Config.GetSendingInFlightSize(), w.remoteNextNumber-w.firstUnacknowledged)
 	if cwnd > w.controlWindow {
 		cwnd = w.controlWindow
 	}

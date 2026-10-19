@@ -5,7 +5,7 @@ import (
 	"context"
 	go_errors "errors"
 	"fmt"
-	"sort"
+	"slices"
 	"strings"
 	"sync"
 
@@ -184,7 +184,7 @@ func New(ctx context.Context, config *Config) (*DNS, error) {
 }
 
 // Type implements common.HasType.
-func (*DNS) Type() interface{} {
+func (*DNS) Type() any {
 	return dns.ClientType()
 }
 
@@ -296,9 +296,7 @@ func (s *DNS) sortClients(domain string) []*Client {
 	hasMatch := false
 	if s.domainMatcher != nil {
 		matchSlice := s.domainMatcher.Match(strings.ToLower(domain))
-		sort.Slice(matchSlice, func(i, j int) bool {
-			return matchSlice[i] < matchSlice[j]
-		})
+		slices.Sort(matchSlice)
 		for _, match := range matchSlice {
 			info := s.matcherInfos[match]
 			client := s.clients[info.clientIdx]
@@ -555,7 +553,7 @@ func makeGroups( /*ctx context.Context,*/ clients []*Client) ([]group, []int) {
 }
 
 func init() {
-	common.Must(common.RegisterConfig((*Config)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*Config)(nil), func(ctx context.Context, config any) (any, error) {
 		return New(ctx, config.(*Config))
 	}))
 }

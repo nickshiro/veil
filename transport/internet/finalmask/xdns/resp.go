@@ -39,17 +39,11 @@ func NewResp(msg dnsmessage.Message, domain *Domain, edns0 uint16) *Resp {
 	switch msg.Questions[0].Type {
 	case dnsmessage.TypeA:
 		single := 2 + 2 + 2 + 4 + 2 + 4
-		n := left / single
-		if n > 255 {
-			n = 255
-		}
+		n := min(left/single, 255)
 		cap = 4*n - n - 1
 	case dnsmessage.TypeCNAME:
 		single := 2 + 2 + 2 + 4 + 2 + domain.lenMax
-		n := left / single
-		if n > 255 {
-			n = 255
-		}
+		n := min(left/single, 255)
 		cap = domain.cap*n - n - 1
 	case dnsmessage.TypeTXT:
 		left -= 2 + 2 + 2 + 4 + 2
@@ -62,10 +56,7 @@ func NewResp(msg dnsmessage.Message, domain *Domain, edns0 uint16) *Resp {
 		}
 	case dnsmessage.TypeAAAA:
 		single := 2 + 2 + 2 + 4 + 2 + 16
-		n := left / single
-		if n > 255 {
-			n = 255
-		}
+		n := min(left/single, 255)
 		cap = 16*n - n - 1
 	}
 

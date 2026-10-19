@@ -340,8 +340,8 @@ func (c *headerManagerConn) WriteTo(p []byte, addr net.Addr) (n int, err error) 
 
 	n = copy(b[sum:], p)
 
-	for i := len(c.conns) - 1; i >= 0; i-- {
-		n, err = c.conns[i].WriteTo(b[sum-c.sizes[i]:n+sum], nil)
+	for i, v := range slices.Backward(c.conns) {
+		n, err = v.WriteTo(b[sum-c.sizes[i]:n+sum], nil)
 		if err != nil {
 			errors.LogErrorInner(context.Background(), err, "[mask] drop packet to ", addr, " with size ", len(p))
 			return 0, nil

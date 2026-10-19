@@ -4,6 +4,7 @@ import (
 	"encoding/base32"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"golang.org/x/net/dns/dnsmessage"
@@ -165,12 +166,7 @@ func (d *Domain) IsDomain(name dnsmessage.Name) bool {
 }
 
 func (d *Domain) HasType(qtype uint16) bool {
-	for i := range d.types {
-		if d.types[i] == qtype {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(d.types, qtype)
 }
 
 func (d *Domain) Encode(data []byte) dnsmessage.Name {

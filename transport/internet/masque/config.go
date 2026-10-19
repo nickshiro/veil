@@ -19,7 +19,7 @@ func (c *Config) keepAlivePeriod() time.Duration {
 }
 
 func init() {
-	common.Must(internet.RegisterProtocolConfigCreator(protocolName, func() interface{} {
+	common.Must(internet.RegisterProtocolConfigCreator(protocolName, func() any {
 		return &Config{
 			Path: DefaultPath,
 		}

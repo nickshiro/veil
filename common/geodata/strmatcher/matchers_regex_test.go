@@ -95,7 +95,7 @@ func TestRegexTailGuard(t *testing.T) {
 func TestRegexTailGuardFlatAlternation(t *testing.T) {
 	var sb strings.Builder
 	sb.WriteString("(?:")
-	for i := 0; i < 20000; i++ {
+	for i := range 20000 {
 		if i > 0 {
 			sb.WriteByte('|')
 		}

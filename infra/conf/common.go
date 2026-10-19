@@ -252,8 +252,8 @@ func (list *PortList) UnmarshalJSON(data []byte) error {
 			return errors.New("invalid port: ", string(data)).Base(err2)
 		}
 	}
-	rangelist := strings.Split(listStr, ",")
-	for _, rangeStr := range rangelist {
+	rangelist := strings.SplitSeq(listStr, ",")
+	for rangeStr := range rangelist {
 		trimmed := strings.TrimSpace(rangeStr)
 		if len(trimmed) > 0 {
 			if strings.Contains(trimmed, "-") || strings.Contains(trimmed, "env:") {

@@ -102,7 +102,7 @@ type DecodedUDPPacket struct {
 func DecryptUDPEIH(block cipher.Block, rawHeader, eih []byte) [AESBlockSize]byte {
 	var decryptedHash [AESBlockSize]byte
 	block.Decrypt(decryptedHash[:], eih)
-	for k := 0; k < AESBlockSize; k++ {
+	for k := range AESBlockSize {
 		decryptedHash[k] ^= rawHeader[k]
 	}
 	return decryptedHash
@@ -577,7 +577,7 @@ func (s *ClientUDPSession) EncodePacket(dest net.Destination, payload []byte) (*
 			nextPSK := s.codec.pskList[i+1]
 			pskHash := DeriveUserPSKHash(nextPSK)
 			var eihPlain [16]byte
-			for k := 0; k < 16; k++ {
+			for k := range 16 {
 				eihPlain[k] = pskHash[k] ^ rawHeader[k]
 			}
 			var encryptedEIH [16]byte

@@ -77,7 +77,7 @@ type testDispatcher struct {
 	readBytes    int32
 }
 
-func (d *testDispatcher) Type() interface{} {
+func (d *testDispatcher) Type() any {
 	return routing.DispatcherType()
 }
 

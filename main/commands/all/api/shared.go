@@ -120,9 +120,9 @@ func showJSONResponse(m proto.Message) {
 	}
 }
 
-func isNil(i interface{}) bool {
+func isNil(i any) bool {
 	vi := reflect.ValueOf(i)
-	if vi.Kind() == reflect.Ptr {
+	if vi.Kind() == reflect.Pointer {
 		return vi.IsNil()
 	}
 	return i == nil

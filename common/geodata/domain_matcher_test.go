@@ -129,9 +129,7 @@ func TestDomainMatcher_MatchResultsCanBeSortedConcurrently(t *testing.T) {
 
 			var wg sync.WaitGroup
 			for range 8 {
-				wg.Add(1)
-				go func() {
-					defer wg.Done()
+				wg.Go(func() {
 					for range 500 {
 						for _, c := range cases {
 							got := matcher.Match(c.input)
@@ -142,7 +140,7 @@ func TestDomainMatcher_MatchResultsCanBeSortedConcurrently(t *testing.T) {
 							}
 						}
 					}
-				}()
+				})
 			}
 			wg.Wait()
 		})

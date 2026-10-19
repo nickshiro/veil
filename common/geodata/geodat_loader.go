@@ -221,7 +221,7 @@ func NewAllAttrsMatcher(attrs string) AttributeMatcher {
 		return nil
 	}
 	m := new(AllAttrsMatcher)
-	for _, attr := range strings.Split(attrs, "@") {
+	for attr := range strings.SplitSeq(attrs, "@") {
 		m.matchers = append(m.matchers, HasAttrMatcher(attr))
 	}
 	return m

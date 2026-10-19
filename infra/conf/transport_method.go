@@ -234,8 +234,8 @@ func (v *Authenticator) Build() (proto.Message, error) {
 }
 
 var tcpHeaderLoader = NewJSONConfigLoader(ConfigCreatorCache{
-	"none": func() interface{} { return new(NoOpConnectionAuthenticator) },
-	"http": func() interface{} { return new(Authenticator) },
+	"none": func() any { return new(NoOpConnectionAuthenticator) },
+	"http": func() any { return new(Authenticator) },
 }, "type", "")
 
 type TCPConfig struct {

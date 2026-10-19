@@ -31,7 +31,7 @@ func New(ctx context.Context, config *proxyman.InboundConfig) (*Manager, error) 
 }
 
 // Type implements common.HasType.
-func (*Manager) Type() interface{} {
+func (*Manager) Type() any {
 	return inbound.ManagerType()
 }
 
@@ -132,7 +132,7 @@ func (m *Manager) Close() error {
 
 	m.running = false
 
-	var errs []interface{}
+	var errs []any
 	for _, handler := range m.taggedHandlers {
 		if err := handler.Close(); err != nil {
 			errs = append(errs, err)
@@ -182,10 +182,10 @@ func NewHandler(ctx context.Context, config *core.InboundHandlerConfig) (inbound
 }
 
 func init() {
-	common.Must(common.RegisterConfig((*proxyman.InboundConfig)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*proxyman.InboundConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return New(ctx, config.(*proxyman.InboundConfig))
 	}))
-	common.Must(common.RegisterConfig((*core.InboundHandlerConfig)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*core.InboundHandlerConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return NewHandler(ctx, config.(*core.InboundHandlerConfig))
 	}))
 }

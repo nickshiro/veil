@@ -548,7 +548,7 @@ func (s *Server) HandleConnection(conn net.Conn, dest net.Destination) {
 }
 
 func init() {
-	common.Must(common.RegisterConfig((*ServerConfig)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*ServerConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return NewServer(ctx, config.(*ServerConfig))
 	}))
 }

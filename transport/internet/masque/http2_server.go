@@ -189,8 +189,7 @@ func (c *http2ServerConn) readLoop() {
 	for {
 		f, err := c.fr.ReadFrame()
 		if err != nil {
-			var streamErr http2.StreamError
-			if go_errors.As(err, &streamErr) {
+			if streamErr, ok := go_errors.AsType[http2.StreamError](err); ok {
 				if err := c.resetStream(streamErr); err != nil {
 					c.fail(err)
 					return

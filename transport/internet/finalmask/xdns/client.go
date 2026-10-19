@@ -125,9 +125,7 @@ func (c *xdnsClient) send(p []byte) {
 
 	send := func(p []byte) {
 		msg := dnsmessage.Message{
-			Header: dnsmessage.Header{
-				RecursionDesired: true,
-			},
+			RecursionDesired: true,
 			Questions: []dnsmessage.Question{
 				{
 					Name:  domain.Encode(p),

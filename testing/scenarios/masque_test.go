@@ -112,8 +112,7 @@ func startMasqueServer(t *testing.T, h2 bool) (net.Port, [32]byte) {
 		}
 		req, err := connectip.ParseProxyRequest(r)
 		if err != nil {
-			var perr *connectip.ProxyRequestParseError
-			if go_errors.As(err, &perr) {
+			if perr, ok := go_errors.AsType[*connectip.ProxyRequestParseError](err); ok {
 				w.WriteHeader(perr.HTTPStatus)
 			}
 			return

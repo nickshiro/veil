@@ -100,7 +100,7 @@ func TestMetrics(t *testing.T) {
 	if err2 != nil {
 		t.Fatal(err2)
 	}
-	var json2 map[string]interface{}
+	var json2 map[string]any
 	if json.Unmarshal(body2, &json2) != nil {
 		t.Error("unexpected response body from expvars handler")
 	}

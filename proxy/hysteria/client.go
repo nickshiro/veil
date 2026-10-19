@@ -169,7 +169,7 @@ func (c *Client) Process(ctx context.Context, link *transport.Link, dialer inter
 }
 
 func init() {
-	common.Must(common.RegisterConfig((*ClientConfig)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*ClientConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return NewClient(ctx, config.(*ClientConfig))
 	}))
 }
@@ -206,8 +206,7 @@ func (w *UDPWriter) WriteMultiBuffer(mb buf.MultiBuffer) error {
 		}
 
 		err := w.SendMessage(msg)
-		var errTooLarge *quic.DatagramTooLargeError
-		if go_errors.As(err, &errTooLarge) {
+		if errTooLarge, ok := go_errors.AsType[*quic.DatagramTooLargeError](err); ok {
 			msg.PacketID = uint16(rand.Intn(0xFFFF)) + 1
 			fMsgs := FragUDPMessage(msg, int(errTooLarge.MaxDatagramPayloadSize))
 			for _, fMsg := range fMsgs {

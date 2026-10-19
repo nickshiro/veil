@@ -30,7 +30,7 @@ func TestGetTunnelFallsBack(t *testing.T) {
 		c.lastErr, c.lastErrAt = refused, time.Now()
 		return failedTunnel(refused)
 	})
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		if _, got, err := c.getTunnel(context.Background(), nil); err != nil || got != healthy {
 			t.Fatalf("flow %d: got %p, %v instead of the healthy tunnel", i, got, err)
 		}
@@ -46,7 +46,7 @@ func TestGetTunnelFailsWithoutTunnels(t *testing.T) {
 		c.lastErr, c.lastErrAt = refused, time.Now()
 		return failedTunnel(refused)
 	})
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		if _, _, err := c.getTunnel(context.Background(), nil); err != refused {
 			t.Fatalf("flow %d: got %v instead of %v", i, err, refused)
 		}

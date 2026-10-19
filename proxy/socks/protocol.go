@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"io"
 	gonet "net"
+	"slices"
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/buf"
@@ -305,12 +306,7 @@ func ReadUntilNull(reader io.Reader) (string, error) {
 }
 
 func hasAuthMethod(expectedAuth byte, authCandidates []byte) bool {
-	for _, a := range authCandidates {
-		if a == expectedAuth {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(authCandidates, expectedAuth)
 }
 
 func writeSocks5AuthenticationResponse(writer io.Writer, version byte, auth byte) error {

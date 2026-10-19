@@ -367,8 +367,7 @@ func (t *tunnel) writeToTunnel() {
 			return
 		}
 		if _, err := t.conn.Write(bufs[0][:sizes[0]]); err != nil {
-			var ptb *masque.PacketTooBigError
-			if go_errors.As(err, &ptb) {
+			if ptb, ok := go_errors.AsType[*masque.PacketTooBigError](err); ok {
 				go t.dev.Write([][]byte{ptb.ICMP}, 0)
 			}
 		}
@@ -391,7 +390,7 @@ func (t *tunnel) close() {
 }
 
 func init() {
-	common.Must(common.RegisterConfig((*ClientConfig)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*ClientConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return NewClient(ctx, config.(*ClientConfig))
 	}))
 }

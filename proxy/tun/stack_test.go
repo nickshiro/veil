@@ -506,7 +506,7 @@ func TestTCPRetransmit(t *testing.T) {
 			t.Error(err)
 		}
 	}()
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		limit := 100
 		if i == 4 {
 			limit = 50

@@ -131,7 +131,7 @@ func TestServiceClientEndsOnlyStalledRequests(t *testing.T) {
 		io.Copy(io.Discard, r.Body)
 		switch r.URL.Path {
 		case "/slow":
-			for i := 0; i < 20; i++ {
+			for range 20 {
 				w.Write([]byte("x"))
 				w.(http.Flusher).Flush()
 				time.Sleep(stall / 4)

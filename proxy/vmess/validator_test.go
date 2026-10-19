@@ -19,7 +19,7 @@ func BenchmarkUserValidator(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		v := NewTimedUserValidator()
 
-		for j := 0; j < 1500; j++ {
+		for range 1500 {
 			id := uuid.NewV4()
 			v.Add(&protocol.MemoryUser{
 				Email: "test",

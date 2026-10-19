@@ -24,14 +24,14 @@ func BenchmarkUDPNewSession(b *testing.B) {
 
 func TestPacketQueueOrderAndClose(t *testing.T) {
 	q := newPacketQueue(udpQueueLimit)
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		b := buf.New()
 		b.WriteByte(byte(i))
 		if !q.push(b) {
 			t.Fatalf("push %d rejected", i)
 		}
 	}
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		b, ok := q.pop()
 		if !ok || b.Byte(0) != byte(i) {
 			t.Fatalf("pop %d: got %v, %v", i, b, ok)
@@ -49,7 +49,7 @@ func TestPacketQueueOrderAndClose(t *testing.T) {
 
 func TestPacketQueueLimit(t *testing.T) {
 	q := newPacketQueue(udpQueueLimit)
-	for i := 0; i < udpQueueLimit; i++ {
+	for i := range udpQueueLimit {
 		if !q.push(&buf.Buffer{}) {
 			t.Fatalf("push %d rejected below the limit", i)
 		}
@@ -79,10 +79,10 @@ func TestPacketQueueCloseUnblocksReader(t *testing.T) {
 
 func TestPacketQueueDropsDrainedStorage(t *testing.T) {
 	q := newPacketQueue(udpQueueLimit)
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		q.push(&buf.Buffer{})
 	}
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		q.pop()
 	}
 	if q.items != nil {

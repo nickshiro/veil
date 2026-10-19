@@ -20,7 +20,7 @@ import (
 )
 
 func init() {
-	common.Must(common.RegisterConfig((*ClientConfig)(nil), func(ctx context.Context, config interface{}) (interface{}, error) {
+	common.Must(common.RegisterConfig((*ClientConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return NewClient(ctx, config.(*ClientConfig))
 	}))
 }

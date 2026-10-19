@@ -104,7 +104,7 @@ func TestInterleaved(t *testing.T) {
 	client, server, cleanup := pair(t)
 	defer cleanup()
 
-	for i := 0; i < 20; i++ {
+	for i := range 20 {
 		if _, err := client.Write([]byte("up")); err != nil {
 			t.Fatalf("client write %d: %v", i, err)
 		}
@@ -440,8 +440,7 @@ func TestMissingSegment(t *testing.T) {
 		t.Fatalf("newLocalStorage: %v", err)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := t.Context()
 
 	p := paramsFromConfig(&Config{PollIntervalMs: 5, MaxPollIntervalMs: 20, HoleTimeoutMs: 200})
 	if err := storage.Put(ctx, objectName("hole", 1, segSuffix), []byte("second")); err != nil {
@@ -470,8 +469,7 @@ func TestIdleStreamWaits(t *testing.T) {
 		t.Fatalf("newLocalStorage: %v", err)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := t.Context()
 
 	p := paramsFromConfig(&Config{PollIntervalMs: 5, MaxPollIntervalMs: 20, HoleTimeoutMs: 100})
 	reader := newWALReader(ctx, storage, "idle", p)
@@ -500,8 +498,7 @@ func TestFailureMarker(t *testing.T) {
 		t.Fatalf("newLocalStorage: %v", err)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := t.Context()
 
 	p := paramsFromConfig(&Config{PollIntervalMs: 5, MaxPollIntervalMs: 20})
 	if err := storage.Put(ctx, objectName("broken", 0, segSuffix), []byte("first")); err != nil {
@@ -538,7 +535,7 @@ func TestFailureMarker(t *testing.T) {
 
 type inlineOnlyStorage struct {
 	Storage
-	gets int64
+	gets atomic.Int64
 }
 
 func (s *inlineOnlyStorage) List(ctx context.Context, prefix string) ([]Entry, error) {
@@ -546,7 +543,7 @@ func (s *inlineOnlyStorage) List(ctx context.Context, prefix string) ([]Entry, e
 }
 
 func (s *inlineOnlyStorage) Get(ctx context.Context, name string) ([]byte, error) {
-	atomic.AddInt64(&s.gets, 1)
+	s.gets.Add(1)
 	return nil, errNotFound
 }
 
@@ -561,8 +558,7 @@ func TestInlinePayload(t *testing.T) {
 	}
 	storage := &inlineOnlyStorage{Storage: base}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := t.Context()
 
 	reader := newWALReader(ctx, storage, "inline", paramsFromConfig(&Config{PollIntervalMs: 5}))
 	select {
@@ -577,7 +573,7 @@ func TestInlinePayload(t *testing.T) {
 		t.Fatal("reader did not deliver the inline payload")
 	}
 
-	if got := atomic.LoadInt64(&storage.gets); got != 0 {
+	if got := storage.gets.Load(); got != 0 {
 		t.Fatalf("called Get %d times for an inline payload", got)
 	}
 }

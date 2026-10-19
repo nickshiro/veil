@@ -15,10 +15,10 @@ func BenchmarkQueueBurstChan(b *testing.B) {
 	p := &buf.Buffer{}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		for j := 0; j < benchBatch; j++ {
+		for range benchBatch {
 			ch <- p
 		}
-		for j := 0; j < benchBatch; j++ {
+		for range benchBatch {
 			<-ch
 		}
 	}
@@ -29,10 +29,10 @@ func BenchmarkQueueBurstPacketQueue(b *testing.B) {
 	p := &buf.Buffer{}
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		for j := 0; j < benchBatch; j++ {
+		for range benchBatch {
 			q.push(p)
 		}
-		for j := 0; j < benchBatch; j++ {
+		for range benchBatch {
 			q.pop()
 		}
 	}

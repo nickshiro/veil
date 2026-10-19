@@ -103,10 +103,7 @@ func (w *StreamWriter) WriteChunk(payload []byte) error {
 func (w *StreamWriter) Write(p []byte) (int, error) {
 	n := len(p)
 	for len(p) > 0 {
-		chunkSize := len(p)
-		if chunkSize > MaxPacketSize {
-			chunkSize = MaxPacketSize
-		}
+		chunkSize := min(len(p), MaxPacketSize)
 		if err := w.WriteChunk(p[:chunkSize]); err != nil {
 			return 0, err
 		}
@@ -120,10 +117,7 @@ func (w *StreamWriter) WriteMultiBuffer(mb buf.MultiBuffer) error {
 	for _, b := range mb {
 		p := b.Bytes()
 		for len(p) > 0 {
-			chunkSize := len(p)
-			if chunkSize > MaxPacketSize {
-				chunkSize = MaxPacketSize
-			}
+			chunkSize := min(len(p), MaxPacketSize)
 			if err := w.WriteChunk(p[:chunkSize]); err != nil {
 				return err
 			}
@@ -533,10 +527,7 @@ func (s *ServerStreamWriter) WriteMultiBuffer(mb buf.MultiBuffer) error {
 		if s.streamWriter == nil {
 			firstBuf := mb[0]
 			firstBytes := firstBuf.Bytes()
-			chunkSize := len(firstBytes)
-			if chunkSize > MaxPacketSize {
-				chunkSize = MaxPacketSize
-			}
+			chunkSize := min(len(firstBytes), MaxPacketSize)
 			firstPayload := firstBytes[:chunkSize]
 			sw, err := s.sendHeaderWithFirstPayload(firstPayload)
 			if err != nil {
@@ -566,10 +557,7 @@ func (s *ServerStreamWriter) Write(p []byte) (int, error) {
 	if s.streamWriter == nil {
 		s.mu.Lock()
 		if s.streamWriter == nil {
-			chunkSize := len(p)
-			if chunkSize > MaxPacketSize {
-				chunkSize = MaxPacketSize
-			}
+			chunkSize := min(len(p), MaxPacketSize)
 			firstPayload := p[:chunkSize]
 			sw, err := s.sendHeaderWithFirstPayload(firstPayload)
 			if err != nil {

@@ -79,7 +79,7 @@ func unmarshalSite(b []byte, attrs string) ([]siteEntry, error) {
 	var entries []siteEntry
 	for _, d := range site.Domain {
 		ok := true
-		for _, key := range strings.Split(attrs, "@") {
+		for key := range strings.SplitSeq(attrs, "@") {
 			ok = ok && (attrs == "" || slices.ContainsFunc(d.Attribute, func(a *Domain_Attribute) bool { return a.Key == key }))
 		}
 		if ok {

@@ -389,8 +389,8 @@ func (g *MphMatcherGroup) Match(input string) []uint32 {
 		return nil
 	}
 	result := g.appendValues(make([]uint32, 0, len(parents)+1), exact, mphFull|mphDomain)
-	for k := len(parents) - 1; k >= 0; k-- {
-		result = g.appendValues(result, parents[k], mphParent|mphDomain)
+	for _, parent := range slices.Backward(parents) {
+		result = g.appendValues(result, parent, mphParent|mphDomain)
 	}
 	return result
 }

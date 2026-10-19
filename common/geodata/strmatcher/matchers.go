@@ -183,11 +183,11 @@ func (b *tailBuilder) walk(re *syntax.Regexp, w tailWalk) tailWalk {
 	case syntax.OpNoMatch:
 		return tailWalk{}
 	case syntax.OpLiteral:
-		for i := len(re.Rune) - 1; i >= 0; i-- {
+		for _, v := range slices.Backward(re.Rune) {
 			var set byteSet
-			set.add(byte(min(re.Rune[i], utf8.RuneSelf)))
+			set.add(byte(min(v, utf8.RuneSelf)))
 			if re.Flags&syntax.FoldCase != 0 {
-				for f := unicode.SimpleFold(re.Rune[i]); f != re.Rune[i]; f = unicode.SimpleFold(f) {
+				for f := unicode.SimpleFold(v); f != v; f = unicode.SimpleFold(f) {
 					set.add(byte(min(f, utf8.RuneSelf)))
 				}
 			}
@@ -216,8 +216,8 @@ func (b *tailBuilder) walk(re *syntax.Regexp, w tailWalk) tailWalk {
 	case syntax.OpCapture:
 		return b.walk(re.Sub[0], w)
 	case syntax.OpConcat:
-		for i := len(re.Sub) - 1; i >= 0; i-- {
-			w = b.walk(re.Sub[i], w)
+		for _, v := range slices.Backward(re.Sub) {
+			w = b.walk(v, w)
 		}
 		return w
 	case syntax.OpAlternate:
@@ -284,7 +284,7 @@ func (b *tailBuilder) step(w tailWalk, set *byteSet) tailWalk {
 	if set.has(0x80) {
 		width = utf8.UTFMax
 	}
-	for i := 0; i < tailLen; i++ {
+	for i := range tailLen {
 		if w.at&(1<<i) == 0 {
 			continue
 		}
@@ -528,7 +528,7 @@ func CompositeMatches(matches [][]uint32) []uint32 {
 		return slices.Clone(matches[0])
 	default:
 		result := make([]uint32, 0, 5)
-		for i := 0; i < len(matches); i++ {
+		for i := range matches {
 			result = append(result, matches[i]...)
 		}
 		return result
@@ -548,8 +548,8 @@ func CompositeMatchesReverse(matches [][]uint32) []uint32 {
 		return matches[0]
 	default:
 		result := make([]uint32, 0, 5)
-		for i := len(matches) - 1; i >= 0; i-- {
-			result = append(result, matches[i]...)
+		for _, matche := range slices.Backward(matches) {
+			result = append(result, matche...)
 		}
 		return result
 	}
