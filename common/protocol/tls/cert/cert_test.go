@@ -1,7 +1,6 @@
 package cert
 
 import (
-	"context"
 	"crypto/x509"
 	"encoding/json"
 	"os"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/errors"
-	"github.com/xtls/xray-core/common/task"
 )
 
 func TestGenerate(t *testing.T) {
@@ -49,12 +47,6 @@ func generate(domainNames []string, isCA bool, jsonOutput bool, fileOutput strin
 		printJSON(cert)
 	}
 
-	if len(fileOutput) > 0 {
-		if err := printFile(cert, fileOutput); err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -73,23 +65,4 @@ func printJSON(certificate *Certificate) {
 	common.Must(err)
 	os.Stdout.Write(content)
 	os.Stdout.WriteString("\n")
-}
-
-func printFile(certificate *Certificate, name string) error {
-	certPEM, keyPEM := certificate.ToPEM()
-	return task.Run(context.Background(), func() error {
-		return writeFile(certPEM, name+".crt")
-	}, func() error {
-		return writeFile(keyPEM, name+".key")
-	})
-}
-
-func writeFile(content []byte, name string) error {
-	f, err := os.Create(name)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	return common.Error2(f.Write(content))
 }
