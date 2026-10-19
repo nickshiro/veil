@@ -110,12 +110,3 @@ type MatcherSet interface {
 	// MatchAny returns true as soon as one matching matcher is found.
 	MatchAny(input string) bool
 }
-
-// AnyMatcher is a lightweight matcher for callers that only need existence checks.
-type AnyMatcher interface {
-	// Add adds a new Matcher to AnyMatcher.
-	Add(matcher Matcher)
-
-	// MatchAny returns true as soon as one matching matcher is found.
-	MatchAny(input string) bool
-}
