@@ -1,5 +1,5 @@
 // Package crypto provides common crypto libraries for Xray.
-package crypto // import "github.com/nickshiro/veil/common/crypto"
+package crypto
 
 import (
 	"crypto/rand"

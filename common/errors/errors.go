@@ -1,5 +1,5 @@
 // Package errors is a drop-in replacement for Golang lib 'errors'.
-package errors // import "github.com/nickshiro/veil/common/errors"
+package errors
 
 import (
 	"context"

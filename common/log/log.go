@@ -1,4 +1,4 @@
-package log // import "github.com/nickshiro/veil/common/log"
+package log
 
 import (
 	"sync/atomic"

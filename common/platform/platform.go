@@ -1,4 +1,4 @@
-package platform // import "github.com/nickshiro/veil/common/platform"
+package platform
 
 import (
 	"os"

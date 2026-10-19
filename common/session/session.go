@@ -1,5 +1,5 @@
 // Package session provides functions for sessions of incoming requests.
-package session // import "github.com/nickshiro/veil/common/session"
+package session
 
 import (
 	"math/rand"

@@ -1,4 +1,4 @@
-package protocol // import "github.com/nickshiro/veil/common/protocol"
+package protocol
 
 import (
 	"errors"
