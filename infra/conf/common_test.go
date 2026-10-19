@@ -3,6 +3,7 @@ package conf_test
 import (
 	"encoding/json"
 	"os"
+	"slices"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -92,10 +93,10 @@ func TestArrayNetworkList(t *testing.T) {
 	common.Must(json.Unmarshal([]byte("[\"Tcp\"]"), &list))
 
 	nlist := list.Build()
-	if !net.HasNetwork(nlist, net.Network_TCP) {
+	if !slices.Contains(nlist, net.Network_TCP) {
 		t.Error("no tcp network")
 	}
-	if net.HasNetwork(nlist, net.Network_UDP) {
+	if slices.Contains(nlist, net.Network_UDP) {
 		t.Error("has udp network")
 	}
 }
@@ -105,10 +106,10 @@ func TestStringNetworkList(t *testing.T) {
 	common.Must(json.Unmarshal([]byte("\"TCP, ip\""), &list))
 
 	nlist := list.Build()
-	if !net.HasNetwork(nlist, net.Network_TCP) {
+	if !slices.Contains(nlist, net.Network_TCP) {
 		t.Error("no tcp network")
 	}
-	if net.HasNetwork(nlist, net.Network_UDP) {
+	if slices.Contains(nlist, net.Network_UDP) {
 		t.Error("has udp network")
 	}
 }

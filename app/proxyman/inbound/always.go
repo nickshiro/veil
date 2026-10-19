@@ -2,6 +2,7 @@ package inbound
 
 import (
 	"context"
+	"slices"
 
 	"github.com/nickshiro/veil/app/proxyman"
 	"github.com/nickshiro/veil/common"
@@ -109,7 +110,7 @@ func NewAlwaysOnInboundHandler(ctx context.Context, tag string, receiverConfig *
 		mss.SocketSettings.ReceiveOriginalDestAddress = true
 	}
 	if pl == nil {
-		if net.HasNetwork(nl, net.Network_UNIX) {
+		if slices.Contains(nl, net.Network_UNIX) {
 			errors.LogDebug(ctx, "creating unix domain socket worker on ", address)
 
 			worker := &dsWorker{
@@ -129,7 +130,7 @@ func NewAlwaysOnInboundHandler(ctx context.Context, tag string, receiverConfig *
 	if pl != nil {
 		for _, pr := range pl.Range {
 			for port := pr.From; port <= pr.To; port++ {
-				if net.HasNetwork(nl, net.Network_TCP) {
+				if slices.Contains(nl, net.Network_TCP) {
 					errors.LogDebug(ctx, "creating stream worker on ", address, ":", port)
 
 					worker := &tcpWorker{
@@ -148,7 +149,7 @@ func NewAlwaysOnInboundHandler(ctx context.Context, tag string, receiverConfig *
 					h.workers = append(h.workers, worker)
 				}
 
-				if net.HasNetwork(nl, net.Network_UDP) {
+				if slices.Contains(nl, net.Network_UDP) {
 					worker := &udpWorker{
 						tag:             tag,
 						proxy:           p,
