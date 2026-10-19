@@ -124,37 +124,3 @@ func (r *ChunkStreamReader) ReadMultiBuffer() (buf.MultiBuffer, error) {
 	}
 	return nil, err
 }
-
-type ChunkStreamWriter struct {
-	sizeEncoder ChunkSizeEncoder
-	writer      buf.Writer
-}
-
-func NewChunkStreamWriter(sizeEncoder ChunkSizeEncoder, writer io.Writer) *ChunkStreamWriter {
-	return &ChunkStreamWriter{
-		sizeEncoder: sizeEncoder,
-		writer:      buf.NewWriter(writer),
-	}
-}
-
-func (w *ChunkStreamWriter) WriteMultiBuffer(mb buf.MultiBuffer) error {
-	const sliceSize = 8192
-	mbLen := mb.Len()
-	mb2Write := make(buf.MultiBuffer, 0, mbLen/buf.Size+mbLen/sliceSize+2)
-
-	for {
-		mb2, slice := buf.SplitSize(mb, sliceSize)
-		mb = mb2
-
-		b := buf.New()
-		w.sizeEncoder.Encode(uint16(slice.Len()), b.Extend(w.sizeEncoder.SizeBytes()))
-		mb2Write = append(mb2Write, b)
-		mb2Write = append(mb2Write, slice...)
-
-		if mb.IsEmpty() {
-			break
-		}
-	}
-
-	return w.writer.WriteMultiBuffer(mb2Write)
-}

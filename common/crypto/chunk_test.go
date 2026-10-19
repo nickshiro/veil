@@ -10,25 +10,10 @@ import (
 	. "github.com/nickshiro/veil/common/crypto"
 )
 
-func TestChunkStreamIO(t *testing.T) {
-	cache := bytes.NewBuffer(make([]byte, 0, 8192))
-
-	writer := NewChunkStreamWriter(PlainChunkSizeParser{}, cache)
+func TestChunkStreamReader(t *testing.T) {
+	// Two length-prefixed chunks followed by the zero-length end marker.
+	cache := bytes.NewReader([]byte{0, 4, 'a', 'b', 'c', 'd', 0, 3, 'e', 'f', 'g', 0, 0})
 	reader := NewChunkStreamReader(PlainChunkSizeParser{}, cache)
-
-	b := buf.New()
-	b.WriteString("abcd")
-	common.Must(writer.WriteMultiBuffer(buf.MultiBuffer{b}))
-
-	b = buf.New()
-	b.WriteString("efg")
-	common.Must(writer.WriteMultiBuffer(buf.MultiBuffer{b}))
-
-	common.Must(writer.WriteMultiBuffer(buf.MultiBuffer{}))
-
-	if cache.Len() != 13 {
-		t.Fatalf("Cache length is %d, want 13", cache.Len())
-	}
 
 	mb, err := reader.ReadMultiBuffer()
 	common.Must(err)
@@ -37,6 +22,7 @@ func TestChunkStreamIO(t *testing.T) {
 		t.Error("content: ", s)
 	}
 
+	buf.ReleaseMulti(mb)
 	mb, err = reader.ReadMultiBuffer()
 	common.Must(err)
 
@@ -44,6 +30,7 @@ func TestChunkStreamIO(t *testing.T) {
 		t.Error("content: ", s)
 	}
 
+	buf.ReleaseMulti(mb)
 	_, err = reader.ReadMultiBuffer()
 	if err != io.EOF {
 		t.Error("error: ", err)
