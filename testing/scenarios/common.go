@@ -122,7 +122,7 @@ func genTestBinaryPath() {
 }
 
 func GetSourcePath() string {
-	return filepath.Join("github.com", "xtls", "xray-core", "main")
+	return filepath.Join("github.com", "nickshiro", "veil", "main")
 }
 
 func CloseAllServers(servers []*exec.Cmd) {
