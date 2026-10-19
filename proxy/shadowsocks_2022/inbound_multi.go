@@ -9,6 +9,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/antireplay"
@@ -19,7 +20,6 @@ import (
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/session"
 	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/features/policy"
 	"github.com/xtls/xray-core/features/routing"
@@ -88,7 +88,7 @@ func NewMultiServer(ctx context.Context, config *MultiUserServerConfig) (*MultiU
 
 	for idx, user := range config.Users {
 		if user.Email == "" {
-			u := uuid.New()
+			u := uuid.NewV4()
 			user.Email = "unnamed-user-" + strconv.Itoa(idx) + "-" + u.String()
 		}
 		memUser, err := user.ToMemoryUser()

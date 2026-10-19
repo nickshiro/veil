@@ -12,8 +12,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"uuid"
 
-	googleuuid "github.com/google/uuid"
 	"github.com/xtls/xray-core/common/errors"
 	xlua "github.com/xtls/xray-core/common/lua"
 	"github.com/xtls/xray-core/common/net"
@@ -932,7 +932,7 @@ func (c *XMCProfile) Build() (*xmc.Profile, error) {
 		return nil, fmt.Errorf("invalid minecraft profile username: %q", c.Username)
 	}
 
-	profileUUID, err := googleuuid.Parse(c.UUID)
+	profileUUID, err := uuid.Parse(c.UUID)
 	if err != nil {
 		return nil, fmt.Errorf("invalid minecraft profile UUID: %w", err)
 	}

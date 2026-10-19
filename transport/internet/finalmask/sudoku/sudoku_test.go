@@ -18,6 +18,7 @@ import (
 	"syscall"
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/dispatcher"
 	"github.com/xtls/xray-core/app/log"
@@ -27,7 +28,6 @@ import (
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/protocol/tls/cert"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	core "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/dokodemo"
 	"github.com/xtls/xray-core/proxy/freedom"
@@ -234,7 +234,7 @@ func runVLESSRealityCase(t *testing.T, bin string, mode trafficMode, payloadSize
 	relay := startTCPRelay(t, int(relayPort), fmt.Sprintf("127.0.0.1:%d", serverPort))
 	defer relay.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	realityPriv, realityPub := mustX25519Keypair(t)
 	shortID := mustDecodeHex(t, "0123456789abcdef")
 
@@ -478,7 +478,7 @@ func runVLesseEncCase(t *testing.T, bin string, mode trafficMode, payloadSize in
 	relay := startTCPRelay(t, int(relayPort), fmt.Sprintf("127.0.0.1:%d", serverPort))
 	defer relay.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	priv, pub := mustX25519Keypair(t)
 	pubB64 := base64.RawURLEncoding.EncodeToString(pub)
 	privB64 := base64.RawURLEncoding.EncodeToString(priv)
@@ -580,7 +580,7 @@ func runVLESSXHTTPCase(t *testing.T, bin string, mode trafficMode, payloadSize i
 	relay := startTCPRelay(t, int(relayPort), fmt.Sprintf("127.0.0.1:%d", serverPort))
 	defer relay.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	xhttpConfig := &splithttp.Config{
 		Host: "localhost",
 		Path: "/sudoku",

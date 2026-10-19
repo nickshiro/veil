@@ -2,12 +2,12 @@ package vmess
 
 import (
 	"strings"
+	"uuid"
 
 	"google.golang.org/protobuf/proto"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 // MemoryAccount is an in-memory form of VMess account.
@@ -47,7 +47,7 @@ func (a *MemoryAccount) ToProto() proto.Message {
 
 // AsAccount implements protocol.Account.
 func (a *Account) AsAccount() (protocol.Account, error) {
-	id, err := uuid.ParseString(a.Id)
+	id, err := uuid.Parse(a.Id)
 	if err != nil {
 		return nil, errors.New("failed to parse ID").Base(err)
 	}

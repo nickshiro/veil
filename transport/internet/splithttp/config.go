@@ -8,12 +8,12 @@ import (
 	"math/rand/v2"
 	"net/http"
 	"strings"
+	"uuid"
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/buf"
 	"github.com/xtls/xray-core/common/crypto"
 	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/transport/internet"
 )
 
@@ -521,7 +521,7 @@ func (c *Config) GenerateSessionID() string {
 		}
 		return string(id)
 	} else {
-		uuid := uuid.New()
+		uuid := uuid.NewV4()
 		return uuid.String()
 	}
 }

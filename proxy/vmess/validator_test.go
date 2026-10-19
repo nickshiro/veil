@@ -2,10 +2,10 @@ package vmess_test
 
 import (
 	"testing"
+	"uuid"
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/uuid"
 	. "github.com/xtls/xray-core/proxy/vmess"
 )
 
@@ -20,7 +20,7 @@ func BenchmarkUserValidator(b *testing.B) {
 		v := NewTimedUserValidator()
 
 		for j := 0; j < 1500; j++ {
-			id := uuid.New()
+			id := uuid.NewV4()
 			v.Add(&protocol.MemoryUser{
 				Email: "test",
 				Account: toAccount(&Account{

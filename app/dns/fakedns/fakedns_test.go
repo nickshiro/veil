@@ -3,11 +3,11 @@ package fakedns
 import (
 	"strconv"
 	"testing"
+	"uuid"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/features/dns"
 	"golang.org/x/sync/errgroup"
 )
@@ -117,7 +117,7 @@ func TestFakeDnsHolderCreateMappingAndRollOver(t *testing.T) {
 		}
 
 		{
-			uuid := uuid.New()
+			uuid := uuid.NewV4()
 			domain := uuid.String() + ".fakednstest.example.com"
 			tempAddr := fkdns.GetFakeIPForDomain(domain)
 			rsaddr := tempAddr[0].IP().String()

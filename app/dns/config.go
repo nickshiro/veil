@@ -4,7 +4,7 @@ import (
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/geodata"
 	"github.com/xtls/xray-core/common/net"
-	"github.com/xtls/xray-core/common/uuid"
+	"uuid"
 )
 
 // References:
@@ -35,6 +35,6 @@ func toNetIP(addrs []net.Address) ([]net.IP, error) {
 }
 
 func generateRandomTag() string {
-	id := uuid.New()
+	id := uuid.NewV4()
 	return "xray.system." + id.String()
 }

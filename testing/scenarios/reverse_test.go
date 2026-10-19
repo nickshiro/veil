@@ -3,6 +3,7 @@ package scenarios
 import (
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/log"
 	"github.com/xtls/xray-core/app/policy"
@@ -15,7 +16,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	core "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/blackhole"
 	"github.com/xtls/xray-core/proxy/dokodemo"
@@ -36,7 +36,7 @@ func TestReverseProxy(t *testing.T) {
 
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	externalPort := tcp.PickPort()
 	reversePort := tcp.PickPort()
 
@@ -197,7 +197,7 @@ func TestReverseProxyLongRunning(t *testing.T) {
 
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	externalPort := tcp.PickPort()
 	reversePort := tcp.PickPort()
 

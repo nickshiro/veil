@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -21,7 +22,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	core "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/dokodemo"
 	"github.com/xtls/xray-core/proxy/freedom"
@@ -323,8 +323,8 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	u1 := protocol.NewID(uuid.New())
-	u2 := protocol.NewID(uuid.New())
+	u1 := protocol.NewID(uuid.NewV4())
+	u2 := protocol.NewID(uuid.NewV4())
 
 	cmdPort := tcp.PickPort()
 	serverPort := tcp.PickPort()
@@ -499,7 +499,7 @@ func TestCommanderStats(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	cmdPort := tcp.PickPort()
 

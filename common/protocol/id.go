@@ -2,9 +2,9 @@ package protocol
 
 import (
 	"crypto/md5"
+	"uuid"
 
 	"github.com/xtls/xray-core/common"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 const (
@@ -19,11 +19,11 @@ type ID struct {
 
 // Equals returns true if this ID equals to the other one.
 func (id *ID) Equals(another *ID) bool {
-	return id.uuid.Equals(&another.uuid)
+	return id.uuid == another.uuid
 }
 
 func (id *ID) Bytes() []byte {
-	return id.uuid.Bytes()
+	return id.uuid[:]
 }
 
 func (id *ID) String() string {
@@ -42,7 +42,7 @@ func (id ID) CmdKey() []byte {
 func NewID(uuid uuid.UUID) *ID {
 	id := &ID{uuid: uuid}
 	md5hash := md5.New()
-	common.Must2(md5hash.Write(uuid.Bytes()))
+	common.Must2(md5hash.Write(uuid[:]))
 	common.Must2(md5hash.Write([]byte("c48619fe-8f02-49e0-b9e9-edf763e17e21")))
 	md5hash.Sum(id.cmdKey[:0])
 	return id

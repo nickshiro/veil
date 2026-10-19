@@ -2,11 +2,11 @@ package account
 
 import (
 	"sync"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 
-	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"
 )
 

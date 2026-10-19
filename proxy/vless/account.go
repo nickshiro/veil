@@ -2,15 +2,15 @@ package vless
 
 import (
 	"google.golang.org/protobuf/proto"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 // AsAccount implements protocol.Account.AsAccount().
 func (a *Account) AsAccount() (protocol.Account, error) {
-	id, err := uuid.ParseString(a.Id)
+	id, err := uuid.Parse(a.Id)
 	if err != nil {
 		return nil, errors.New("failed to parse ID").Base(err)
 	}

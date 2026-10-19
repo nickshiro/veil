@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/proxyman"
 	"github.com/xtls/xray-core/common"
@@ -12,7 +13,6 @@ import (
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/protocol/tls/cert"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	core "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/dokodemo"
 	"github.com/xtls/xray-core/proxy/freedom"
@@ -38,7 +38,7 @@ func TestSimpleTLSConnection(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -147,7 +147,7 @@ func TestAutoIssuingCertificate(t *testing.T) {
 	common.Must(err)
 	certPEM, keyPEM := caCert.ToPEM()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -255,7 +255,7 @@ func TestTLSOverKCP(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := udp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -355,7 +355,7 @@ func TestTLSOverWebSocket(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -465,7 +465,7 @@ func TestGRPC(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -581,7 +581,7 @@ func TestGRPCMultiMode(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -697,7 +697,7 @@ func TestSimpleTLSConnectionPinned(t *testing.T) {
 	certificateDer, _ := cert.MustGenerate(nil)
 	certificate := tls.ParseCertificate(certificateDer)
 	certHash := tls.GenerateCertHash(certificateDer.Certificate)
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -796,7 +796,7 @@ func TestSimpleTLSConnectionPinnedWrongCert(t *testing.T) {
 	certificate := tls.ParseCertificate(certificateDer)
 	certHash := tls.GenerateCertHash(certificateDer.Certificate)
 	certHash[1] += 1
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -894,7 +894,7 @@ func TestUTLSConnectionPinned(t *testing.T) {
 	certificateDer, _ := cert.MustGenerate(nil)
 	certificate := tls.ParseCertificate(certificateDer)
 	certHash := tls.GenerateCertHash(certificateDer.Certificate)
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -994,7 +994,7 @@ func TestUTLSConnectionPinnedWrongCert(t *testing.T) {
 	certificate := tls.ParseCertificate(certificateDer)
 	certHash := tls.GenerateCertHash(certificateDer.Certificate)
 	certHash[1] += 1
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{

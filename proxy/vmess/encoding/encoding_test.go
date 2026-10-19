@@ -3,13 +3,13 @@ package encoding_test
 import (
 	"context"
 	"testing"
+	"uuid"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/buf"
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/proxy/vmess"
 	. "github.com/xtls/xray-core/proxy/vmess/encoding"
 )
@@ -25,7 +25,7 @@ func TestRequestSerialization(t *testing.T) {
 		Level: 0,
 		Email: "test@example.com",
 	}
-	id := uuid.New()
+	id := uuid.NewV4()
 	account := &vmess.Account{
 		Id: id.String(),
 	}
@@ -74,7 +74,7 @@ func TestInvalidRequest(t *testing.T) {
 		Level: 0,
 		Email: "test@example.com",
 	}
-	id := uuid.New()
+	id := uuid.NewV4()
 	account := &vmess.Account{
 		Id: id.String(),
 	}
@@ -115,7 +115,7 @@ func TestMuxRequest(t *testing.T) {
 		Level: 0,
 		Email: "test@example.com",
 	}
-	id := uuid.New()
+	id := uuid.NewV4()
 	account := &vmess.Account{
 		Id: id.String(),
 	}

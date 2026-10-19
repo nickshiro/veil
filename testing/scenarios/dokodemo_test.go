@@ -3,6 +3,7 @@ package scenarios
 import (
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/log"
 	"github.com/xtls/xray-core/app/proxyman"
@@ -11,7 +12,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/dokodemo"
 	"github.com/xtls/xray-core/proxy/freedom"
@@ -31,7 +31,7 @@ func TestDokodemoTCP(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{
@@ -140,7 +140,7 @@ func TestDokodemoUDP(t *testing.T) {
 	common.Must(err)
 	defer udpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{

@@ -4,10 +4,10 @@ import (
 	"context"
 	"sync"
 	"sync/atomic"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 type DomainRegistry struct {
@@ -26,7 +26,7 @@ func (r *DomainRegistry) BuildDomainMatcher(rules []*DomainRule) (DomainMatcher,
 	}
 
 	d := NewDynamicDomainMatcher(rules, m)
-	r.matchers.Store(uuid.New(), d)
+	r.matchers.Store(uuid.NewV4(), d)
 	return d, nil
 }
 

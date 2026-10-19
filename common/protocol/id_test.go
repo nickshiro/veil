@@ -2,13 +2,13 @@ package protocol_test
 
 import (
 	"testing"
+	"uuid"
 
 	. "github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 func TestIdEquals(t *testing.T) {
-	id1 := NewID(uuid.New())
+	id1 := NewID(uuid.NewV4())
 	id2 := NewID(id1.UUID())
 
 	if !id1.Equals(id2) {

@@ -6,6 +6,7 @@ import (
 	"sync"
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/log"
 	"github.com/xtls/xray-core/app/proxyman"
@@ -15,7 +16,6 @@ import (
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/protocol/tls/cert"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	core "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/dokodemo"
 	"github.com/xtls/xray-core/proxy/freedom"
@@ -38,7 +38,7 @@ func TestVless(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{
@@ -134,7 +134,7 @@ func TestVlessTls(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{
@@ -256,7 +256,7 @@ func TestVlessXtlsVision(t *testing.T) {
 
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{
@@ -378,7 +378,7 @@ func TestVlessXtlsVisionReality(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	privateKey, _ := base64.RawURLEncoding.DecodeString("aGSYystUbf59_9_6LKRxD27rmSW_-2_nyd9YG_Gwbks")
 	publicKey, _ := base64.RawURLEncoding.DecodeString("E59WjnvZcQMu7tR7_BgyhycuEdBS-CtKxfImRCdAvFM")
@@ -519,7 +519,7 @@ func TestVlessRealityFingerprints(t *testing.T) {
 		common.Must(err)
 		defer tcpServer.Close()
 
-		userID := protocol.NewID(uuid.New())
+		userID := protocol.NewID(uuid.NewV4())
 		serverPort := tcp.PickPort()
 		privateKey, _ := base64.RawURLEncoding.DecodeString("aGSYystUbf59_9_6LKRxD27rmSW_-2_nyd9YG_Gwbks")
 		publicKey, _ := base64.RawURLEncoding.DecodeString("E59WjnvZcQMu7tR7_BgyhycuEdBS-CtKxfImRCdAvFM")

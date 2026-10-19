@@ -2,6 +2,7 @@ package core_test
 
 import (
 	"testing"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/dispatcher"
 	"github.com/xtls/xray-core/app/proxyman"
@@ -9,7 +10,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	. "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/features/dns"
 	"github.com/xtls/xray-core/features/dns/localdns"
@@ -38,7 +38,7 @@ func TestXrayDependency(t *testing.T) {
 func TestXrayClose(t *testing.T) {
 	port := tcp.PickPort()
 
-	userID := uuid.New()
+	userID := uuid.NewV4()
 	config := &Config{
 		App: []*serial.TypedMessage{
 			serial.ToTypedMessage(&dispatcher.Config{}),

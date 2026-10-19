@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"strconv"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/buf"
@@ -14,7 +15,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/session"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/features/policy"
 	"github.com/xtls/xray-core/features/routing"
@@ -84,7 +84,7 @@ func NewRelayServer(ctx context.Context, config *RelayServerConfig) (*RelayInbou
 
 	for idx, d := range config.Destinations {
 		if d.Email == "" {
-			u := uuid.New()
+			u := uuid.NewV4()
 			d.Email = "unnamed-destination-" + strconv.Itoa(idx) + "-" + u.String()
 		}
 		destKey, err := ParseKey(d.Key, method.KeySaltLength)

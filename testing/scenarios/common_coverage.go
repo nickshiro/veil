@@ -7,8 +7,7 @@ import (
 	"bytes"
 	"os"
 	"os/exec"
-
-	"github.com/xtls/xray-core/common/uuid"
+	"uuid"
 )
 
 func BuildXray() error {
@@ -26,7 +25,7 @@ func RunXrayProtobuf(config []byte) *exec.Cmd {
 
 	covDir := os.Getenv("XRAY_COV")
 	os.MkdirAll(covDir, os.ModeDir)
-	randomID := uuid.New()
+	randomID := uuid.NewV4()
 	profile := randomID.String() + ".out"
 	proc := exec.Command(testBinaryPath, "-config=stdin:", "-format=pb", "-test.run", "TestRunMainForCoverage", "-test.coverprofile", profile, "-test.outputdir", covDir)
 	proc.Stdin = bytes.NewBuffer(config)

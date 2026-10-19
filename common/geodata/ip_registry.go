@@ -4,11 +4,11 @@ import (
 	"context"
 	"sync"
 	"sync/atomic"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/utils"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 type IPRegistry struct {
@@ -27,7 +27,7 @@ func (r *IPRegistry) BuildIPMatcher(rules []*IPRule) (IPMatcher, error) {
 	}
 
 	d := NewDynamicIPMatcher(rules, m)
-	r.matchers.Store(uuid.New(), d)
+	r.matchers.Store(uuid.NewV4(), d)
 	return d, nil
 }
 

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"sync"
 	"time"
+	"uuid"
 
 	"github.com/gorilla/websocket"
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/platform"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 //go:embed dialer.html
@@ -68,7 +68,7 @@ func Reload() {
 	}
 	currentAddr = addr
 	if addr != "" {
-		token := uuid.New()
+		token := uuid.NewV4()
 		csrfToken := token.String()
 		webpage := bytes.ReplaceAll(webpage, []byte("csrfToken"), []byte(csrfToken))
 		conns = make(chan *websocket.Conn, 256)

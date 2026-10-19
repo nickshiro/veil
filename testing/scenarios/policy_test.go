@@ -4,6 +4,7 @@ import (
 	"io"
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/log"
 	"github.com/xtls/xray-core/app/policy"
@@ -13,7 +14,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/dokodemo"
 	"github.com/xtls/xray-core/proxy/freedom"
@@ -50,7 +50,7 @@ func TestVMessClosing(t *testing.T) {
 
 	dest := net.DestinationFromAddr(tcpServer.Addr())
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{
@@ -155,7 +155,7 @@ func TestZeroBuffer(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{

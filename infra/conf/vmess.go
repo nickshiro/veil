@@ -3,12 +3,12 @@ package conf
 import (
 	"encoding/json"
 	"strings"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
 	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/proxy/vmess"
 	"github.com/xtls/xray-core/proxy/vmess/inbound"
 	"github.com/xtls/xray-core/proxy/vmess/outbound"
@@ -85,7 +85,7 @@ func (c *VMessInboundConfig) Build() (proto.Message, error) {
 			return errors.New("invalid VMess user").Base(err)
 		}
 
-		u, err := uuid.ParseString(account.ID)
+		u, err := uuid.Parse(account.ID)
 		if err != nil {
 			return err
 		}
@@ -168,7 +168,7 @@ func (c *VMessOutboundConfig) Build() (proto.Message, error) {
 				}
 			}
 
-			u, err := uuid.ParseString(account.ID)
+			u, err := uuid.Parse(account.ID)
 			if err != nil {
 				return nil, err
 			}

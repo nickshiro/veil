@@ -3,10 +3,10 @@ package vless
 import (
 	"strings"
 	"sync"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/protocol"
-	"github.com/xtls/xray-core/common/uuid"
 )
 
 type Validator interface {

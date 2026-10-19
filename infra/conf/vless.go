@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"uuid"
 
 	"github.com/xtls/xray-core/common/errors"
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
 	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/proxy/vless"
 	"github.com/xtls/xray-core/proxy/vless/inbound"
 	"github.com/xtls/xray-core/proxy/vless/outbound"
@@ -63,7 +63,7 @@ func (c *VLessInboundConfig) Build() (proto.Message, error) {
 			return errors.New(`VLESS users: invalid user`).Base(err)
 		}
 
-		u, err := uuid.ParseString(account.Id)
+		u, err := uuid.Parse(account.Id)
 		if err != nil {
 			return err
 		}
@@ -320,7 +320,7 @@ func (c *VLessOutboundConfig) Build() (proto.Message, error) {
 				}
 			}
 
-			u, err := uuid.ParseString(account.Id)
+			u, err := uuid.Parse(account.Id)
 			if err != nil {
 				return nil, err
 			}

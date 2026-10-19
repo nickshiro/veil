@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"testing"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/app/dispatcher"
 	"github.com/xtls/xray-core/app/log"
@@ -19,7 +20,6 @@ import (
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
-	"github.com/xtls/xray-core/common/uuid"
 	core "github.com/xtls/xray-core/core"
 	"github.com/xtls/xray-core/proxy/blackhole"
 	"github.com/xtls/xray-core/proxy/dokodemo"
@@ -100,7 +100,7 @@ func TestDialerProxy(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	serverUserID := protocol.NewID(uuid.New())
+	serverUserID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -129,7 +129,7 @@ func TestDialerProxy(t *testing.T) {
 		},
 	}
 
-	proxyUserID := protocol.NewID(uuid.New())
+	proxyUserID := protocol.NewID(uuid.NewV4())
 	proxyPort := tcp.PickPort()
 	proxyConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -228,7 +228,7 @@ func TestDialerProxyOverKCP(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	serverUserID := protocol.NewID(uuid.New())
+	serverUserID := protocol.NewID(uuid.NewV4())
 	serverPort := udp.PickPort()
 	serverConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -260,7 +260,7 @@ func TestDialerProxyOverKCP(t *testing.T) {
 		},
 	}
 
-	proxyUserID := protocol.NewID(uuid.New())
+	proxyUserID := protocol.NewID(uuid.NewV4())
 	proxyPort := tcp.PickPort()
 	proxyConfig := &core.Config{
 		Inbound: []*core.InboundHandlerConfig{
@@ -640,7 +640,7 @@ func TestDialXray(t *testing.T) {
 	common.Must(err)
 	defer tcpServer.Close()
 
-	userID := protocol.NewID(uuid.New())
+	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
 		App: []*serial.TypedMessage{

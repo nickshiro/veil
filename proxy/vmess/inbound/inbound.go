@@ -6,6 +6,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"uuid"
 
 	"github.com/xtls/xray-core/common"
 	"github.com/xtls/xray-core/common/buf"
@@ -16,7 +17,6 @@ import (
 	"github.com/xtls/xray-core/common/session"
 	"github.com/xtls/xray-core/common/signal"
 	"github.com/xtls/xray-core/common/task"
-	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
 	feature_inbound "github.com/xtls/xray-core/features/inbound"
 	"github.com/xtls/xray-core/features/policy"
@@ -64,7 +64,7 @@ func (v *userByEmail) GetOrGenerate(email string) (*protocol.MemoryUser, bool) {
 
 	user, found := v.cache[email]
 	if !found {
-		id := uuid.New()
+		id := uuid.NewV4()
 		rawAccount := &vmess.Account{
 			Id: id.String(),
 		}
