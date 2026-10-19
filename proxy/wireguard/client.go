@@ -3,6 +3,7 @@ package wireguard
 import (
 	"context"
 	"fmt"
+	randv2 "math/rand/v2"
 	"net/netip"
 	"reflect"
 	"strings"
@@ -14,7 +15,6 @@ import (
 
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/buf"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/net"
@@ -364,7 +364,7 @@ func MakeResolveLocal(d dns.Client, streamSettings *internet.MemoryStreamConfig)
 				return nil, dns.ErrEmptyResponse
 			}
 		}
-		return got[dice.Roll(len(got))], nil
+		return got[randv2.IntN(len(got))], nil
 	}
 }
 

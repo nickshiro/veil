@@ -3,13 +3,13 @@ package router
 import (
 	"context"
 	"math"
+	randv2 "math/rand/v2"
 	"slices"
 	"sort"
 	"time"
 
 	"github.com/nickshiro/veil/app/observatory"
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/features/extension"
@@ -74,7 +74,7 @@ func (s *LeastLoadStrategy) PickOutbound(candidates []string) string {
 		// goes to fallbackTag
 		return ""
 	}
-	return selects[dice.Roll(count)].Tag
+	return selects[randv2.IntN(count)].Tag
 }
 
 func (s *LeastLoadStrategy) pickOutbounds(candidates []string) []*node {

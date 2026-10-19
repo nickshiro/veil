@@ -3,10 +3,10 @@ package internet
 import (
 	"context"
 	"fmt"
+	randv2 "math/rand/v2"
 	"strings"
 
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/net/cnc"
@@ -260,7 +260,7 @@ func DialSystem(ctx context.Context, dest net.Destination, sockopt *SocketConfig
 				return nil, err
 			}
 		} else if sockopt.HappyEyeballs == nil || sockopt.HappyEyeballs.TryDelayMs == 0 || sockopt.HappyEyeballs.MaxConcurrentTry == 0 || len(ips) < 2 || len(sockopt.DialerProxy) > 0 || dest.Network != net.Network_TCP {
-			dest.Address = net.IPAddress(ips[dice.Roll(len(ips))])
+			dest.Address = net.IPAddress(ips[randv2.IntN(len(ips))])
 			errors.LogInfo(ctx, "replace destination with "+dest.String())
 		} else {
 			return TcpRaceDial(ctx, src, ips, dest.Port, sockopt, dest.Address.String())

@@ -4,12 +4,12 @@ package blackhole
 import (
 	"bytes"
 	"context"
+	randv2 "math/rand/v2"
 	"net/http"
 	"time"
 
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/buf"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/session"
@@ -74,7 +74,7 @@ func (h *Handler) Process(ctx context.Context, link *transport.Link, dialer inte
 		ctx, cancel := context.WithCancel(ctx)
 		timer := signal.CancelAfterInactivity(ctx, func() {
 			cancel()
-		}, time.Duration(30+dice.Roll(61))*time.Second)
+		}, time.Duration(30+randv2.IntN(61))*time.Second)
 		go buf.Copy(link.Reader, buf.Discard, buf.UpdateActivity(timer))
 		<-ctx.Done()
 	}

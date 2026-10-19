@@ -1,9 +1,8 @@
 package http
 
 import (
+	randv2 "math/rand/v2"
 	"strings"
-
-	"github.com/nickshiro/veil/common/dice"
 )
 
 func pickString(arr []string) string {
@@ -14,7 +13,7 @@ func pickString(arr []string) string {
 	case 1:
 		return arr[0]
 	default:
-		return arr[dice.Roll(n)]
+		return arr[randv2.IntN(n)]
 	}
 }
 

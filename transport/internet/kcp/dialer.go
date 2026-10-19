@@ -3,11 +3,11 @@ package kcp
 import (
 	"context"
 	"io"
+	randv2 "math/rand/v2"
 	"sync/atomic"
 
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/buf"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/transport/internet"
@@ -15,7 +15,7 @@ import (
 	"github.com/nickshiro/veil/transport/internet/tls"
 )
 
-var globalConv = uint32(dice.RollUint16())
+var globalConv = uint32(uint16(randv2.Uint32()))
 
 func fetchInput(_ context.Context, input io.Reader, reader PacketReader, conn *Connection) {
 	cache := make(chan *buf.Buffer, 1024)

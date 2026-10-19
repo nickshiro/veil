@@ -7,13 +7,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	randv2 "math/rand/v2"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/transport/internet"
 )
@@ -154,7 +154,7 @@ func jitter(backoff time.Duration) time.Duration {
 	if half <= 0 {
 		return backoff
 	}
-	return half + time.Duration(dice.RollInt63n(int64(half)))
+	return half + time.Duration(randv2.Int64N(int64(half)))
 }
 
 func rateLimited(payload []byte) bool {

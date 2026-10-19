@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"io"
+	randv2 "math/rand/v2"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -11,7 +12,6 @@ import (
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/crypto"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
@@ -223,7 +223,7 @@ func (h *Handler) blockDelay(rule *FinalRule) time.Duration {
 	if max < min {
 		span = min - max
 	}
-	return time.Duration(min+uint64(dice.Roll(int(span+1)))) * time.Second
+	return time.Duration(min+uint64(randv2.IntN(int(span+1)))) * time.Second
 }
 
 func (h *Handler) blackhole(ctx context.Context, input buf.Reader, output buf.Writer, rule *FinalRule, dest *net.Destination) error {
@@ -607,7 +607,7 @@ func (w *PacketWriter) WriteMultiBuffer(mb buf.MultiBuffer) error {
 								continue
 							}
 						} else {
-							ip = net.IPAddress(ips[dice.Roll(len(ips))])
+							ip = net.IPAddress(ips[randv2.IntN(len(ips))])
 							shouldUseSystemResolver = false
 						}
 					}

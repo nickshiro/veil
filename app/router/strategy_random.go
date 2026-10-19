@@ -2,10 +2,10 @@ package router
 
 import (
 	"context"
+	randv2 "math/rand/v2"
 
 	"github.com/nickshiro/veil/app/observatory"
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/features/extension"
 )
@@ -63,5 +63,5 @@ func (s *RandomStrategy) PickOutbound(candidates []string) string {
 		// goes to fallbackTag
 		return ""
 	}
-	return candidates[dice.Roll(count)]
+	return candidates[randv2.IntN(count)]
 }

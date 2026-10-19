@@ -5,10 +5,10 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"hash/crc64"
+	randv2 "math/rand/v2"
 	"strings"
 	"sync"
 
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/protocol"
 )
@@ -158,7 +158,7 @@ func (v *Validator) GetBehaviorSeed() uint64 {
 
 	v.behaviorFused = true
 	if v.behaviorSeed == 0 {
-		v.behaviorSeed = dice.RollUint64()
+		v.behaviorSeed = randv2.Uint64()
 	}
 	return v.behaviorSeed
 }

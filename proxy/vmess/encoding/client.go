@@ -8,12 +8,12 @@ import (
 	"encoding/binary"
 	"hash/fnv"
 	"io"
+	randv2 "math/rand/v2"
 
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/bitmask"
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/crypto"
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/drain"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/protocol"
@@ -72,7 +72,7 @@ func (c *ClientSession) EncodeRequestHeader(header *protocol.RequestHeader, writ
 	common.Must(buffer.WriteByte(c.responseHeader))
 	common.Must(buffer.WriteByte(byte(header.Option)))
 
-	paddingLen := dice.Roll(16)
+	paddingLen := randv2.IntN(16)
 	security := byte(paddingLen<<4) | byte(header.Security)
 	common.Must2(buffer.Write([]byte{security, byte(0), byte(header.Command)}))
 

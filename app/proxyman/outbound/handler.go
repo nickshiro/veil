@@ -6,8 +6,7 @@ import (
 	goerrors "errors"
 	"io"
 	"math/big"
-
-	"github.com/nickshiro/veil/common/dice"
+	randv2 "math/rand/v2"
 
 	"github.com/nickshiro/veil/app/proxyman"
 	"github.com/nickshiro/veil/common"
@@ -196,7 +195,7 @@ func (h *Handler) Dispatch(ctx context.Context, link *transport.Link) {
 			}
 		} else {
 			unchangedDomain := ob.Target.Address.Domain()
-			ob.Target.Address = net.IPAddress(ips[dice.Roll(len(ips))])
+			ob.Target.Address = net.IPAddress(ips[randv2.IntN(len(ips))])
 			errors.LogInfo(ctx, "target: ", unchangedDomain, " resolved to: ", ob.Target.Address.String())
 		}
 	}

@@ -2,6 +2,7 @@ package drain
 
 import (
 	"io"
+	randv2 "math/rand/v2"
 
 	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
@@ -15,7 +16,7 @@ func NewBehaviorSeedLimitedDrainer(behaviorSeed int64, drainFoundation, maxBaseD
 	behaviorRand := dice.NewDeterministicDice(behaviorSeed)
 	BaseDrainSize := behaviorRand.Roll(maxBaseDrainSize)
 	RandDrainMax := behaviorRand.Roll(maxRandDrain) + 1
-	RandDrainRolled := dice.Roll(RandDrainMax)
+	RandDrainRolled := randv2.IntN(RandDrainMax)
 	DrainSize := drainFoundation + BaseDrainSize + RandDrainRolled
 	return &BehaviorSeedLimitedDrainer{DrainSize: DrainSize}, nil
 }

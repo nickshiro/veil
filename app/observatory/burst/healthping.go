@@ -3,13 +3,13 @@ package burst
 import (
 	"context"
 	"fmt"
+	randv2 "math/rand/v2"
 	"slices"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 
-	"github.com/nickshiro/veil/common/dice"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/features/routing"
 )
@@ -182,7 +182,7 @@ func (h *HealthPing) doCheck(ctx context.Context, tags []string, duration time.D
 		for range rounds {
 			delay := time.Duration(0)
 			if duration > 0 {
-				delay = time.Duration(dice.RollInt63n(int64(duration)))
+				delay = time.Duration(randv2.Int64N(int64(duration)))
 			}
 			timers = append(timers, time.AfterFunc(delay, func() {
 				errors.LogDebug(h.ctx, "checking ", handler)
