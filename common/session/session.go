@@ -2,11 +2,9 @@
 package session // import "github.com/nickshiro/veil/common/session"
 
 import (
-	"context"
 	"math/rand"
 
 	c "github.com/nickshiro/veil/common/ctx"
-	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/protocol"
@@ -21,15 +19,6 @@ func NewID() c.ID {
 		if id != 0 {
 			return id
 		}
-	}
-}
-
-// ExportIDToError transfers session.ID into an error object, for logging purpose.
-// This can be used with error.WriteToLog().
-func ExportIDToError(ctx context.Context) errors.ExportOption {
-	id := c.IDFromContext(ctx)
-	return func(h *errors.ExportOptionHolder) {
-		h.SessionID = uint32(id)
 	}
 }
 

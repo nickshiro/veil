@@ -69,12 +69,6 @@ func (err *Error) String() string {
 	return err.Error()
 }
 
-type ExportOptionHolder struct {
-	SessionID uint32
-}
-
-type ExportOption func(*ExportOptionHolder)
-
 // New returns a new error object with message formed from given arguments.
 func New(msg ...any) *Error {
 	pc, _, _, _ := runtime.Caller(1)
