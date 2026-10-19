@@ -214,7 +214,7 @@ func transferResponse(timer signal.ActivityUpdater, session *encoding.ServerSess
 
 	account := request.User.Account.(*vmess.MemoryAccount)
 
-	if request.Option.Has(protocol.RequestOptionChunkStream) && !account.NoTerminationSignal {
+	if request.Option&protocol.RequestOptionChunkStream != 0 && !account.NoTerminationSignal {
 		if err := bodyWriter.WriteMultiBuffer(buf.MultiBuffer{}); err != nil {
 			return err
 		}

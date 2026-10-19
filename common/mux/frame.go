@@ -5,7 +5,6 @@ import (
 	"io"
 
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/bitmask"
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
@@ -24,8 +23,8 @@ const (
 )
 
 const (
-	OptionData  bitmask.Byte = 0x01
-	OptionError bitmask.Byte = 0x02
+	OptionData  byte = 0x01
+	OptionError byte = 0x02
 )
 
 type TargetNetwork byte
@@ -58,7 +57,7 @@ n bytes - address
 type FrameMetadata struct {
 	Target        net.Destination
 	SessionID     uint16
-	Option        bitmask.Byte
+	Option        byte
 	SessionStatus SessionStatus
 	GlobalID      [8]byte
 	Inbound       *session.Inbound
@@ -138,7 +137,7 @@ func (f *FrameMetadata) UnmarshalFromBuffer(b *buf.Buffer, readSourceAndLocal bo
 
 	f.SessionID = binary.BigEndian.Uint16(b.BytesTo(2))
 	f.SessionStatus = SessionStatus(b.Byte(2))
-	f.Option = bitmask.Byte(b.Byte(3))
+	f.Option = b.Byte(3)
 	f.Target.Network = net.Network_Unknown
 
 	if f.SessionStatus == SessionStatusNew || (f.SessionStatus == SessionStatusKeep && b.Len() > 4 &&
@@ -213,7 +212,7 @@ func (f *FrameMetadata) UnmarshalFromBuffer(b *buf.Buffer, readSourceAndLocal bo
 	}
 
 	// Application data is essential, to test whether the pipe is closed.
-	if f.SessionStatus == SessionStatusNew && f.Option.Has(OptionData) &&
+	if f.SessionStatus == SessionStatusNew && f.Option&OptionData != 0 &&
 		f.Target.Network == net.Network_UDP && b.Len() >= 8 {
 		copy(f.GlobalID[:], b.Bytes())
 	}

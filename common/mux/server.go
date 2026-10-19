@@ -156,7 +156,7 @@ func (w *ServerWorker) Close() error {
 }
 
 func (w *ServerWorker) handleStatusKeepAlive(meta *FrameMetadata, reader *buf.BufferedReader) error {
-	if meta.Option.Has(OptionData) {
+	if meta.Option&OptionData != 0 {
 		return buf.Copy(NewStreamReader(reader), buf.Discard)
 	}
 	return nil
@@ -263,7 +263,7 @@ func (w *ServerWorker) handleStatusNew(ctx context.Context, meta *FrameMetadata,
 
 	link, err := w.dispatcher.Dispatch(ctx, meta.Target)
 	if err != nil {
-		if meta.Option.Has(OptionData) {
+		if meta.Option&OptionData != 0 {
 			buf.Copy(NewStreamReader(reader), buf.Discard)
 		}
 		return errors.New("failed to dispatch request.").Base(err)
@@ -283,7 +283,7 @@ func (w *ServerWorker) handleStatusNew(ctx context.Context, meta *FrameMetadata,
 		return errors.New("failed to add new session")
 	}
 	go handle(ctx, s, w.link.Writer)
-	if !meta.Option.Has(OptionData) {
+	if meta.Option&OptionData == 0 {
 		return nil
 	}
 
@@ -298,7 +298,7 @@ func (w *ServerWorker) handleStatusNew(ctx context.Context, meta *FrameMetadata,
 }
 
 func (w *ServerWorker) handleStatusKeep(meta *FrameMetadata, reader *buf.BufferedReader) error {
-	if !meta.Option.Has(OptionData) {
+	if meta.Option&OptionData == 0 {
 		return nil
 	}
 
@@ -327,7 +327,7 @@ func (w *ServerWorker) handleStatusEnd(meta *FrameMetadata, reader *buf.Buffered
 	if s, found := w.sessionManager.Get(meta.SessionID); found {
 		s.Close(false)
 	}
-	if meta.Option.Has(OptionData) {
+	if meta.Option&OptionData != 0 {
 		return buf.Copy(NewStreamReader(reader), buf.Discard)
 	}
 	return nil

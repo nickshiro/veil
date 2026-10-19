@@ -11,7 +11,6 @@ import (
 	randv2 "math/rand/v2"
 
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/bitmask"
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/crypto"
 	"github.com/nickshiro/veil/common/drain"
@@ -103,11 +102,11 @@ func (c *ClientSession) EncodeRequestHeader(header *protocol.RequestHeader, writ
 
 func (c *ClientSession) EncodeRequestBody(request *protocol.RequestHeader, writer io.Writer) (buf.Writer, error) {
 	var sizeParser crypto.ChunkSizeEncoder = crypto.PlainChunkSizeParser{}
-	if request.Option.Has(protocol.RequestOptionChunkMasking) {
+	if request.Option&protocol.RequestOptionChunkMasking != 0 {
 		sizeParser = NewShakeSizeParser(c.requestBodyIV[:])
 	}
 	var padding crypto.PaddingLengthGenerator
-	if request.Option.Has(protocol.RequestOptionGlobalPadding) {
+	if request.Option&protocol.RequestOptionGlobalPadding != 0 {
 		var ok bool
 		padding, ok = sizeParser.(crypto.PaddingLengthGenerator)
 		if !ok {
@@ -123,7 +122,7 @@ func (c *ClientSession) EncodeRequestBody(request *protocol.RequestHeader, write
 			NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
 		}
-		if request.Option.Has(protocol.RequestOptionAuthenticatedLength) {
+		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
 			AuthenticatedLengthKeyAEAD := crypto.NewAesGcm(AuthenticatedLengthKey)
 
@@ -144,7 +143,7 @@ func (c *ClientSession) EncodeRequestBody(request *protocol.RequestHeader, write
 			NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
 		}
-		if request.Option.Has(protocol.RequestOptionAuthenticatedLength) {
+		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
 			AuthenticatedLengthKeyAEAD, err := chacha20poly1305.New(GenerateChacha20Poly1305Key(AuthenticatedLengthKey))
 			common.Must(err)
@@ -217,7 +216,7 @@ func (c *ClientSession) DecodeResponseHeader(reader io.Reader) (*protocol.Respon
 	}
 
 	header := &protocol.ResponseHeader{
-		Option: bitmask.Byte(buffer.Byte(1)),
+		Option: buffer.Byte(1),
 	}
 
 	if buffer.Byte(2) != 0 {
@@ -240,11 +239,11 @@ func (c *ClientSession) DecodeResponseHeader(reader io.Reader) (*protocol.Respon
 
 func (c *ClientSession) DecodeResponseBody(request *protocol.RequestHeader, reader io.Reader) (buf.Reader, error) {
 	var sizeParser crypto.ChunkSizeDecoder = crypto.PlainChunkSizeParser{}
-	if request.Option.Has(protocol.RequestOptionChunkMasking) {
+	if request.Option&protocol.RequestOptionChunkMasking != 0 {
 		sizeParser = NewShakeSizeParser(c.responseBodyIV[:])
 	}
 	var padding crypto.PaddingLengthGenerator
-	if request.Option.Has(protocol.RequestOptionGlobalPadding) {
+	if request.Option&protocol.RequestOptionGlobalPadding != 0 {
 		var ok bool
 		padding, ok = sizeParser.(crypto.PaddingLengthGenerator)
 		if !ok {
@@ -261,7 +260,7 @@ func (c *ClientSession) DecodeResponseBody(request *protocol.RequestHeader, read
 			NonceGenerator:          GenerateChunkNonce(c.responseBodyIV[:], uint32(aead.NonceSize())),
 			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
 		}
-		if request.Option.Has(protocol.RequestOptionAuthenticatedLength) {
+		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
 			AuthenticatedLengthKeyAEAD := crypto.NewAesGcm(AuthenticatedLengthKey)
 
@@ -281,7 +280,7 @@ func (c *ClientSession) DecodeResponseBody(request *protocol.RequestHeader, read
 			NonceGenerator:          GenerateChunkNonce(c.responseBodyIV[:], uint32(aead.NonceSize())),
 			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
 		}
-		if request.Option.Has(protocol.RequestOptionAuthenticatedLength) {
+		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
 			AuthenticatedLengthKeyAEAD, err := chacha20poly1305.New(GenerateChacha20Poly1305Key(AuthenticatedLengthKey))
 			common.Must(err)

@@ -88,7 +88,7 @@ func writeMetaWithFrame(writer buf.Writer, meta FrameMetadata, data buf.MultiBuf
 
 func (w *Writer) writeData(mb buf.MultiBuffer) error {
 	meta := w.getNextFrameMeta()
-	meta.Option.Set(OptionData)
+	meta.Option |= OptionData
 
 	return writeMetaWithFrame(w.writer, meta, mb)
 }
@@ -125,7 +125,7 @@ func (w *Writer) Close() error {
 		SessionStatus: SessionStatusEnd,
 	}
 	if w.hasError {
-		meta.Option.Set(OptionError)
+		meta.Option |= OptionError
 	}
 
 	frame := buf.New()

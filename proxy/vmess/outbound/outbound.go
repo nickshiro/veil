@@ -107,15 +107,15 @@ func (h *Handler) Process(ctx context.Context, link *transport.Link, dialer inte
 	request.Security = account.Security
 
 	if request.Security == protocol.SecurityType_AES128_GCM || request.Security == protocol.SecurityType_CHACHA20_POLY1305 {
-		request.Option.Set(protocol.RequestOptionChunkMasking)
+		request.Option |= protocol.RequestOptionChunkMasking
 	}
 
-	if shouldEnablePadding(request.Security) && request.Option.Has(protocol.RequestOptionChunkMasking) {
-		request.Option.Set(protocol.RequestOptionGlobalPadding)
+	if shouldEnablePadding(request.Security) && request.Option&protocol.RequestOptionChunkMasking != 0 {
+		request.Option |= protocol.RequestOptionGlobalPadding
 	}
 
 	if account.AuthenticatedLengthExperiment {
-		request.Option.Set(protocol.RequestOptionAuthenticatedLength)
+		request.Option |= protocol.RequestOptionAuthenticatedLength
 	}
 
 	input := link.Reader
@@ -177,7 +177,7 @@ func (h *Handler) Process(ctx context.Context, link *transport.Link, dialer inte
 			return err
 		}
 
-		if request.Option.Has(protocol.RequestOptionChunkStream) && !account.NoTerminationSignal {
+		if request.Option&protocol.RequestOptionChunkStream != 0 && !account.NoTerminationSignal {
 			if err := bodyWriter2.WriteMultiBuffer(buf.MultiBuffer{}); err != nil {
 				return err
 			}

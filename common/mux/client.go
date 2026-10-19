@@ -329,21 +329,21 @@ func (m *ClientWorker) Dispatch(ctx context.Context, link *transport.Link) bool 
 }
 
 func (m *ClientWorker) handleStatueKeepAlive(meta *FrameMetadata, reader *buf.BufferedReader) error {
-	if meta.Option.Has(OptionData) {
+	if meta.Option&OptionData != 0 {
 		return buf.Copy(NewStreamReader(reader), buf.Discard)
 	}
 	return nil
 }
 
 func (m *ClientWorker) handleStatusNew(meta *FrameMetadata, reader *buf.BufferedReader) error {
-	if meta.Option.Has(OptionData) {
+	if meta.Option&OptionData != 0 {
 		return buf.Copy(NewStreamReader(reader), buf.Discard)
 	}
 	return nil
 }
 
 func (m *ClientWorker) handleStatusKeep(meta *FrameMetadata, reader *buf.BufferedReader) error {
-	if !meta.Option.Has(OptionData) {
+	if meta.Option&OptionData == 0 {
 		return nil
 	}
 
@@ -371,7 +371,7 @@ func (m *ClientWorker) handleStatusEnd(meta *FrameMetadata, reader *buf.Buffered
 	if s, found := m.sessionManager.Get(meta.SessionID); found {
 		s.Close(false)
 	}
-	if meta.Option.Has(OptionData) {
+	if meta.Option&OptionData != 0 {
 		return buf.Copy(NewStreamReader(reader), buf.Discard)
 	}
 	return nil
