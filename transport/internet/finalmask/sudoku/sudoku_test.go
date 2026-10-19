@@ -1,7 +1,6 @@
 package sudoku
 
 import (
-	"bytes"
 	"crypto/ecdh"
 	"crypto/rand"
 	cryptotls "crypto/tls"
@@ -11,9 +10,7 @@ import (
 	"io"
 	stdnet "net"
 	"os"
-	"os/exec"
 	"os/signal"
-	"path/filepath"
 	"sync"
 	"syscall"
 	"testing"
@@ -23,6 +20,8 @@ import (
 	"github.com/nickshiro/veil/app/dispatcher"
 	"github.com/nickshiro/veil/app/log"
 	"github.com/nickshiro/veil/app/proxyman"
+	_ "github.com/nickshiro/veil/app/proxyman/inbound"
+	_ "github.com/nickshiro/veil/app/proxyman/outbound"
 	clog "github.com/nickshiro/veil/common/log"
 	xnet "github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/protocol"
@@ -46,12 +45,6 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-var (
-	e2eBinaryOnce sync.Once
-	e2eBinaryPath string
-	e2eBinaryErr  error
-)
-
 type trafficMode struct {
 	name   string
 	config *Config
@@ -60,7 +53,7 @@ type trafficMode struct {
 type protocolCase struct {
 	name      string
 	transport string
-	run       func(t *testing.T, bin string, mode trafficMode) caseResult
+	run       func(t *testing.T, mode trafficMode) caseResult
 }
 
 type caseResult struct {
@@ -125,7 +118,6 @@ func TestSudokuE2ETemp(t *testing.T) {
 		t.Skip("skipping sudoku e2e harness in short mode")
 	}
 
-	bin := buildE2EBinary(t)
 	payloadSize := 192 * 1024
 	modes := []trafficMode{
 		{
@@ -153,17 +145,17 @@ func TestSudokuE2ETemp(t *testing.T) {
 	}
 
 	cases := []protocolCase{
-		{name: "vless-reality", transport: "tcp", run: func(t *testing.T, bin string, mode trafficMode) caseResult {
-			return runVLESSRealityCase(t, bin, mode, payloadSize)
+		{name: "vless-reality", transport: "tcp", run: func(t *testing.T, mode trafficMode) caseResult {
+			return runVLESSRealityCase(t, mode, payloadSize)
 		}},
-		{name: "hysteria2", transport: "udp", run: func(t *testing.T, bin string, mode trafficMode) caseResult {
-			return runHysteria2Case(t, bin, mode, payloadSize)
+		{name: "hysteria2", transport: "udp", run: func(t *testing.T, mode trafficMode) caseResult {
+			return runHysteria2Case(t, mode, payloadSize)
 		}},
-		{name: "vless-enc", transport: "tcp", run: func(t *testing.T, bin string, mode trafficMode) caseResult {
-			return runVLesseEncCase(t, bin, mode, payloadSize)
+		{name: "vless-enc", transport: "tcp", run: func(t *testing.T, mode trafficMode) caseResult {
+			return runVLesseEncCase(t, mode, payloadSize)
 		}},
-		{name: "vless-xhttp", transport: "tcp", run: func(t *testing.T, bin string, mode trafficMode) caseResult {
-			return runVLESSXHTTPCase(t, bin, mode, payloadSize)
+		{name: "vless-xhttp", transport: "tcp", run: func(t *testing.T, mode trafficMode) caseResult {
+			return runVLESSXHTTPCase(t, mode, payloadSize)
 		}},
 	}
 
@@ -172,7 +164,7 @@ func TestSudokuE2ETemp(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			for _, mode := range modes {
 				t.Run(mode.name, func(t *testing.T) {
-					result := tc.run(t, bin, mode)
+					result := tc.run(t, mode)
 					if mode.name == "prefer_ascii" && result.ASCIIRatio < 0.97 {
 						t.Fatalf("%s %s ascii ratio %.4f < 0.97", tc.name, mode.name, result.ASCIIRatio)
 					}
@@ -217,7 +209,7 @@ func TestSudokuE2ETemp(t *testing.T) {
 	}
 }
 
-func runVLESSRealityCase(t *testing.T, bin string, mode trafficMode, payloadSize int) caseResult {
+func runVLESSRealityCase(t *testing.T, mode trafficMode, payloadSize int) caseResult {
 	backend := startXOREchoServer(t)
 	defer backend.Close()
 
@@ -336,7 +328,7 @@ func runVLESSRealityCase(t *testing.T, bin string, mode trafficMode, payloadSize
 		},
 	})
 
-	serverCmd, clientCmd := runXrayPair(t, bin, serverConfig, clientConfig)
+	serverCmd, clientCmd := runXrayPair(t, serverConfig, clientConfig)
 	defer stopCmd(clientCmd)
 	defer stopCmd(serverCmd)
 	exerciseTCPClient(t, int(clientPort), payloadSize)
@@ -344,7 +336,7 @@ func runVLESSRealityCase(t *testing.T, bin string, mode trafficMode, payloadSize
 	return analyzeTCPRelay(t, "vless-reality", mode, relay.Snapshots())
 }
 
-func runHysteria2Case(t *testing.T, bin string, mode trafficMode, payloadSize int) caseResult {
+func runHysteria2Case(t *testing.T, mode trafficMode, payloadSize int) caseResult {
 	backend := startXOREchoServer(t)
 	defer backend.Close()
 
@@ -453,7 +445,7 @@ func runHysteria2Case(t *testing.T, bin string, mode trafficMode, payloadSize in
 		},
 	})
 
-	serverCmd, clientCmd := runXrayPair(t, bin, serverConfig, clientConfig)
+	serverCmd, clientCmd := runXrayPair(t, serverConfig, clientConfig)
 	defer stopCmd(clientCmd)
 	defer stopCmd(serverCmd)
 	if err := exerciseTCPClientErr(t, int(clientPort), payloadSize); err != nil {
@@ -465,7 +457,7 @@ func runHysteria2Case(t *testing.T, bin string, mode trafficMode, payloadSize in
 	return analyzeUDPRelay(t, "hysteria2", mode, c2s, s2c)
 }
 
-func runVLesseEncCase(t *testing.T, bin string, mode trafficMode, payloadSize int) caseResult {
+func runVLesseEncCase(t *testing.T, mode trafficMode, payloadSize int) caseResult {
 	backend := startXOREchoServer(t)
 	defer backend.Close()
 
@@ -559,7 +551,7 @@ func runVLesseEncCase(t *testing.T, bin string, mode trafficMode, payloadSize in
 		},
 	})
 
-	serverCmd, clientCmd := runXrayPair(t, bin, serverConfig, clientConfig)
+	serverCmd, clientCmd := runXrayPair(t, serverConfig, clientConfig)
 	defer stopCmd(clientCmd)
 	defer stopCmd(serverCmd)
 	exerciseTCPClient(t, int(clientPort), payloadSize)
@@ -567,7 +559,7 @@ func runVLesseEncCase(t *testing.T, bin string, mode trafficMode, payloadSize in
 	return analyzeTCPRelay(t, "vless-enc", mode, relay.Snapshots())
 }
 
-func runVLESSXHTTPCase(t *testing.T, bin string, mode trafficMode, payloadSize int) caseResult {
+func runVLESSXHTTPCase(t *testing.T, mode trafficMode, payloadSize int) caseResult {
 	backend := startXOREchoServer(t)
 	defer backend.Close()
 
@@ -657,7 +649,7 @@ func runVLESSXHTTPCase(t *testing.T, bin string, mode trafficMode, payloadSize i
 		},
 	})
 
-	serverCmd, clientCmd := runXrayPair(t, bin, serverConfig, clientConfig)
+	serverCmd, clientCmd := runXrayPair(t, serverConfig, clientConfig)
 	defer stopCmd(clientCmd)
 	defer stopCmd(serverCmd)
 	exerciseTCPClient(t, int(clientPort), payloadSize)
@@ -942,89 +934,35 @@ func defaultApps(cfg *core.Config) *core.Config {
 	return cfg
 }
 
-func buildE2EBinary(t *testing.T) string {
+func runXrayPair(t *testing.T, serverCfg, clientCfg *core.Config) (*core.Instance, *core.Instance) {
 	t.Helper()
-	e2eBinaryOnce.Do(func() {
-		tempDir, err := os.MkdirTemp("", "xray-sudoku-e2e-*")
-		if err != nil {
-			e2eBinaryErr = err
-			return
-		}
-		e2eBinaryPath = filepath.Join(tempDir, "xray.test")
-		cmd := exec.Command("go", "build", "-o", e2eBinaryPath)
-		cmd.Dir = repoRoot(t)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		e2eBinaryErr = cmd.Run()
-	})
-	if e2eBinaryErr != nil {
-		t.Fatal(e2eBinaryErr)
-	}
-	return e2eBinaryPath
-}
-
-func repoRoot(t *testing.T) string {
-	t.Helper()
-	dir, err := os.Getwd()
-	if err != nil {
-		t.Fatal(err)
-	}
-	for {
-		if _, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil {
-			return dir
-		}
-		parent := filepath.Dir(dir)
-		if parent == dir {
-			t.Fatal("failed to locate repo root")
-		}
-		dir = parent
-	}
-}
-
-func runXrayPair(t *testing.T, bin string, serverCfg, clientCfg *core.Config) (*exec.Cmd, *exec.Cmd) {
-	t.Helper()
-	serverCmd := runXray(t, bin, serverCfg)
+	server := runXray(t, serverCfg)
 
 	time.Sleep(500 * time.Millisecond)
 
-	clientCmd := runXray(t, bin, clientCfg)
+	client := runXray(t, clientCfg)
 
 	time.Sleep(1500 * time.Millisecond)
-	return serverCmd, clientCmd
+	return server, client
 }
 
-func runXray(t *testing.T, bin string, cfg *core.Config) *exec.Cmd {
+func runXray(t *testing.T, cfg *core.Config) *core.Instance {
 	t.Helper()
-	cfgBytes, err := proto.Marshal(cfg)
+	instance, err := core.New(cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
-	cmd := exec.Command(bin, "-config=stdin:", "-format=pb")
-	cmd.Stdin = bytes.NewReader(cfgBytes)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Start(); err != nil {
+	if err := instance.Start(); err != nil {
 		t.Fatal(err)
 	}
-	return cmd
+	return instance
 }
 
-func stopCmd(cmd *exec.Cmd) {
-	if cmd == nil || cmd.Process == nil {
+func stopCmd(instance *core.Instance) {
+	if instance == nil {
 		return
 	}
-	_ = cmd.Process.Signal(syscall.SIGTERM)
-	done := make(chan struct{})
-	go func() {
-		_, _ = cmd.Process.Wait()
-		close(done)
-	}()
-	select {
-	case <-done:
-	case <-time.After(3 * time.Second):
-		_ = cmd.Process.Kill()
-		<-done
-	}
+	_ = instance.Close()
 }
 
 func startTCPRelay(t *testing.T, listenPort int, target string) *tcpRelay {

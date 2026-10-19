@@ -95,8 +95,7 @@ func TestMarshalConfigJson(t *testing.T) {
 		t.Error("build core config failed")
 	}
 
-	tmsg := cserial.ToTypedMessage(bc)
-	tc, ok := MarshalToJson(tmsg, true)
+	tc, ok := MarshalToJson(bc, true)
 	if !ok {
 		t.Error("marshal config failed")
 	}

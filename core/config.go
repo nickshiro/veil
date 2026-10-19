@@ -5,13 +5,28 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/cmdarg"
 	"github.com/nickshiro/veil/common/errors"
-	"github.com/nickshiro/veil/main/confloader"
-	"google.golang.org/protobuf/proto"
+	"github.com/nickshiro/veil/common/serial"
 )
+
+// Config is the master config of Xray. Xray takes this config as input and
+// functions accordingly.
+type Config struct {
+	// Inbound handler configurations. Must have at least one item.
+	Inbound []*InboundHandlerConfig `json:"inbound,omitempty"`
+	// Outbound handler configurations. Must have at least one item. The first
+	// item is used as default for routing.
+	Outbound []*OutboundHandlerConfig `json:"outbound,omitempty"`
+	// App is for configurations of all features in Xray. A feature must
+	// implement the Feature interface, and its config type must be registered
+	// through common.RegisterConfig.
+	App []*serial.TypedMessage `json:"app,omitempty"`
+	// Configuration for extensions. The config may not work if corresponding
+	// extension is not loaded into Xray. Xray will ignore such config during
+	// initialization.
+	Extension []*serial.TypedMessage `json:"extension,omitempty"`
+}
 
 // ConfigFormat is a configurable format of Xray config file.
 type ConfigFormat struct {
@@ -80,14 +95,7 @@ func GetMergedConfig(args cmdarg.Arg) (string, error) {
 }
 
 func GetFormatByExtension(ext string) string {
-	switch strings.ToLower(ext) {
-	case "pb", "protobuf":
-		return "protobuf"
-	case "json":
-		return "json"
-	default:
-		return ""
-	}
+	return "json"
 }
 
 func getExtension(filename string) string {
@@ -106,7 +114,6 @@ func LoadConfig(formatName string, input interface{}) (*Config, error) {
 	switch v := input.(type) {
 	case cmdarg.Arg:
 		files := make([]*ConfigSource, len(v))
-		hasProtobuf := false
 		for i, file := range v {
 			var f string
 
@@ -124,21 +131,9 @@ func LoadConfig(formatName string, input interface{}) (*Config, error) {
 				return nil, errors.New("Failed to get format of ", file)
 			}
 
-			if f == "protobuf" {
-				hasProtobuf = true
-			}
 			files[i] = &ConfigSource{
 				Name:   file,
 				Format: f,
-			}
-		}
-
-		// only one protobuf config file is allowed
-		if hasProtobuf {
-			if len(v) == 1 {
-				return configLoaderByName["protobuf"].Loader(v)
-			} else {
-				return nil, errors.New("Only one protobuf config file is allowed")
 			}
 		}
 
@@ -153,39 +148,4 @@ func LoadConfig(formatName string, input interface{}) (*Config, error) {
 	}
 
 	return nil, errors.New("Unable to load config")
-}
-
-func loadProtobufConfig(data []byte) (*Config, error) {
-	config := new(Config)
-	if err := proto.Unmarshal(data, config); err != nil {
-		return nil, err
-	}
-	return config, nil
-}
-
-func init() {
-	common.Must(RegisterConfigLoader(&ConfigFormat{
-		Name:      "Protobuf",
-		Extension: []string{"pb"},
-		Loader: func(input interface{}) (*Config, error) {
-			switch v := input.(type) {
-			case cmdarg.Arg:
-				r, err := confloader.LoadConfig(v[0])
-				if err != nil {
-					return nil, err
-				}
-				data, err := buf.ReadAllToBytes(r)
-				if err != nil {
-					return nil, err
-				}
-				return loadProtobufConfig(data)
-			case io.Reader:
-				data, err := buf.ReadAllToBytes(v)
-				common.Must(err)
-				return loadProtobufConfig(data)
-			default:
-				return nil, errors.New("unknown type")
-			}
-		},
-	}))
 }

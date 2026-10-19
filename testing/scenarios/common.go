@@ -5,12 +5,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
-	"os"
-	"os/exec"
-	"path/filepath"
 	"runtime"
-	"sync"
-	"syscall"
 	"testing"
 	"time"
 
@@ -20,10 +15,9 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/retry"
 	"github.com/nickshiro/veil/common/serial"
 	core "github.com/nickshiro/veil/core"
-	"google.golang.org/protobuf/proto"
+	_ "github.com/nickshiro/veil/main/distro/all"
 )
 
 func xor(b []byte) []byte {
@@ -45,8 +39,8 @@ func readFrom2(conn net.Conn, timeout time.Duration, length int) ([]byte, error)
 	return b[:n], nil
 }
 
-func InitializeServerConfigs(configs ...*core.Config) ([]*exec.Cmd, error) {
-	servers := make([]*exec.Cmd, 0, 10)
+func InitializeServerConfigs(configs ...*core.Config) ([]*core.Instance, error) {
+	servers := make([]*core.Instance, 0, 10)
 
 	for _, config := range configs {
 		server, err := InitializeServerConfig(config)
@@ -62,71 +56,25 @@ func InitializeServerConfigs(configs ...*core.Config) ([]*exec.Cmd, error) {
 	return servers, nil
 }
 
-func InitializeServerConfig(config *core.Config) (*exec.Cmd, error) {
-	err := BuildXray()
-	if err != nil {
-		return nil, err
-	}
-
+func InitializeServerConfig(config *core.Config) (*core.Instance, error) {
 	config = withDefaultApps(config)
-	configBytes, err := proto.Marshal(config)
+	server, err := core.New(config)
 	if err != nil {
 		return nil, err
 	}
-	proc := RunXrayProtobuf(configBytes)
-
-	if err := proc.Start(); err != nil {
+	if err := server.Start(); err != nil {
 		return nil, err
 	}
-
-	return proc, nil
+	return server, nil
 }
 
-var (
-	testBinaryPath    string
-	testBinaryCleanFn func()
-	testBinaryPathGen sync.Once
-)
-
-func genTestBinaryPath() {
-	testBinaryPathGen.Do(func() {
-		var tempDir string
-		common.Must(retry.Timed(5, 100).On(func() error {
-			dir, err := os.MkdirTemp("", "xray")
-			if err != nil {
-				return err
-			}
-			tempDir = dir
-			testBinaryCleanFn = func() { os.RemoveAll(dir) }
-			return nil
-		}))
-		file := filepath.Join(tempDir, "xray.test")
-		if runtime.GOOS == "windows" {
-			file += ".exe"
-		}
-		testBinaryPath = file
-		fmt.Printf("Generated binary path: %s\n", file)
-	})
-}
-
-func GetSourcePath() string {
-	return filepath.Join("github.com", "nickshiro", "veil")
-}
-
-func CloseAllServers(servers []*exec.Cmd) {
+func CloseAllServers(servers []*core.Instance) {
 	log.Record(&log.GeneralMessage{
 		Severity: log.Severity_Info,
 		Content:  "Closing all servers.",
 	})
 	for _, server := range servers {
-		if runtime.GOOS == "windows" {
-			server.Process.Kill()
-		} else {
-			server.Process.Signal(syscall.SIGTERM)
-		}
-	}
-	for _, server := range servers {
-		server.Process.Wait()
+		server.Close()
 	}
 	log.Record(&log.GeneralMessage{
 		Severity: log.Severity_Info,
@@ -134,17 +82,12 @@ func CloseAllServers(servers []*exec.Cmd) {
 	})
 }
 
-func CloseServer(server *exec.Cmd) {
+func CloseServer(server *core.Instance) {
 	log.Record(&log.GeneralMessage{
 		Severity: log.Severity_Info,
 		Content:  "Closing server.",
 	})
-	if runtime.GOOS == "windows" {
-		server.Process.Kill()
-	} else {
-		server.Process.Signal(syscall.SIGTERM)
-	}
-	server.Process.Wait()
+	server.Close()
 	log.Record(&log.GeneralMessage{
 		Severity: log.Severity_Info,
 		Content:  "Server closed.",

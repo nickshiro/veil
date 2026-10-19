@@ -18,7 +18,6 @@ import (
 	"github.com/nickshiro/veil/proxy/vmess"
 	"github.com/nickshiro/veil/proxy/vmess/outbound"
 	"github.com/nickshiro/veil/testing/servers/tcp"
-	"google.golang.org/protobuf/proto"
 )
 
 func TestXrayDependency(t *testing.T) {
@@ -77,10 +76,8 @@ func TestXrayClose(t *testing.T) {
 		},
 	}
 
-	cfgBytes, err := proto.Marshal(config)
+	server, err := New(config)
 	common.Must(err)
-
-	server, err := StartInstance("protobuf", cfgBytes)
-	common.Must(err)
+	common.Must(server.Start())
 	server.Close()
 }

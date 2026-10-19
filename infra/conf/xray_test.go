@@ -23,23 +23,12 @@ import (
 	"github.com/nickshiro/veil/transport/internet"
 	"github.com/nickshiro/veil/transport/internet/tls"
 	"github.com/nickshiro/veil/transport/internet/websocket"
-	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/testing/protocmp"
 )
 
 func TestXrayConfig(t *testing.T) {
-	createParser := func() func(string) (proto.Message, error) {
-		return func(s string) (proto.Message, error) {
-			config := new(Config)
-			if err := json.Unmarshal([]byte(s), config); err != nil {
-				return nil, err
-			}
-			return config.Build()
-		}
-	}
-
-	runMultiTestCase(t, []TestCase{
-		{
-			Input: `{
+	config := new(Config)
+	common.Must(json.Unmarshal([]byte(`{
 				"log": {
 					"access": "/var/log/xray/access.log",
 					"loglevel": "error",
@@ -78,83 +67,88 @@ func TestXrayConfig(t *testing.T) {
 						}
 					]
 				}
-			}`,
-			Parser: createParser(),
-			Output: &core.Config{
-				App: []*serial.TypedMessage{
-					serial.ToTypedMessage(&log.Config{
-						ErrorLogType:  log.LogType_File,
-						ErrorLogPath:  "/var/log/xray/error.log",
-						ErrorLogLevel: clog.Severity_Error,
-						AccessLogType: log.LogType_File,
-						AccessLogPath: "/var/log/xray/access.log",
-					}),
-					serial.ToTypedMessage(&dispatcher.Config{}),
-					serial.ToTypedMessage(&proxyman.InboundConfig{}),
-					serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-					serial.ToTypedMessage(&router.Config{
-						DomainStrategy: router.Config_AsIs,
-						Rule: []*router.RoutingRule{
+			}`), config))
+
+	actual, err := config.Build()
+	common.Must(err)
+
+	expected := &core.Config{
+		App: []*serial.TypedMessage{
+			serial.ToTypedMessage(&log.Config{
+				ErrorLogType:  log.LogType_File,
+				ErrorLogPath:  "/var/log/xray/error.log",
+				ErrorLogLevel: clog.Severity_Error,
+				AccessLogType: log.LogType_File,
+				AccessLogPath: "/var/log/xray/access.log",
+			}),
+			serial.ToTypedMessage(&dispatcher.Config{}),
+			serial.ToTypedMessage(&proxyman.InboundConfig{}),
+			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+			serial.ToTypedMessage(&router.Config{
+				DomainStrategy: router.Config_AsIs,
+				Rule: []*router.RoutingRule{
+					{
+						Ip: []*geodata.IPRule{
 							{
-								Ip: []*geodata.IPRule{
-									{
-										Value: &geodata.IPRule_Custom{
-											Custom: &geodata.CIDRRule{
-												Cidr: &geodata.CIDR{Ip: []byte{10, 0, 0, 0}, Prefix: 8},
-											},
-										},
+								Value: &geodata.IPRule_Custom{
+									Custom: &geodata.CIDRRule{
+										Cidr: &geodata.CIDR{Ip: []byte{10, 0, 0, 0}, Prefix: 8},
 									},
-								},
-								TargetTag: &router.RoutingRule_Tag{
-									Tag: "blocked",
 								},
 							},
 						},
-					}),
-				},
-				Inbound: []*core.InboundHandlerConfig{
-					{
-						ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
-							PortList: &net.PortList{Range: []*net.PortRange{{
-								From: 443,
-								To:   500,
-							}}},
-							StreamSettings: &internet.StreamConfig{
-								ProtocolName: "websocket",
-								TransportSettings: []*internet.TransportConfig{
-									{
-										ProtocolName: "websocket",
-										Settings: serial.ToTypedMessage(&websocket.Config{
-											Host: "example.domain",
-										}),
-									},
-								},
-								SecurityType: "xray.transport.internet.tls.Config",
-								SecuritySettings: []*serial.TypedMessage{
-									serial.ToTypedMessage(&tls.Config{
-										NextProtocol: []string{"h2"},
-									}),
-								},
-							},
-						}),
-						ProxySettings: serial.ToTypedMessage(&inbound.Config{
-							User: []*protocol.User{
-								{
-									Level: 0,
-									Account: serial.ToTypedMessage(&vmess.Account{
-										Id: "0cdf8a45-303d-4fed-9780-29aa7f54175e",
-										SecuritySettings: &protocol.SecurityConfig{
-											Type: protocol.SecurityType_AES128_GCM,
-										},
-									}),
-								},
-							},
-						}),
+						TargetTag: &router.RoutingRule_Tag{
+							Tag: "blocked",
+						},
 					},
 				},
+			}),
+		},
+		Inbound: []*core.InboundHandlerConfig{
+			{
+				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+					PortList: &net.PortList{Range: []*net.PortRange{{
+						From: 443,
+						To:   500,
+					}}},
+					StreamSettings: &internet.StreamConfig{
+						ProtocolName: "websocket",
+						TransportSettings: []*internet.TransportConfig{
+							{
+								ProtocolName: "websocket",
+								Settings: serial.ToTypedMessage(&websocket.Config{
+									Host: "example.domain",
+								}),
+							},
+						},
+						SecurityType: "xray.transport.internet.tls.Config",
+						SecuritySettings: []*serial.TypedMessage{
+							serial.ToTypedMessage(&tls.Config{
+								NextProtocol: []string{"h2"},
+							}),
+						},
+					},
+				}),
+				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+					User: []*protocol.User{
+						{
+							Level: 0,
+							Account: serial.ToTypedMessage(&vmess.Account{
+								Id: "0cdf8a45-303d-4fed-9780-29aa7f54175e",
+								SecuritySettings: &protocol.SecurityConfig{
+									Type: protocol.SecurityType_AES128_GCM,
+								},
+							}),
+						},
+					},
+				}),
 			},
 		},
-	})
+	}
+
+	if diff := cmp.Diff(actual, expected, protocmp.Transform()); diff != "" {
+		t.Fatal(diff)
+	}
 }
 
 func TestSniffingConfig_Build(t *testing.T) {

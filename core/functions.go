@@ -22,7 +22,8 @@ func CreateObject(v *Instance, config interface{}) (interface{}, error) {
 }
 
 // StartInstance starts a new Xray instance with given serialized config.
-// By default Xray only support config in protobuf format, i.e., configFormat = "protobuf". Caller need to load other packages to add JSON support.
+// The config format must be registered by the caller, e.g. by loading the
+// main/json package to support JSON config.
 func StartInstance(configFormat string, configBytes []byte) (*Instance, error) {
 	config, err := LoadConfig(configFormat, bytes.NewReader(configBytes))
 	if err != nil {

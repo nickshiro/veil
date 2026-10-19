@@ -17,7 +17,6 @@ import (
 	"github.com/nickshiro/veil/proxy/freedom"
 	"github.com/nickshiro/veil/testing/servers/tcp"
 	"github.com/nickshiro/veil/testing/servers/udp"
-	"google.golang.org/protobuf/proto"
 )
 
 func xor(b []byte) []byte {
@@ -59,11 +58,9 @@ func TestXrayDial(t *testing.T) {
 		},
 	}
 
-	cfgBytes, err := proto.Marshal(config)
+	server, err := core.New(config)
 	common.Must(err)
-
-	server, err := core.StartInstance("protobuf", cfgBytes)
-	common.Must(err)
+	common.Must(server.Start())
 	defer server.Close()
 
 	conn, err := core.Dial(context.Background(), server, dest)
@@ -111,11 +108,9 @@ func TestXrayDialUDPConn(t *testing.T) {
 		},
 	}
 
-	cfgBytes, err := proto.Marshal(config)
+	server, err := core.New(config)
 	common.Must(err)
-
-	server, err := core.StartInstance("protobuf", cfgBytes)
-	common.Must(err)
+	common.Must(server.Start())
 	defer server.Close()
 
 	conn, err := core.Dial(context.Background(), server, dest)
@@ -180,11 +175,9 @@ func TestXrayDialUDP(t *testing.T) {
 		},
 	}
 
-	cfgBytes, err := proto.Marshal(config)
+	server, err := core.New(config)
 	common.Must(err)
-
-	server, err := core.StartInstance("protobuf", cfgBytes)
-	common.Must(err)
+	common.Must(server.Start())
 	defer server.Close()
 
 	conn, err := core.DialUDP(context.Background(), server)
