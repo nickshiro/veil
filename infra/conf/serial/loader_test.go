@@ -16,7 +16,7 @@ func TestLoaderError(t *testing.T) {
 		{
 			Input: `{
 				"log": {
-					// abcd
+
 					0,
 					"loglevel": "info"
 				}
@@ -26,7 +26,7 @@ func TestLoaderError(t *testing.T) {
 		{
 			Input: `{
 				"log": {
-					// abcd
+
 					"loglevel": "info",
 				}
 		}`,
@@ -55,6 +55,9 @@ func TestLoaderError(t *testing.T) {
 	for _, testCase := range testCases {
 		reader := bytes.NewReader([]byte(testCase.Input))
 		_, err := serial.LoadJSONConfig(reader)
+		if err == nil {
+			t.Fatalf("expected error for %s", testCase.Input)
+		}
 		errString := err.Error()
 		if !strings.Contains(errString, testCase.Output) {
 			t.Error("unexpected output from json: ", testCase.Input, ". expected ", testCase.Output, ", but actually ", errString)

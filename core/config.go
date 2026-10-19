@@ -85,7 +85,7 @@ func GetFormatByExtension(ext string) string {
 		return "protobuf"
 	case "yaml", "yml":
 		return "yaml"
-	case "json", "jsonc":
+	case "json":
 		return "json"
 	default:
 		return ""
