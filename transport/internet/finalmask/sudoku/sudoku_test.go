@@ -951,7 +951,7 @@ func buildE2EBinary(t *testing.T) string {
 			return
 		}
 		e2eBinaryPath = filepath.Join(tempDir, "xray.test")
-		cmd := exec.Command("go", "build", "-o", e2eBinaryPath, "./main")
+		cmd := exec.Command("go", "build", "-o", e2eBinaryPath)
 		cmd.Dir = repoRoot(t)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
