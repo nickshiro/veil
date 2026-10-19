@@ -15,7 +15,6 @@ import (
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/utils"
-	"github.com/nickshiro/veil/main/commands/base"
 	"github.com/nickshiro/veil/main/confloader"
 )
 
@@ -49,10 +48,6 @@ func ConfigLoader(arg string) (out io.Reader, err error) {
 }
 
 func readConfigFile(file *os.File) ([]byte, error) {
-	if base.CommandEnv.CommandName != "run" {
-		return io.ReadAll(file)
-	}
-
 	info, err := file.Stat()
 	if err != nil {
 		return nil, err
