@@ -125,7 +125,7 @@ func (c *Channel) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (c *Channel) Close() error {
 	c.access.Lock()
 	defer c.access.Unlock()

@@ -76,7 +76,7 @@ func (DefaultRouter) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (DefaultRouter) Close() error {
 	return nil
 }

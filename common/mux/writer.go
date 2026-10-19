@@ -118,7 +118,7 @@ func (w *Writer) WriteMultiBuffer(mb buf.MultiBuffer) error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (w *Writer) Close() error {
 	meta := FrameMetadata{
 		SessionID:     w.id,

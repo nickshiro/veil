@@ -187,7 +187,7 @@ func (h *AlwaysOnInboundHandler) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (h *AlwaysOnInboundHandler) Close() error {
 	var errs []error
 	for _, worker := range h.workers {

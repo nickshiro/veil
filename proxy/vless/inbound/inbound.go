@@ -223,7 +223,7 @@ func (h *Handler) RemoveReverse(u *protocol.MemoryUser) {
 	}
 }
 
-// Close implements common.Closable.Close().
+// Close implements io.Closer.Close().
 func (h *Handler) Close() error {
 	if h.decryption != nil {
 		h.decryption.Close()

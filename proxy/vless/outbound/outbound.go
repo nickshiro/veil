@@ -131,7 +131,7 @@ func New(ctx context.Context, config *Config) (*Handler, error) {
 	return handler, nil
 }
 
-// Close implements common.Closable.Close().
+// Close implements io.Closer.Close().
 func (h *Handler) Close() error {
 	if h.preConns != nil {
 		close(h.preConns)

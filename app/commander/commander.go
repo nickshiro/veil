@@ -115,7 +115,7 @@ func (c *Commander) Start() error {
 	})
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (c *Commander) Close() error {
 	c.Lock()
 	defer c.Unlock()

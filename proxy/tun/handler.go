@@ -263,7 +263,7 @@ func (t *Handler) HandleConnection(conn net.Conn, destination net.Destination) {
 	}
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (t *Handler) Close() error {
 	return errors.Combine(common.CloseIfExists(t.stack), common.CloseIfExists(t.tun))
 }

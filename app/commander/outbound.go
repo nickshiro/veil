@@ -101,7 +101,7 @@ func (co *Outbound) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (co *Outbound) Close() error {
 	co.access.Lock()
 	defer co.access.Unlock()

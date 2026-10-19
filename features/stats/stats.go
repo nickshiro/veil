@@ -205,5 +205,5 @@ func (NoopManager) GetAllOnlineUsers() []string {
 // Start implements common.Runnable.
 func (NoopManager) Start() error { return nil }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (NoopManager) Close() error { return nil }

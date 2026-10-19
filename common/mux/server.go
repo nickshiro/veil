@@ -79,7 +79,7 @@ func (s *Server) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (s *Server) Close() error {
 	return nil
 }

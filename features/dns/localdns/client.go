@@ -25,7 +25,7 @@ func (*Client) Type() any {
 // Start implements common.Runnable.
 func (*Client) Start() error { return nil }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (*Client) Close() error { return nil }
 
 // LookupIP implements Client.

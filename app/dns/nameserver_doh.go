@@ -75,10 +75,10 @@ func NewDoHNameServer(url *url.URL, dispatcher routing.Dispatcher, h2c bool, dis
 						return nil, err
 					}
 					cc := common.ChainedClosable{}
-					if cw, ok := link.Writer.(common.Closable); ok {
+					if cw, ok := link.Writer.(io.Closer); ok {
 						cc = append(cc, cw)
 					}
-					if cr, ok := link.Reader.(common.Closable); ok {
+					if cr, ok := link.Reader.(io.Closer); ok {
 						cc = append(cc, cr)
 					}
 					conn = cnc.NewConnection(

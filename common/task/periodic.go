@@ -70,7 +70,7 @@ func (t *Periodic) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (t *Periodic) Close() error {
 	t.access.Lock()
 	defer t.access.Unlock()

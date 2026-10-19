@@ -228,7 +228,7 @@ func (w *BufferedWriter) ReadFrom(reader io.Reader) (int64, error) {
 	return sc.Size, err
 }
 
-// Close implements io.Closable.
+// Close implements io.Closer.
 func (w *BufferedWriter) Close() error {
 	if err := w.Flush(); err != nil {
 		return err

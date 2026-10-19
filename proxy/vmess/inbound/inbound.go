@@ -134,7 +134,7 @@ func New(ctx context.Context, config *Config) (*Handler, error) {
 	return handler, nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (h *Handler) Close() error {
 	return errors.Combine(
 		h.sessionHistory.Close(),

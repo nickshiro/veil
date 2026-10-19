@@ -125,7 +125,7 @@ func (m *Manager) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (m *Manager) Close() error {
 	m.access.Lock()
 	defer m.access.Unlock()

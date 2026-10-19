@@ -145,7 +145,7 @@ func (g *Instance) Severity() log.Severity {
 	return g.config.ErrorLogLevel
 }
 
-// Close implements common.Closable.Close().
+// Close implements io.Closer.Close().
 func (g *Instance) Close() error {
 	errors.LogDebug(context.Background(), "Logger closing")
 

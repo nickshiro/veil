@@ -327,7 +327,7 @@ func (h *Handler) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (h *Handler) Close() error {
 	common.Close(h.mux)
 	common.Close(h.proxy)

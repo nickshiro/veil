@@ -253,7 +253,7 @@ func (m *Manager) Start() error {
 	return nil
 }
 
-// Close implement common.Closable.
+// Close implement io.Closer.
 func (m *Manager) Close() error {
 	m.access.Lock()
 	defer m.access.Unlock()

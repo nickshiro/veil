@@ -48,7 +48,7 @@ func NewSessionHistory() *SessionHistory {
 	return h
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (h *SessionHistory) Close() error {
 	return h.task.Close()
 }

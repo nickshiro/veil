@@ -230,7 +230,7 @@ func (s *Server) Process(ctx context.Context, network net.Network, conn stat.Con
 	return nil
 }
 
-// Close implements common.Closable.Close.
+// Close implements io.Closer.Close.
 func (s *Server) Close() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()

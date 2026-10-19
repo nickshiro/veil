@@ -67,7 +67,7 @@ func (r *UDPReader) ReadMessage() (*buf.Buffer, error) {
 	}
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (r *UDPReader) Close() error {
 	defer func() {
 		r.access.Lock()

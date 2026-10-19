@@ -134,7 +134,7 @@ func TestInterfaces(t *testing.T) {
 
 	_ = common.Interruptible(new(Reader))
 	_ = common.Interruptible(new(Writer))
-	_ = common.Closable(new(Writer))
+	_ = io.Closer(new(Writer))
 }
 
 func BenchmarkPipeReadWrite(b *testing.B) {

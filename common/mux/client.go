@@ -148,7 +148,7 @@ func (f *DialingWorkerFactory) Create() (*ClientWorker, error) {
 		return nil, err
 	}
 
-	go func(p proxy.Outbound, d internet.Dialer, c common.Closable) {
+	go func(p proxy.Outbound, d internet.Dialer, c io.Closer) {
 		outbounds := []*session.Outbound{{
 			Target: net.TCPDestination(muxCoolAddress, muxCoolPort),
 		}}

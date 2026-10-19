@@ -56,7 +56,7 @@ func (m *Instance) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.Close().
+// Close implements io.Closer.Close().
 func (m *Instance) Close() error {
 	return nil
 }

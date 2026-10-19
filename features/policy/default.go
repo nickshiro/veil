@@ -31,7 +31,7 @@ func (DefaultManager) Start() error {
 	return nil
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (DefaultManager) Close() error {
 	return nil
 }

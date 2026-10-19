@@ -233,7 +233,7 @@ func closeWebhooks(rules []*Rule) {
 	}
 }
 
-// Close implements common.Closable.
+// Close implements io.Closer.
 func (r *Router) Close() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
