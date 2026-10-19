@@ -18,7 +18,6 @@ func init() {
 		convert.CmdConvert,
 		// lua.CmdLua,
 		tls.CmdTLS,
-		cmdUUID,
 		cmdX25519,
 		// cmdEd25519,
 		cmdWG,
