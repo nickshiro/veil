@@ -75,5 +75,6 @@ message Config {
 
   bool enableParallelQuery = 14;
 
-  string script = 15;
+  reserved 15;
+  reserved "script";
 }

@@ -23,9 +23,6 @@ import (
 
 const idleTimeout = 30 * time.Second
 
-// DO NOT EDIT. Ignored by geodata, rejected by Lua.
-const luaGuardHeader = "\x12\x01\x00"
-
 type stage struct {
 	target string
 	temp   string
@@ -173,10 +170,6 @@ func (d *downloader) downloadOne(asset *Asset) (stage, error) {
 		}
 	}()
 
-	if _, err := temp.WriteString(luaGuardHeader); err != nil {
-		temp.Close()
-		return stage{}, err
-	}
 	if err := d.fetch(asset.Url, temp); err != nil {
 		temp.Close()
 		return stage{}, err
