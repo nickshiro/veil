@@ -30,7 +30,13 @@ func (r *Rule) Apply(ctx routing.Context) bool {
 	return r.Condition.Apply(ctx)
 }
 
-func (rr *RoutingRule) BuildCondition() (Condition, error) {
+func (rr *RuleConfig) BuildCondition() (Condition, error) {
+	if rr == nil {
+		return nil, errors.New("missing routing rule")
+	}
+	if rr.OutboundTag != "" && rr.BalancerTag != "" {
+		return nil, errors.New("both outboundTag and balancerTag specified")
+	}
 	conds := NewConditionChan()
 
 	if len(rr.LocalOs) > 0 {

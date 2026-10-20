@@ -286,38 +286,38 @@ func TestServiceTestRoute(t *testing.T) {
 	mockCtl := gomock.NewController(t)
 	defer mockCtl.Finish()
 	common.Must(r.Init(context.TODO(), &router.RuntimeConfig{
-		Rule: []*router.RoutingRule{
+		Rule: []*router.RuleConfig{
 			{
-				InboundTag: []string{"in"},
-				TargetTag:  &router.RoutingRule_Tag{Tag: "out"},
+				InboundTag:  []string{"in"},
+				OutboundTag: "out",
 			},
 			{
-				Protocol:  []string{"bittorrent"},
-				TargetTag: &router.RoutingRule_Tag{Tag: "blocked"},
+				Protocol:    []string{"bittorrent"},
+				OutboundTag: "blocked",
 			},
 			{
-				PortList:  &net.PortList{Range: []*net.PortRange{{From: 8080, To: 8080}}},
-				TargetTag: &router.RoutingRule_Tag{Tag: "out"},
+				PortList:    &net.PortList{Range: []*net.PortRange{{From: 8080, To: 8080}}},
+				OutboundTag: "out",
 			},
 			{
 				SourcePortList: &net.PortList{Range: []*net.PortRange{{From: 9999, To: 9999}}},
-				TargetTag:      &router.RoutingRule_Tag{Tag: "out"},
+				OutboundTag:    "out",
 			},
 			{
-				Domain:    []*geodata.DomainRule{{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Domain, Value: "com"}}}},
-				TargetTag: &router.RoutingRule_Tag{Tag: "out"},
+				Domain:      []*geodata.DomainRule{{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Domain, Value: "com"}}}},
+				OutboundTag: "out",
 			},
 			{
-				SourceIp:  []*geodata.IPRule{{Value: &geodata.IPRule_Custom{Custom: &geodata.CIDRRule{Cidr: &geodata.CIDR{Ip: []byte{127, 0, 0, 0}, Prefix: 8}}}}},
-				TargetTag: &router.RoutingRule_Tag{Tag: "out"},
+				SourceIp:    []*geodata.IPRule{{Value: &geodata.IPRule_Custom{Custom: &geodata.CIDRRule{Cidr: &geodata.CIDR{Ip: []byte{127, 0, 0, 0}, Prefix: 8}}}}},
+				OutboundTag: "out",
 			},
 			{
-				UserEmail: []string{"example@example.com"},
-				TargetTag: &router.RoutingRule_Tag{Tag: "out"},
+				UserEmail:   []string{"example@example.com"},
+				OutboundTag: "out",
 			},
 			{
-				Networks:  []net.Network{net.Network_UDP, net.Network_TCP},
-				TargetTag: &router.RoutingRule_Tag{Tag: "out"},
+				Networks:    []net.Network{net.Network_UDP, net.Network_TCP},
+				OutboundTag: "out",
 			},
 		},
 	}, mocks.NewDNSClient(mockCtl), mocks.NewOutboundManager(mockCtl), nil))

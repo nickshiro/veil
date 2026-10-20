@@ -6,6 +6,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/nickshiro/veil/app/router"
+	"github.com/nickshiro/veil/common/geodata"
+	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/features/routing"
 	"google.golang.org/protobuf/proto"
@@ -44,7 +46,7 @@ func TestAddRuleConvertsWireConfig(t *testing.T) {
 	if _, err := NewRoutingServer(target, nil).AddRule(context.Background(), request); err != nil {
 		t.Fatal(err)
 	}
-	want := &router.RuntimeConfig{DomainStrategy: wire.DomainStrategy, Rule: wire.Rule, BalancingRule: []*router.BalancerConfig{{Tag: "balance", OutboundSelector: []string{"proxy"}, Strategy: "leastLoad", FallbackTag: "direct", StrategySettings: &router.LeastLoadConfig{Costs: []*router.Weight{{Regexp: true, Match: "proxy.*", Value: 2}}, Baselines: []int64{100, 200}, Expected: 2, MaxRTT: 300, Tolerance: 0.5}}}}
+	want := &router.RuntimeConfig{DomainStrategy: router.DomainIPOnDemand, Rule: []*router.RuleConfig{{RuleTag: "rule", OutboundTag: "direct"}}, BalancingRule: []*router.BalancerConfig{{Tag: "balance", OutboundSelector: []string{"proxy"}, Strategy: "leastLoad", FallbackTag: "direct", StrategySettings: &router.LeastLoadConfig{Costs: []*router.Weight{{Regexp: true, Match: "proxy.*", Value: 2}}, Baselines: []int64{100, 200}, Expected: 2, MaxRTT: 300, Tolerance: 0.5}}}}
 	if diff := cmp.Diff(want, target.config, protocmp.Transform()); diff != "" {
 		t.Fatal(diff)
 	}
@@ -59,12 +61,71 @@ func TestDecodeRuntimeConfigRejectsInvalidSettings(t *testing.T) {
 		"wrong config":     serial.ToTypedMessage(&router.RoutingRule{}),
 		"missing settings": serial.ToTypedMessage(&router.Config{BalancingRule: []*router.BalancingRule{{Strategy: "leastload"}}}),
 		"wrong settings":   serial.ToTypedMessage(&router.Config{BalancingRule: []*router.BalancingRule{{Strategy: "leastload", StrategySettings: serial.ToTypedMessage(&router.RoutingRule{})}}}),
-		"malformed":        {Type: "veil.app.router.Config", Value: []byte{0xff}},
+		"malformed":        {Type: "xray.app.router.Config", Value: []byte{0xff}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			if _, err := decodeRuntimeConfig(message); err == nil {
 				t.Fatal("expected error")
 			}
 		})
+	}
+}
+
+func TestDecodeRoutingRuleFields(t *testing.T) {
+	domain := []*geodata.DomainRule{{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Domain, Value: "example.com"}}}}
+	ips := []*geodata.IPRule{{Value: &geodata.IPRule_Custom{Custom: &geodata.CIDRRule{Cidr: &geodata.CIDR{Ip: []byte{10, 0, 0, 0}, Prefix: 8}}}}}
+	ports := &net.PortList{Range: []*net.PortRange{{From: 80, To: 443}}}
+	wire := &router.RoutingRule{
+		TargetTag: &router.RoutingRule_BalancingTag{BalancingTag: "balance"}, RuleTag: "all-fields",
+		Domain: domain, Ip: ips, PortList: ports, Networks: []net.Network{net.Network_TCP},
+		SourceIp: ips, SourcePortList: ports, LocalIp: ips, LocalPortList: ports, VlessRouteList: ports,
+		UserEmail: []string{"user"}, InboundTag: []string{"in"}, Protocol: []string{"http"},
+		Attributes: map[string]string{"key": "pattern"}, Process: []string{"curl"}, LocalOs: []string{"linux"},
+		Webhook: &router.WebhookConfig{Url: "https://example.com/hook", Deduplication: 10, Headers: map[string]string{"X-Test": "value"}},
+	}
+	got, err := decodeRuntimeConfig(serial.ToTypedMessage(&router.Config{Rule: []*router.RoutingRule{wire}}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := &router.RuleConfig{
+		BalancerTag: "balance", RuleTag: "all-fields", Domain: domain, Ip: ips, PortList: ports, Networks: []net.Network{net.Network_TCP},
+		SourceIp: ips, SourcePortList: ports, LocalIp: ips, LocalPortList: ports, VlessRouteList: ports,
+		UserEmail: []string{"user"}, InboundTag: []string{"in"}, Protocol: []string{"http"},
+		Attributes: map[string]string{"key": "pattern"}, Process: []string{"curl"}, LocalOs: []string{"linux"},
+		Webhook: &router.WebhookSettings{Url: "https://example.com/hook", Deduplication: 10, Headers: map[string]string{"X-Test": "value"}},
+	}
+	if diff := cmp.Diff([]*router.RuleConfig{want}, got.Rule, protocmp.Transform()); diff != "" {
+		t.Fatal(diff)
+	}
+}
+
+func TestAddRuleUpdatesNativeRouter(t *testing.T) {
+	ctx := context.Background()
+	r := new(router.Router)
+	if err := r.Init(ctx, &router.RuntimeConfig{}, nil, nil, nil); err != nil {
+		t.Fatal(err)
+	}
+	defer r.Close()
+	server := NewRoutingServer(r, nil)
+	for _, appendRules := range []bool{false, true, false} {
+		outbound := "first"
+		if appendRules {
+			outbound = "second"
+		}
+		config := &router.Config{Rule: []*router.RoutingRule{{InboundTag: []string{outbound}, TargetTag: &router.RoutingRule_Tag{Tag: outbound}}}}
+		if _, err := server.AddRule(ctx, &AddRuleRequest{Config: serial.ToTypedMessage(config), ShouldAppend: appendRules}); err != nil {
+			t.Fatal(err)
+		}
+		route, err := server.TestRoute(ctx, &TestRouteRequest{RoutingContext: &RoutingContext{InboundTag: outbound}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if route.OutboundTag != outbound {
+			t.Fatalf("unexpected outbound %q", route.OutboundTag)
+		}
+		_, err = server.TestRoute(ctx, &TestRouteRequest{RoutingContext: &RoutingContext{InboundTag: "second"}})
+		if (err == nil) != appendRules {
+			t.Fatalf("append=%v: second route error=%v", appendRules, err)
+		}
 	}
 }

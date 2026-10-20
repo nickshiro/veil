@@ -23,12 +23,10 @@ type mockOutboundManager struct {
 
 func TestSimpleRouter(t *testing.T) {
 	config := &RuntimeConfig{
-		Rule: []*RoutingRule{
+		Rule: []*RuleConfig{
 			{
-				TargetTag: &RoutingRule_Tag{
-					Tag: "test",
-				},
-				Networks: []net.Network{net.Network_TCP},
+				OutboundTag: "test",
+				Networks:    []net.Network{net.Network_TCP},
 			},
 		},
 	}
@@ -58,12 +56,10 @@ func TestSimpleRouter(t *testing.T) {
 
 func TestSimpleBalancer(t *testing.T) {
 	config := &RuntimeConfig{
-		Rule: []*RoutingRule{
+		Rule: []*RuleConfig{
 			{
-				TargetTag: &RoutingRule_BalancingTag{
-					BalancingTag: "balance",
-				},
-				Networks: []net.Network{net.Network_TCP},
+				BalancerTag: "balance",
+				Networks:    []net.Network{net.Network_TCP},
 			},
 		},
 		BalancingRule: []*BalancerConfig{
@@ -105,11 +101,9 @@ Do not work right now: need a full client setup
 
 func TestLeastLoadBalancer(t *testing.T) {
 	config := &RuntimeConfig{
-		Rule: []*RoutingRule{
+		Rule: []*RuleConfig{
 			{
-				TargetTag: &RoutingRule_BalancingTag{
-					BalancingTag: "balance",
-				},
+				BalancerTag: "balance",
 				Networks: []net.Network{net.Network_TCP},
 			},
 		},
@@ -150,12 +144,10 @@ func TestLeastLoadBalancer(t *testing.T) {
 
 func TestIPOnDemand(t *testing.T) {
 	config := &RuntimeConfig{
-		DomainStrategy: Config_IpOnDemand,
-		Rule: []*RoutingRule{
+		DomainStrategy: DomainIPOnDemand,
+		Rule: []*RuleConfig{
 			{
-				TargetTag: &RoutingRule_Tag{
-					Tag: "test",
-				},
+				OutboundTag: "test",
 				Ip: []*geodata.IPRule{
 					{
 						Value: &geodata.IPRule_Custom{
@@ -194,12 +186,10 @@ func TestIPOnDemand(t *testing.T) {
 
 func TestIPIfNonMatchDomain(t *testing.T) {
 	config := &RuntimeConfig{
-		DomainStrategy: Config_IpIfNonMatch,
-		Rule: []*RoutingRule{
+		DomainStrategy: DomainIPIfNonMatch,
+		Rule: []*RuleConfig{
 			{
-				TargetTag: &RoutingRule_Tag{
-					Tag: "test",
-				},
+				OutboundTag: "test",
 				Ip: []*geodata.IPRule{
 					{
 						Value: &geodata.IPRule_Custom{
@@ -238,12 +228,10 @@ func TestIPIfNonMatchDomain(t *testing.T) {
 
 func TestIPIfNonMatchIP(t *testing.T) {
 	config := &RuntimeConfig{
-		DomainStrategy: Config_IpIfNonMatch,
-		Rule: []*RoutingRule{
+		DomainStrategy: DomainIPIfNonMatch,
+		Rule: []*RuleConfig{
 			{
-				TargetTag: &RoutingRule_Tag{
-					Tag: "test",
-				},
+				OutboundTag: "test",
 				Ip: []*geodata.IPRule{
 					{
 						Value: &geodata.IPRule_Custom{

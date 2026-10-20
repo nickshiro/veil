@@ -28,18 +28,18 @@ const (
 )
 
 // port53Rule sends DNS queries arriving from the interface to the dns outbound.
-func port53Rule() *router.RoutingRule {
-	return &router.RoutingRule{
-		InboundTag: []string{routeTestInboundTag},
-		PortList:   &net.PortList{Range: []*net.PortRange{net.SinglePortRange(53)}},
-		TargetTag:  &router.RoutingRule_Tag{Tag: "dns"},
+func port53Rule() *router.RuleConfig {
+	return &router.RuleConfig{
+		InboundTag:  []string{routeTestInboundTag},
+		PortList:    &net.PortList{Range: []*net.PortRange{net.SinglePortRange(53)}},
+		OutboundTag: "dns",
 	}
 }
 
 // sourceBlockRule diverts traffic from one address, which is the shape of a rule
 // that only matches because the real request carries a source.
-func sourceBlockRule(ip []byte) *router.RoutingRule {
-	return &router.RoutingRule{
+func sourceBlockRule(ip []byte) *router.RuleConfig {
+	return &router.RuleConfig{
 		SourceIp: []*geodata.IPRule{{
 			Value: &geodata.IPRule_Custom{
 				Custom: &geodata.CIDRRule{
@@ -47,14 +47,14 @@ func sourceBlockRule(ip []byte) *router.RoutingRule {
 				},
 			},
 		}},
-		TargetTag: &router.RoutingRule_Tag{Tag: "block"},
+		OutboundTag: "block",
 	}
 }
 
 // newRouteTestContext builds a real but unstarted instance: no TUN device, no
 // running resolver. The instance is placed in the context through the key core
 // exports for tests.
-func newRouteTestContext(t *testing.T, withDNSApp bool, nameServers []*appdns.NameServer, rules []*router.RoutingRule) context.Context {
+func newRouteTestContext(t *testing.T, withDNSApp bool, nameServers []*appdns.NameServer, rules []*router.RuleConfig) context.Context {
 	t.Helper()
 
 	apps := []any{
@@ -114,25 +114,25 @@ func TestVerifyDNSRoutingDecisions(t *testing.T) {
 		name        string
 		withDNSApp  bool
 		nameServers []*appdns.NameServer
-		rules       []*router.RoutingRule
+		rules       []*router.RuleConfig
 		wantErr     string
 	}{
 		{
 			name:        "independent upstream reaches the dns outbound",
 			withDNSApp:  true,
 			nameServers: udpNameServer([]byte{9, 9, 9, 9}),
-			rules:       []*router.RoutingRule{port53Rule()},
+			rules:       []*router.RuleConfig{port53Rule()},
 			wantErr:     "",
 		},
 		{
 			name:    "no dns section falls back to the system resolver",
-			rules:   []*router.RoutingRule{port53Rule()},
+			rules:   []*router.RuleConfig{port53Rule()},
 			wantErr: "system resolver",
 		},
 		{
 			name:       "dns section without name servers falls back too",
 			withDNSApp: true,
-			rules:      []*router.RoutingRule{port53Rule()},
+			rules:      []*router.RuleConfig{port53Rule()},
 			wantErr:    "system resolver",
 		},
 		{
@@ -142,13 +142,13 @@ func TestVerifyDNSRoutingDecisions(t *testing.T) {
 			name:        "a local name server alongside an independent one",
 			withDNSApp:  true,
 			nameServers: append(udpNameServer([]byte{9, 9, 9, 9}), localNameServer()),
-			rules:       []*router.RoutingRule{port53Rule()},
+			rules:       []*router.RuleConfig{port53Rule()},
 			wantErr:     "system resolver",
 		},
 		{
 			name:       "a rule on the interface address diverts the real query",
 			withDNSApp: true, nameServers: udpNameServer([]byte{9, 9, 9, 9}),
-			rules: []*router.RoutingRule{
+			rules: []*router.RuleConfig{
 				sourceBlockRule([]byte{192, 168, 100, 1}),
 				port53Rule(),
 			},
@@ -157,7 +157,7 @@ func TestVerifyDNSRoutingDecisions(t *testing.T) {
 		{
 			name:       "a rule on another address does not match it",
 			withDNSApp: true, nameServers: udpNameServer([]byte{9, 9, 9, 9}),
-			rules: []*router.RoutingRule{
+			rules: []*router.RuleConfig{
 				sourceBlockRule([]byte{10, 0, 0, 1}),
 				port53Rule(),
 			},
@@ -194,7 +194,7 @@ func TestVerifyDNSRoutingDecisions(t *testing.T) {
 // Without an IPv4 gateway, the takeover uses the first IPv6 one, and the probe
 // carries IPv6 addresses.
 func TestVerifyDNSRoutingIPv6(t *testing.T) {
-	ctx := newRouteTestContext(t, true, udpNameServer([]byte{9, 9, 9, 9}), []*router.RoutingRule{port53Rule()})
+	ctx := newRouteTestContext(t, true, udpNameServer([]byte{9, 9, 9, 9}), []*router.RuleConfig{port53Rule()})
 	if err := verifyDNSRouting(ctx, routeTestInboundTag, "fc00::1", "fc00::2"); err != nil {
 		t.Fatalf("expected the takeover to be accepted, got: %v", err)
 	}

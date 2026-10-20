@@ -21,7 +21,24 @@ func decodeRuntimeConfig(message *serial.TypedMessage) (*router.RuntimeConfig, e
 	if !ok {
 		return nil, fmt.Errorf("unexpected routing config %T", value)
 	}
-	result := &router.RuntimeConfig{DomainStrategy: config.DomainStrategy, Rule: config.Rule}
+	result := &router.RuntimeConfig{DomainStrategy: router.DomainStrategy(config.DomainStrategy)}
+	for _, rule := range config.Rule {
+		if rule == nil {
+			return nil, fmt.Errorf("missing routing rule")
+		}
+		native := &router.RuleConfig{
+			OutboundTag: rule.GetTag(), BalancerTag: rule.GetBalancingTag(), RuleTag: rule.RuleTag,
+			Domain: rule.Domain, Ip: rule.Ip, PortList: rule.PortList, Networks: rule.Networks,
+			SourceIp: rule.SourceIp, SourcePortList: rule.SourcePortList, UserEmail: rule.UserEmail,
+			InboundTag: rule.InboundTag, Protocol: rule.Protocol, Attributes: rule.Attributes,
+			LocalIp: rule.LocalIp, LocalPortList: rule.LocalPortList, VlessRouteList: rule.VlessRouteList,
+			Process: rule.Process, LocalOs: rule.LocalOs,
+		}
+		if w := rule.Webhook; w != nil {
+			native.Webhook = &router.WebhookSettings{Url: w.Url, Deduplication: w.Deduplication, Headers: w.Headers}
+		}
+		result.Rule = append(result.Rule, native)
+	}
 	for _, rule := range config.BalancingRule {
 		if rule == nil {
 			return nil, fmt.Errorf("missing balancer config")

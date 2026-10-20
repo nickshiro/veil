@@ -509,9 +509,9 @@ func masqueServerConfig(serverPort net.Port, certificate *tls.Certificate, h2 bo
 				ErrorLogType:  log.LogType_Console,
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
-					{Networks: []net.Network{net.Network_TCP}, TargetTag: &router.RoutingRule_Tag{Tag: "tcp"}},
-					{Networks: []net.Network{net.Network_UDP}, TargetTag: &router.RoutingRule_Tag{Tag: "udp"}},
+				Rule: []*router.RuleConfig{
+					{Networks: []net.Network{net.Network_TCP}, OutboundTag: "tcp"},
+					{Networks: []net.Network{net.Network_UDP}, OutboundTag: "udp"},
 				},
 			},
 		},

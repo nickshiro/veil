@@ -17,7 +17,7 @@ import (
 
 // Router is an implementation of routing.Router.
 type Router struct {
-	domainStrategy Config_DomainStrategy
+	domainStrategy DomainStrategy
 	rules          atomic.Pointer[[]*Rule]
 	balancers      atomic.Pointer[map[string]*Balancer]
 	dns            dns.Client
@@ -103,21 +103,21 @@ func (r *Router) ReloadRules(config *RuntimeConfig, shouldAppend bool) error {
 		}
 		rr := &Rule{
 			Condition: cond,
-			Tag:       rule.GetTag(),
-			RuleTag:   rule.GetRuleTag(),
+			Tag:       rule.OutboundTag,
+			RuleTag:   rule.RuleTag,
 		}
 		if rr.RuleTag != "" && existTags[rr.RuleTag] {
 			return errors.New("duplicate ruleTag ", rr.RuleTag)
 		}
 		existTags[rr.RuleTag] = true
-		if wh := rule.GetWebhook(); wh != nil {
+		if wh := rule.Webhook; wh != nil {
 			notifier, err := NewWebhookNotifier(wh)
 			if err != nil {
 				return err
 			}
 			rr.Webhook = notifier
 		}
-		if btag := rule.GetBalancingTag(); len(btag) > 0 {
+		if btag := rule.BalancerTag; len(btag) > 0 {
 			brule, found := newBalancers[btag]
 			if !found {
 				return errors.New("balancer ", btag, " not found")
@@ -178,7 +178,7 @@ func (r *Router) pickRouteInternal(ctx routing.Context) (*Rule, routing.Context,
 	// this prevents cycle resolving dead loop
 	skipDNSResolve := ctx.GetSkipDNSResolve()
 
-	if r.domainStrategy == Config_IpOnDemand && !skipDNSResolve {
+	if r.domainStrategy == DomainIPOnDemand && !skipDNSResolve {
 		ctx = routing_dns.ContextWithDNSClient(ctx, r.dns)
 	}
 
@@ -190,7 +190,7 @@ func (r *Router) pickRouteInternal(ctx routing.Context) (*Rule, routing.Context,
 		}
 	}
 
-	if r.domainStrategy != Config_IpIfNonMatch || len(ctx.GetTargetDomain()) == 0 || skipDNSResolve {
+	if r.domainStrategy != DomainIPIfNonMatch || len(ctx.GetTargetDomain()) == 0 || skipDNSResolve {
 		return nil, ctx, common.ErrNoClue
 	}
 

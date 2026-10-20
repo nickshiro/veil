@@ -411,11 +411,9 @@ func TestBlackhole(t *testing.T) {
 		},
 		App: []any{
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "blocked",
-						},
+						OutboundTag: "blocked",
 						PortList: &net.PortList{
 							Range: []*net.PortRange{net.SinglePortRange(dest2.Port)},
 						},
@@ -587,17 +585,13 @@ func TestDomainSniffing(t *testing.T) {
 		},
 		App: []any{
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "direct",
-						},
-						InboundTag: []string{"snif"},
+						OutboundTag: "direct",
+						InboundTag:  []string{"snif"},
 					}, {
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "redir",
-						},
-						InboundTag: []string{"http"},
+						OutboundTag: "redir",
+						InboundTag:  []string{"http"},
 					},
 				},
 			},

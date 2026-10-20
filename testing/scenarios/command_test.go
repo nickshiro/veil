@@ -150,12 +150,10 @@ func TestCommanderRemoveHandler(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						InboundTag: []string{"api"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "api",
-						},
+						InboundTag:  []string{"api"},
+						OutboundTag: "api",
 					},
 				},
 			},
@@ -245,12 +243,10 @@ func TestCommanderListHandlers(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						InboundTag: []string{"api"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "api",
-						},
+						InboundTag:  []string{"api"},
+						OutboundTag: "api",
 					},
 				},
 			},
@@ -380,12 +376,10 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						InboundTag: []string{"api"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "api",
-						},
+						InboundTag:  []string{"api"},
+						OutboundTag: "api",
 					},
 				},
 			},
@@ -556,12 +550,10 @@ func TestCommanderStats(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						InboundTag: []string{"api"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "api",
-						},
+						InboundTag:  []string{"api"},
+						OutboundTag: "api",
 					},
 				},
 			},

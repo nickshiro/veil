@@ -51,20 +51,16 @@ func TestReverseProxy(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
 						Domain: []*geodata.DomainRule{
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Full, Value: "test.example.com"}}},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "portal",
-						},
+						OutboundTag: "portal",
 					},
 					{
-						InboundTag: []string{"external"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "portal",
-						},
+						InboundTag:  []string{"external"},
+						OutboundTag: "portal",
 					},
 				},
 			},
@@ -117,20 +113,16 @@ func TestReverseProxy(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
 						Domain: []*geodata.DomainRule{
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Full, Value: "test.example.com"}}},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "reverse",
-						},
+						OutboundTag: "reverse",
 					},
 					{
-						InboundTag: []string{"bridge"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "freedom",
-						},
+						InboundTag:  []string{"bridge"},
+						OutboundTag: "freedom",
 					},
 				},
 			},
@@ -226,20 +218,16 @@ func TestReverseProxyLongRunning(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
 						Domain: []*geodata.DomainRule{
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Full, Value: "test.example.com"}}},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "portal",
-						},
+						OutboundTag: "portal",
 					},
 					{
-						InboundTag: []string{"external"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "portal",
-						},
+						InboundTag:  []string{"external"},
+						OutboundTag: "portal",
 					},
 				},
 			},
@@ -306,20 +294,16 @@ func TestReverseProxyLongRunning(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
 						Domain: []*geodata.DomainRule{
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Full, Value: "test.example.com"}}},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "reverse",
-						},
+						OutboundTag: "reverse",
 					},
 					{
-						InboundTag: []string{"bridge"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "freedom",
-						},
+						InboundTag:  []string{"bridge"},
+						OutboundTag: "freedom",
 					},
 				},
 			},

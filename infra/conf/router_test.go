@@ -94,7 +94,7 @@ func TestRouterConfig(t *testing.T) {
 			}`,
 			Parser: createParser(),
 			Output: &router.RuntimeConfig{
-				DomainStrategy: router.Config_AsIs,
+				DomainStrategy: router.DomainAsIs,
 				BalancingRule: []*router.BalancerConfig{
 					{
 						Tag:              "b1",
@@ -125,15 +125,13 @@ func TestRouterConfig(t *testing.T) {
 						FallbackTag: "fall",
 					},
 				},
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
 						Domain: []*geodata.DomainRule{
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Substr, Value: "baidu.com"}}},
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Substr, Value: "qq.com"}}},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "direct",
-						},
+						OutboundTag: "direct",
 					},
 					{
 						Ip: []*geodata.IPRule{
@@ -152,9 +150,7 @@ func TestRouterConfig(t *testing.T) {
 								},
 							},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "test",
-						},
+						OutboundTag: "test",
 					},
 					{
 						PortList: &net.PortList{
@@ -164,9 +160,7 @@ func TestRouterConfig(t *testing.T) {
 								{From: 1000, To: 2000},
 							},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "test",
-						},
+						OutboundTag: "test",
 					},
 					{
 						PortList: &net.PortList{
@@ -174,9 +168,7 @@ func TestRouterConfig(t *testing.T) {
 								{From: 123, To: 123},
 							},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "test",
-						},
+						OutboundTag: "test",
 					},
 				},
 			},
@@ -203,16 +195,14 @@ func TestRouterConfig(t *testing.T) {
 			}`,
 			Parser: createParser(),
 			Output: &router.RuntimeConfig{
-				DomainStrategy: router.Config_IpIfNonMatch,
-				Rule: []*router.RoutingRule{
+				DomainStrategy: router.DomainIPIfNonMatch,
+				Rule: []*router.RuleConfig{
 					{
 						Domain: []*geodata.DomainRule{
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Substr, Value: "baidu.com"}}},
 							{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Substr, Value: "qq.com"}}},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "direct",
-						},
+						OutboundTag: "direct",
 					},
 					{
 						Ip: []*geodata.IPRule{
@@ -231,9 +221,7 @@ func TestRouterConfig(t *testing.T) {
 								},
 							},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "test",
-						},
+						OutboundTag: "test",
 					},
 				},
 			},

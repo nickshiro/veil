@@ -41,11 +41,11 @@ func TestRoutingRule(t *testing.T) {
 	}
 
 	cases := []struct {
-		rule *RoutingRule
+		rule *RuleConfig
 		test []ruleTest
 	}{
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				Domain: []*geodata.DomainRule{
 					{
 						Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Substr, Value: "example.com"}},
@@ -90,7 +90,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				Ip: []*geodata.IPRule{
 					{
 						Value: &geodata.IPRule_Custom{
@@ -135,7 +135,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				SourceIp: []*geodata.IPRule{
 					{
 						Value: &geodata.IPRule_Custom{
@@ -158,7 +158,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				UserEmail: []string{
 					"admin@example.com",
 				},
@@ -179,7 +179,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				Protocol: []string{"http"},
 			},
 			test: []ruleTest{
@@ -190,7 +190,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				InboundTag: []string{"test", "test1"},
 			},
 			test: []ruleTest{
@@ -205,7 +205,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				PortList: &net.PortList{
 					Range: []*net.PortRange{
 						{From: 443, To: 443},
@@ -233,7 +233,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				SourcePortList: &net.PortList{
 					Range: []*net.PortRange{
 						{From: 123, To: 123},
@@ -261,7 +261,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				Protocol: []string{"http"},
 				Attributes: map[string]string{
 					":path": "/test",
@@ -275,7 +275,7 @@ func TestRoutingRule(t *testing.T) {
 			},
 		},
 		{
-			rule: &RoutingRule{
+			rule: &RuleConfig{
 				Attributes: map[string]string{
 					"Custom": "p([a-z]+)ch",
 				},
@@ -363,7 +363,7 @@ func TestLocalOSRule(t *testing.T) {
 	}
 
 	for _, test := range cases {
-		cond, err := (&RoutingRule{LocalOs: test.localOS}).BuildCondition()
+		cond, err := (&RuleConfig{LocalOs: test.localOS}).BuildCondition()
 		common.Must(err)
 		if got := cond.Apply(withBackground()); got != test.output {
 			t.Errorf("for localOS %v on %s: expected %v, got %v", test.localOS, runtime.GOOS, test.output, got)

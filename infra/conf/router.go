@@ -78,7 +78,7 @@ type RouterConfig struct {
 	Balancers      []*BalancingRule  `json:"balancers"`
 }
 
-func (c *RouterConfig) getDomainStrategy() router.Config_DomainStrategy {
+func (c *RouterConfig) getDomainStrategy() router.DomainStrategy {
 	ds := ""
 	if c.DomainStrategy != nil {
 		ds = *c.DomainStrategy
@@ -86,11 +86,11 @@ func (c *RouterConfig) getDomainStrategy() router.Config_DomainStrategy {
 
 	switch strings.ToLower(ds) {
 	case "ipifnonmatch":
-		return router.Config_IpIfNonMatch
+		return router.DomainIPIfNonMatch
 	case "ipondemand":
-		return router.Config_IpOnDemand
+		return router.DomainIPOnDemand
 	default:
-		return router.Config_AsIs
+		return router.DomainAsIs
 	}
 }
 
@@ -134,7 +134,7 @@ type WebhookRuleConfig struct {
 	Headers       map[string]string `json:"headers"`
 }
 
-func parseFieldRule(msg json.RawMessage) (*router.RoutingRule, error) {
+func parseFieldRule(msg json.RawMessage) (*router.RuleConfig, error) {
 	type RawFieldRule struct {
 		RouterRule
 		Domain     *StringList        `json:"domain"`
@@ -162,17 +162,13 @@ func parseFieldRule(msg json.RawMessage) (*router.RoutingRule, error) {
 		return nil, err
 	}
 
-	rule := new(router.RoutingRule)
+	rule := new(router.RuleConfig)
 	rule.RuleTag = rawFieldRule.RuleTag
 	switch {
 	case len(rawFieldRule.OutboundTag) > 0:
-		rule.TargetTag = &router.RoutingRule_Tag{
-			Tag: rawFieldRule.OutboundTag,
-		}
+		rule.OutboundTag = rawFieldRule.OutboundTag
 	case len(rawFieldRule.BalancerTag) > 0:
-		rule.TargetTag = &router.RoutingRule_BalancingTag{
-			BalancingTag: rawFieldRule.BalancerTag,
-		}
+		rule.BalancerTag = rawFieldRule.BalancerTag
 	default:
 		return nil, errors.New("neither outboundTag nor balancerTag is specified in routing rule")
 	}
@@ -272,7 +268,7 @@ func parseFieldRule(msg json.RawMessage) (*router.RoutingRule, error) {
 	}
 
 	if rawFieldRule.Webhook != nil && rawFieldRule.Webhook.URL != "" {
-		rule.Webhook = &router.WebhookConfig{
+		rule.Webhook = &router.WebhookSettings{
 			Url:           rawFieldRule.Webhook.URL,
 			Deduplication: rawFieldRule.Webhook.Deduplication,
 			Headers:       rawFieldRule.Webhook.Headers,
@@ -282,7 +278,7 @@ func parseFieldRule(msg json.RawMessage) (*router.RoutingRule, error) {
 	return rule, nil
 }
 
-func parseRule(msg json.RawMessage) (*router.RoutingRule, error) {
+func parseRule(msg json.RawMessage) (*router.RuleConfig, error) {
 	rawRule := new(RouterRule)
 	err := json.Unmarshal(msg, rawRule)
 	if err != nil {

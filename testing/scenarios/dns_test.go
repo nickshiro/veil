@@ -40,8 +40,8 @@ func TestResolveIP(t *testing.T) {
 				},
 			},
 			&router.RuntimeConfig{
-				DomainStrategy: router.Config_IpIfNonMatch,
-				Rule: []*router.RoutingRule{
+				DomainStrategy: router.DomainIPIfNonMatch,
+				Rule: []*router.RuleConfig{
 					{
 						Ip: []*geodata.IPRule{
 							{
@@ -52,9 +52,7 @@ func TestResolveIP(t *testing.T) {
 								},
 							},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "direct",
-						},
+						OutboundTag: "direct",
 					},
 				},
 			},

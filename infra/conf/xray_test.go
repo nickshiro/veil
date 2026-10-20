@@ -85,8 +85,8 @@ func TestXrayConfig(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&proxyman.OutboundConfig{},
 			&router.RuntimeConfig{
-				DomainStrategy: router.Config_AsIs,
-				Rule: []*router.RoutingRule{
+				DomainStrategy: router.DomainAsIs,
+				Rule: []*router.RuleConfig{
 					{
 						Ip: []*geodata.IPRule{
 							{
@@ -97,9 +97,7 @@ func TestXrayConfig(t *testing.T) {
 								},
 							},
 						},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "blocked",
-						},
+						OutboundTag: "blocked",
 					},
 				},
 			},

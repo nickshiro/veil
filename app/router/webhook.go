@@ -46,7 +46,7 @@ type WebhookNotifier struct {
 	closeOnce     sync.Once
 }
 
-func NewWebhookNotifier(cfg *WebhookConfig) (*WebhookNotifier, error) {
+func NewWebhookNotifier(cfg *WebhookSettings) (*WebhookNotifier, error) {
 	if cfg == nil || cfg.Url == "" {
 		return nil, nil
 	}

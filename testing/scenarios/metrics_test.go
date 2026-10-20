@@ -35,12 +35,10 @@ func TestMetrics(t *testing.T) {
 				Tag: "metrics_out",
 			},
 			&router.RuntimeConfig{
-				Rule: []*router.RoutingRule{
+				Rule: []*router.RuleConfig{
 					{
-						InboundTag: []string{"metrics_in"},
-						TargetTag: &router.RoutingRule_Tag{
-							Tag: "metrics_out",
-						},
+						InboundTag:  []string{"metrics_in"},
+						OutboundTag: "metrics_out",
 					},
 				},
 			},
