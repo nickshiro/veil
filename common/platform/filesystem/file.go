@@ -6,19 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/platform"
 )
-
-func ReadFile(path string) ([]byte, error) {
-	reader, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer reader.Close()
-
-	return buf.ReadAllToBytes(reader)
-}
 
 func OpenAsset(file string) (io.ReadCloser, int64, error) {
 	path, info, err := getAssetFileLocation(file)
@@ -60,7 +49,7 @@ func getAssetFileLocation(file string) (string, os.FileInfo, error) {
 
 func ReadCert(file string) ([]byte, error) {
 	if filepath.IsAbs(file) {
-		return ReadFile(file)
+		return os.ReadFile(file)
 	}
-	return ReadFile(platform.GetCertLocation(file))
+	return os.ReadFile(platform.GetCertLocation(file))
 }
