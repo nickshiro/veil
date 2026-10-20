@@ -233,10 +233,26 @@ func (v *Authenticator) Build() (proto.Message, error) {
 	return config, nil
 }
 
-var tcpHeaderLoader = NewJSONConfigLoader(ConfigFactories{
+var tcpHeaderFactories = map[string]func() Buildable{
 	"none": func() Buildable { return new(NoOpConnectionAuthenticator) },
 	"http": func() Buildable { return new(Authenticator) },
-}, "type")
+}
+
+func decodeTCPHeader(raw json.RawMessage) (Buildable, error) {
+	var header map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &header); err != nil {
+		return nil, err
+	}
+	rawType, ok := header["type"]
+	if !ok {
+		return nil, errors.New("type not found in JSON context")
+	}
+	var kind string
+	if err := json.Unmarshal(rawType, &kind); err != nil {
+		return nil, err
+	}
+	return decodeSettings(raw, kind, tcpHeaderFactories)
+}
 
 type TCPConfig struct {
 	HeaderConfig        json.RawMessage `json:"header"`
@@ -247,7 +263,7 @@ type TCPConfig struct {
 func (c *TCPConfig) Build() (proto.Message, error) {
 	config := new(tcp.Config)
 	if len(c.HeaderConfig) > 0 {
-		headerConfig, _, err := tcpHeaderLoader.Load(c.HeaderConfig)
+		headerConfig, err := decodeTCPHeader(c.HeaderConfig)
 		if err != nil {
 			return nil, errors.New("invalid TCP header config").Base(err)
 		}

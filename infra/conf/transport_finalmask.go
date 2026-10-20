@@ -72,14 +72,14 @@ func PraseByteSlice(data json.RawMessage, typ string) ([]byte, error) {
 var (
 	customVarNamePattern = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
 
-	tcpmaskLoader = NewJSONConfigLoader(ConfigFactories{
+	tcpMaskFactories = map[string]func() Buildable{
 		"header-custom": func() Buildable { return new(HeaderCustomTCP) },
 		"fragment":      func() Buildable { return new(FragmentMask) },
 		"sudoku":        func() Buildable { return new(Sudoku) },
 		"xmc":           func() Buildable { return new(XMC) },
-	}, "type")
+	}
 
-	udpmaskLoader = NewJSONConfigLoader(ConfigFactories{
+	udpMaskFactories = map[string]func() Buildable{
 		"header-custom": func() Buildable { return new(HeaderCustomUDP) },
 		"mkcp-legacy":   func() Buildable { return new(MkcpLegacy) },
 		"noise":         func() Buildable { return new(NoiseMask) },
@@ -89,7 +89,7 @@ var (
 		"xicmp":         func() Buildable { return new(Xicmp) },
 		"realm":         func() Buildable { return new(Realm) },
 		"udphop":        func() Buildable { return new(UDPHop) },
-	}, "type")
+	}
 )
 
 type TCPItem struct {
@@ -1138,16 +1138,16 @@ type Mask struct {
 }
 
 func (c *Mask) Build(tcp bool) (proto.Message, error) {
-	loader := udpmaskLoader
+	factories := udpMaskFactories
 	if tcp {
-		loader = tcpmaskLoader
+		factories = tcpMaskFactories
 	}
 
 	settings := []byte("{}")
 	if c.Settings != nil {
 		settings = ([]byte)(*c.Settings)
 	}
-	rawConfig, err := loader.LoadWithID(settings, c.Type)
+	rawConfig, err := decodeSettings(settings, c.Type, factories)
 	if err != nil {
 		return nil, err
 	}

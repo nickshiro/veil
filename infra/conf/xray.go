@@ -25,7 +25,7 @@ import (
 )
 
 var (
-	inboundConfigLoader = NewJSONConfigLoader(ConfigFactories{
+	inboundConfigFactories = map[string]func() Buildable{
 		"tunnel":        func() Buildable { return new(DokodemoConfig) },
 		"dokodemo-door": func() Buildable { return new(DokodemoConfig) },
 		"http":          func() Buildable { return new(HTTPServerConfig) },
@@ -39,9 +39,9 @@ var (
 		"hysteria":      func() Buildable { return new(HysteriaServerConfig) },
 		"masque":        func() Buildable { return new(MasqueServerConfig) },
 		"tun":           func() Buildable { return new(TunConfig) },
-	}, "protocol")
+	}
 
-	outboundConfigLoader = NewJSONConfigLoader(ConfigFactories{
+	outboundConfigFactories = map[string]func() Buildable{
 		"block":       func() Buildable { return new(BlackholeConfig) },
 		"blackhole":   func() Buildable { return new(BlackholeConfig) },
 		"loopback":    func() Buildable { return new(LoopbackConfig) },
@@ -57,7 +57,7 @@ var (
 		"masque":      func() Buildable { return new(MasqueClientConfig) },
 		"dns":         func() Buildable { return new(DNSOutboundConfig) },
 		"wireguard":   func() Buildable { return &WireGuardConfig{IsClient: true} },
-	}, "protocol")
+	}
 )
 
 type SniffingConfig struct {
@@ -199,7 +199,7 @@ func (c *InboundDetourConfig) Build() (*core.InboundConfig, error) {
 	if c.Settings != nil {
 		settings = ([]byte)(*c.Settings)
 	}
-	rawConfig, err := inboundConfigLoader.LoadWithID(settings, c.Protocol)
+	rawConfig, err := decodeSettings(settings, c.Protocol, inboundConfigFactories)
 	if err != nil {
 		return nil, errors.New("failed to load inbound detour config for protocol ", c.Protocol).Base(err)
 	}
@@ -387,7 +387,7 @@ func (c *OutboundDetourConfig) Build() (*core.OutboundConfig, error) {
 	if c.Settings != nil {
 		settings = ([]byte)(*c.Settings)
 	}
-	rawConfig, err := outboundConfigLoader.LoadWithID(settings, c.Protocol)
+	rawConfig, err := decodeSettings(settings, c.Protocol, outboundConfigFactories)
 	if err != nil {
 		return nil, errors.New("failed to load outbound detour config for protocol ", c.Protocol).Base(err)
 	}
