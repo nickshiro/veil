@@ -6,9 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"path"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"runtime/debug"
 	"syscall"
@@ -25,13 +23,11 @@ import (
 func init() {
 	flag.Var(&configFiles, "config", "Config path for Xray.")
 	flag.Var(&configFiles, "c", "Short alias of -config")
-	flag.StringVar(&configDir, "confdir", "", "A dir with multiple json config")
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
 }
 
 var (
 	configFiles cmdarg.Arg // "Config file for Xray.", the option is customed type, parse in main
-	configDir   string
 	dump        = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
 	test        = flag.Bool("test", false, "Test config file only, without launching Xray server.")
 )
@@ -91,47 +87,7 @@ func fileExists(file string) bool {
 	return err == nil && !info.IsDir()
 }
 
-func dirExists(file string) bool {
-	if file == "" {
-		return false
-	}
-	info, err := os.Stat(file)
-	return err == nil && info.IsDir()
-}
-
-func getRegepxByFormat() string {
-	return `^.+\.json$`
-}
-
-func readConfDir(dirPath string) {
-	confs, err := os.ReadDir(dirPath)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	for _, f := range confs {
-		matched, err := regexp.MatchString(getRegepxByFormat(), f.Name())
-		if err != nil {
-			log.Fatalln(err)
-		}
-		if matched {
-			configFiles.Set(path.Join(dirPath, f.Name()))
-		}
-	}
-}
-
 func getConfigFilePath(verbose bool) cmdarg.Arg {
-	if dirExists(configDir) {
-		if verbose {
-			log.Println("Using confdir from arg:", configDir)
-		}
-		readConfDir(configDir)
-	} else if envConfDir := platform.GetConfDirPath(); dirExists(envConfDir) {
-		if verbose {
-			log.Println("Using confdir from env:", envConfDir)
-		}
-		readConfDir(envConfDir)
-	}
-
 	if len(configFiles) > 0 {
 		return configFiles
 	}

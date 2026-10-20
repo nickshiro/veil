@@ -8,10 +8,9 @@ import (
 )
 
 const (
-	ConfigLocation  = "xray.location.config"
-	ConfdirLocation = "xray.location.confdir"
-	AssetLocation   = "xray.location.asset"
-	CertLocation    = "xray.location.cert"
+	ConfigLocation = "xray.location.config"
+	AssetLocation  = "xray.location.asset"
+	CertLocation   = "xray.location.cert"
 
 	UseReadV         = "xray.buf.readv"
 	UseFreedomSplice = "xray.buf.splice"
@@ -82,10 +81,4 @@ func getExecutableDir() string {
 func GetConfigurationPath() string {
 	configPath := NewEnvFlag(ConfigLocation).GetValue(getExecutableDir)
 	return filepath.Join(configPath, "config.json")
-}
-
-// GetConfDirPath reads "xray.location.confdir"
-func GetConfDirPath() string {
-	configPath := NewEnvFlag(ConfdirLocation).GetValue(func() string { return "" })
-	return configPath
 }
