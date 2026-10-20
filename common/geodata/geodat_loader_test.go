@@ -33,7 +33,7 @@ func TestLoadFileRejectsVarintOverflow(t *testing.T) {
 		0x0a, 0x04, 'T', 'E', 'S', 'T',
 	}
 	dir := t.TempDir()
-	t.Setenv("xray.location.asset", dir)
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
 	if err := os.WriteFile(filepath.Join(dir, "overflow.dat"), payload, 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -49,7 +49,7 @@ func TestLoadFileRejectsOversizedEntry(t *testing.T) {
 		0x0a, 0x04, 'T', 'E', 'S', 'T',
 	}
 	dir := t.TempDir()
-	t.Setenv("xray.location.asset", dir)
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
 	if err := os.WriteFile(filepath.Join(dir, "oversized.dat"), payload, 0o600); err != nil {
 		t.Fatal(err)
 	}
@@ -200,7 +200,7 @@ func TestLoadSiteReadsInPieces(t *testing.T) {
 		t.Fatal(err)
 	}
 	dir := t.TempDir()
-	t.Setenv("xray.location.asset", dir)
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
 	write := func(b []byte) {
 		if err := os.WriteFile(filepath.Join(dir, "big.dat"), b, 0o644); err != nil {
 			t.Fatal(err)
@@ -252,7 +252,7 @@ func TestLoadSiteWindowedMatchesSingleShot(t *testing.T) {
 		t.Fatal(err)
 	}
 	dir := t.TempDir()
-	t.Setenv("xray.location.asset", dir)
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
 
 	// mutations of the encoded entry: unchanged, a byte flipped at several offsets (early windows and
 	// either side of a window edge), and truncations at the same places.
@@ -314,7 +314,7 @@ func TestLoadSiteLongCode(t *testing.T) {
 		t.Fatal(err)
 	}
 	dir := t.TempDir()
-	t.Setenv("xray.location.asset", dir)
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
 	if err := os.WriteFile(filepath.Join(dir, "lc.dat"), bs, 0o644); err != nil {
 		t.Fatal(err)
 	}

@@ -4,36 +4,33 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 )
 
 const (
-	ConfigLocation = "xray.location.config"
-	AssetLocation  = "xray.location.asset"
-	CertLocation   = "xray.location.cert"
+	ConfigLocation = "XRAY_LOCATION_CONFIG"
+	AssetLocation  = "XRAY_LOCATION_ASSET"
+	CertLocation   = "XRAY_LOCATION_CERT"
 
-	UseReadV         = "xray.buf.readv"
-	UseFreedomSplice = "xray.buf.splice"
-	UseVmessPadding  = "xray.vmess.padding"
-	UseCone          = "xray.cone.disabled"
+	UseReadV         = "XRAY_BUF_READV"
+	UseFreedomSplice = "XRAY_BUF_SPLICE"
+	UseVmessPadding  = "XRAY_VMESS_PADDING"
+	UseCone          = "XRAY_CONE_DISABLED"
 
-	BufferSize           = "xray.ray.buffer.size"
-	BrowserDialerAddress = "xray.browser.dialer"
-	XUDPLog              = "xray.xudp.show"
-	XUDPBaseKey          = "xray.xudp.basekey"
+	BufferSize           = "XRAY_RAY_BUFFER_SIZE"
+	BrowserDialerAddress = "XRAY_BROWSER_DIALER"
+	XUDPLog              = "XRAY_XUDP_SHOW"
+	XUDPBaseKey          = "XRAY_XUDP_BASEKEY"
 
-	TunFdKey = "xray.tun.fd"
+	TunFdKey = "XRAY_TUN_FD"
 )
 
 type EnvFlag struct {
-	Name    string
-	AltName string
+	Name string
 }
 
 func NewEnvFlag(name string) EnvFlag {
 	return EnvFlag{
-		Name:    name,
-		AltName: NormalizeEnvName(name),
+		Name: name,
 	}
 }
 
@@ -41,12 +38,6 @@ func (f EnvFlag) GetValue(defaultValue func() string) string {
 	if v, found := os.LookupEnv(f.Name); found {
 		return v
 	}
-	if len(f.AltName) > 0 {
-		if v, found := os.LookupEnv(f.AltName); found {
-			return v
-		}
-	}
-
 	return defaultValue()
 }
 
@@ -64,10 +55,6 @@ func (f EnvFlag) GetValueAsInt(defaultValue int) int {
 		return defaultValue
 	}
 	return int(v)
-}
-
-func NormalizeEnvName(name string) string {
-	return strings.ReplaceAll(strings.ToUpper(strings.TrimSpace(name)), ".", "_")
 }
 
 func getExecutableDir() string {

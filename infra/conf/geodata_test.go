@@ -10,7 +10,7 @@ import (
 
 func TestGeodataConfig(t *testing.T) {
 	t.Skip("requires resources/geoip.dat and resources/geosite.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	creator := func() Buildable {
 		return new(GeodataConfig)
@@ -41,7 +41,7 @@ func TestGeodataConfig(t *testing.T) {
 
 func TestGeodataAssetConfig(t *testing.T) {
 	t.Skip("requires resources/geoip.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	if _, err := (&GeodataAssetConfig{
 		URL:  "https://example.com/geoip.dat",
@@ -59,7 +59,7 @@ func TestGeodataAssetConfig(t *testing.T) {
 }
 
 func TestGeodataAssetConfigInvalidURL(t *testing.T) {
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	for _, rawURL := range []string{
 		"",

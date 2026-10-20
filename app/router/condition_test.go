@@ -304,7 +304,7 @@ func TestRoutingRule(t *testing.T) {
 
 func TestChinaSites(t *testing.T) {
 	t.Skip("requires resources/geosite.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 	rules, err := geodata.ParseDomainRules([]string{"geosite:cn"}, geodata.Domain_Substr)
 	common.Must(err)
 

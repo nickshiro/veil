@@ -9,7 +9,7 @@ import (
 
 func TestParseIPRules(t *testing.T) {
 	t.Skip("requires resources/geoip.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	rules := []string{
 		"geoip:us",
@@ -41,7 +41,7 @@ func TestParseIPRules(t *testing.T) {
 
 func TestParseIPRuleReverse(t *testing.T) {
 	t.Skip("requires resources/geoip.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	for _, tt := range []struct {
 		rule    string
@@ -89,7 +89,7 @@ func TestParseIPRuleReverse(t *testing.T) {
 
 func TestParseDomainRules(t *testing.T) {
 	t.Skip("requires resources/geosite.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	rules := []string{
 		"geosite:cn",

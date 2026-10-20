@@ -392,7 +392,7 @@ func TestIPMatcherFilterIPs(t *testing.T) {
 
 func TestIPMatcher4CN(t *testing.T) {
 	t.Skip("requires resources/geoip.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	matcher := buildIPMatcher("geoip:cn")
 
@@ -403,7 +403,7 @@ func TestIPMatcher4CN(t *testing.T) {
 
 func TestIPMatcher6US(t *testing.T) {
 	t.Skip("requires resources/geoip.dat")
-	t.Setenv("xray.location.asset", filepath.Join("..", "..", "resources"))
+	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
 
 	matcher := buildIPMatcher("geoip:us")
 
