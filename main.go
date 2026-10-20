@@ -7,10 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"runtime"
-	"runtime/debug"
 	"syscall"
-	"time"
 
 	"github.com/nickshiro/veil/common/cmdarg"
 	"github.com/nickshiro/veil/common/errors"
@@ -20,12 +17,6 @@ import (
 	_ "github.com/nickshiro/veil/main/distro/all"
 )
 
-func init() {
-	flag.Var(&configFiles, "config", "Config path for Xray.")
-	flag.Var(&configFiles, "c", "Short alias of -config")
-	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
-}
-
 var (
 	configFiles cmdarg.Arg // "Config file for Xray.", the option is customed type, parse in main
 	dump        = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
@@ -33,6 +24,9 @@ var (
 )
 
 func main() {
+	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
+	flag.Var(&configFiles, "config", "Config path for Xray.")
+	flag.Var(&configFiles, "c", "Short alias of -config")
 	flag.Parse()
 
 	if *dump {
@@ -44,8 +38,7 @@ func main() {
 	server, err := startXray()
 	if err != nil {
 		fmt.Println("Failed to start:", err)
-		// Configuration error. Exit with a special value to prevent systemd from restarting.
-		os.Exit(23)
+		os.Exit(1)
 	}
 
 	if *test {
@@ -55,30 +48,23 @@ func main() {
 
 	if err := server.Start(); err != nil {
 		fmt.Println("Failed to start:", err)
-		os.Exit(-1)
+		os.Exit(1)
 	}
 	defer server.Close()
 
-	// Explicitly triggering GC to remove garbage from config loading.
-	runtime.GC()
-	debug.FreeOSMemory()
-
-	{
-		osSignals := make(chan os.Signal, 1)
-		signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM)
-		<-osSignals
-	}
+	osSignals := make(chan os.Signal, 1)
+	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM)
+	<-osSignals
 }
 
 func dumpConfig() int {
 	files := getConfigFilePath(false)
-	if config, err := core.GetMergedConfig(files); err != nil {
+	config, err := core.GetMergedConfig(files)
+	if err != nil {
 		fmt.Println(err)
-		time.Sleep(1 * time.Second)
-		return 23
-	} else {
-		fmt.Print(config)
+		return 1
 	}
+	fmt.Print(config)
 	return 0
 }
 
@@ -93,15 +79,12 @@ func getConfigFilePath(verbose bool) cmdarg.Arg {
 	}
 
 	if workingDir, err := os.Getwd(); err == nil {
-		suffixes := []string{".json"}
-		for _, suffix := range suffixes {
-			configFile := filepath.Join(workingDir, "config"+suffix)
-			if fileExists(configFile) {
-				if verbose {
-					log.Println("Using default config: ", configFile)
-				}
-				return cmdarg.Arg{configFile}
+		configFile := filepath.Join(workingDir, "config.json")
+		if fileExists(configFile) {
+			if verbose {
+				log.Println("Using default config: ", configFile)
 			}
+			return cmdarg.Arg{configFile}
 		}
 	}
 
