@@ -2,6 +2,7 @@ package serial
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/nickshiro/veil/common/errors"
 	creflect "github.com/nickshiro/veil/common/reflect"
@@ -30,15 +31,15 @@ func mergeConfigs(files []*core.ConfigSource) (*conf.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to read config: ", file).Base(err)
 		}
-		c, err := DecodeJSONConfig(r)
-		if err != nil {
+		var c conf.Config
+		if err := json.NewDecoder(r).Decode(&c); err != nil {
 			return nil, errors.New("failed to decode config: ", file).Base(err)
 		}
 		if i == 0 {
-			*cf = *c
+			*cf = c
 			continue
 		}
-		cf.Override(c, file.Name)
+		cf.Override(&c, file.Name)
 	}
 	return cf, nil
 }

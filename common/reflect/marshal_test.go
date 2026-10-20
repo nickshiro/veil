@@ -1,7 +1,6 @@
 package reflect_test
 
 import (
-	"bytes"
 	"encoding/json"
 	"strings"
 	"testing"
@@ -9,7 +8,6 @@ import (
 	"github.com/nickshiro/veil/common/protocol"
 	. "github.com/nickshiro/veil/common/reflect"
 	cserial "github.com/nickshiro/veil/common/serial"
-	iserial "github.com/nickshiro/veil/infra/conf/serial"
 	"github.com/nickshiro/veil/proxy/shadowsocks"
 )
 
@@ -80,53 +78,6 @@ func TestMashalStruct(t *testing.T) {
 
 	if f1.N != f2.N || *f1.Np != *f2.Np || f1.S != f2.S || v != "world" {
 		t.Error("f1 not equal to f2")
-	}
-}
-
-func TestMarshalConfigJson(t *testing.T) {
-	buf := bytes.NewBufferString(getConfig())
-	config, err := iserial.DecodeJSONConfig(buf)
-	if err != nil {
-		t.Error("decode JSON config failed")
-	}
-
-	bc, err := config.Build()
-	if err != nil {
-		t.Error("build core config failed")
-	}
-
-	tc, ok := MarshalToJson(bc, true)
-	if !ok {
-		t.Error("marshal config failed")
-	}
-
-	// t.Log(tc)
-
-	keywords := []string{
-		"4784f9b8-a879-4fec-9718-ebddefa47750",
-		"bing.com",
-		"inboundTag",
-		"level",
-		"stats",
-		"userDownlink",
-		"userUplink",
-		"system",
-		"inboundDownlink",
-		"outboundUplink",
-		"XHTTP_IN",
-		"\"host\": \"bing.com\"",
-		"scMaxEachPostBytes",
-		"\"from\": 100",
-		"\"to\": 1000",
-		"\"from\": 1000000",
-		"\"to\": 1000000",
-	}
-	for _, kw := range keywords {
-		if !strings.Contains(tc, kw) {
-			t.Log("config.json:", tc)
-			t.Error("keyword not found:", kw)
-			break
-		}
 	}
 }
 

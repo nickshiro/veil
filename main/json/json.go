@@ -2,10 +2,12 @@ package json
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/infra/conf"
 	"github.com/nickshiro/veil/infra/conf/serial"
 	"github.com/nickshiro/veil/main/confloader"
 )
@@ -19,8 +21,8 @@ func init() {
 			if err != nil {
 				return nil, errors.New("failed to read config: ", v).Base(err)
 			}
-			c, err := serial.DecodeJSONConfig(r)
-			if err != nil {
+			var c conf.Config
+			if err := json.NewDecoder(r).Decode(&c); err != nil {
 				return nil, errors.New("failed to decode config: ", v).Base(err)
 			}
 			return c.Build()
