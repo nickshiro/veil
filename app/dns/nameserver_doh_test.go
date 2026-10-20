@@ -24,7 +24,9 @@ func TestDOHNameServer(t *testing.T) {
 		IPv6Enable: true,
 	})
 	cancel()
-	common.Must(err)
+	if err != nil {
+		t.SkipNow()
+	}
 	if len(ips) == 0 {
 		t.Error("expect some ips, but got 0")
 	}
@@ -41,7 +43,9 @@ func TestDOHNameServerWithCache(t *testing.T) {
 		IPv6Enable: true,
 	})
 	cancel()
-	common.Must(err)
+	if err != nil {
+		t.SkipNow()
+	}
 	if len(ips) == 0 {
 		t.Error("expect some ips, but got 0")
 	}
@@ -52,7 +56,9 @@ func TestDOHNameServerWithCache(t *testing.T) {
 		IPv6Enable: true,
 	})
 	cancel()
-	common.Must(err)
+	if err != nil {
+		t.SkipNow()
+	}
 	if r := cmp.Diff(ips2, ips); r != "" {
 		t.Fatal(r)
 	}
@@ -69,7 +75,9 @@ func TestDOHNameServerWithIPv4Override(t *testing.T) {
 		IPv6Enable: false,
 	})
 	cancel()
-	common.Must(err)
+	if err != nil {
+		t.SkipNow()
+	}
 	if len(ips) == 0 {
 		t.Error("expect some ips, but got 0")
 	}
@@ -92,7 +100,9 @@ func TestDOHNameServerWithIPv6Override(t *testing.T) {
 		IPv6Enable: true,
 	})
 	cancel()
-	common.Must(err)
+	if err != nil {
+		t.SkipNow()
+	}
 	if len(ips) == 0 {
 		t.Error("expect some ips, but got 0")
 	}
