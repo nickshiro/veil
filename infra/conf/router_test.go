@@ -6,18 +6,18 @@ import (
 	"time"
 	_ "unsafe"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/nickshiro/veil/app/router"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	. "github.com/nickshiro/veil/infra/conf"
 
-	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/testing/protocmp"
 )
 
 func TestRouterConfig(t *testing.T) {
-	createParser := func() func(string) (proto.Message, error) {
-		return func(s string) (proto.Message, error) {
+	createParser := func() func(string) (*router.RuntimeConfig, error) {
+		return func(s string) (*router.RuntimeConfig, error) {
 			config := new(RouterConfig)
 			if err := json.Unmarshal([]byte(s), config); err != nil {
 				return nil, err
@@ -26,7 +26,11 @@ func TestRouterConfig(t *testing.T) {
 		}
 	}
 
-	runMultiTestCase(t, []TestCase{
+	cases := []struct {
+		Input  string
+		Parser func(string) (*router.RuntimeConfig, error)
+		Output *router.RuntimeConfig
+	}{
 		{
 			Input: `{
 				"domainStrategy": "AsIs",
@@ -89,9 +93,9 @@ func TestRouterConfig(t *testing.T) {
 				]
 			}`,
 			Parser: createParser(),
-			Output: &router.Config{
+			Output: &router.RuntimeConfig{
 				DomainStrategy: router.Config_AsIs,
-				BalancingRule: []*router.BalancingRule{
+				BalancingRule: []*router.BalancerConfig{
 					{
 						Tag:              "b1",
 						OutboundSelector: []string{"test"},
@@ -102,8 +106,8 @@ func TestRouterConfig(t *testing.T) {
 						Tag:              "b2",
 						OutboundSelector: []string{"test"},
 						Strategy:         "leastload",
-						StrategySettings: serial.ToTypedMessage(&router.StrategyLeastLoadConfig{
-							Costs: []*router.StrategyWeight{
+						StrategySettings: &router.LeastLoadConfig{
+							Costs: []*router.Weight{
 								{
 									Regexp: true,
 									Match:  "\\d+(\\.\\d+)",
@@ -117,7 +121,7 @@ func TestRouterConfig(t *testing.T) {
 							Expected:  6,
 							MaxRTT:    int64(time.Duration(1000) * time.Millisecond),
 							Tolerance: 0.5,
-						}),
+						},
 						FallbackTag: "fall",
 					},
 				},
@@ -198,7 +202,7 @@ func TestRouterConfig(t *testing.T) {
 				]
 			}`,
 			Parser: createParser(),
-			Output: &router.Config{
+			Output: &router.RuntimeConfig{
 				DomainStrategy: router.Config_IpIfNonMatch,
 				Rule: []*router.RoutingRule{
 					{
@@ -234,5 +238,14 @@ func TestRouterConfig(t *testing.T) {
 				},
 			},
 		},
-	})
+	}
+	for _, tc := range cases {
+		got, err := tc.Parser(tc.Input)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if diff := cmp.Diff(tc.Output, got, protocmp.Transform()); diff != "" {
+			t.Error(diff)
+		}
+	}
 }

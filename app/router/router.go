@@ -8,7 +8,6 @@ import (
 
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/errors"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/features/dns"
 	"github.com/nickshiro/veil/features/outbound"
@@ -38,7 +37,7 @@ type Route struct {
 }
 
 // Init initializes the Router.
-func (r *Router) Init(ctx context.Context, config *Config, d dns.Client, ohm outbound.Manager, dispatcher routing.Dispatcher) error {
+func (r *Router) Init(ctx context.Context, config *RuntimeConfig, d dns.Client, ohm outbound.Manager, dispatcher routing.Dispatcher) error {
 	r.domainStrategy = config.DomainStrategy
 	r.dns = d
 	r.ctx = ctx
@@ -67,19 +66,7 @@ func (r *Router) PickRoute(ctx routing.Context) (routing.Route, error) {
 	return &Route{Context: ctx, outboundTag: tag, ruleTag: rule.RuleTag}, nil
 }
 
-// AddRule implements routing.Router.
-func (r *Router) AddRule(config *serial.TypedMessage, shouldAppend bool) error {
-	inst, err := config.GetInstance()
-	if err != nil {
-		return err
-	}
-	if c, ok := inst.(*Config); ok {
-		return r.ReloadRules(c, shouldAppend)
-	}
-	return errors.New("AddRule: config type error")
-}
-
-func (r *Router) ReloadRules(config *Config, shouldAppend bool) error {
+func (r *Router) ReloadRules(config *RuntimeConfig, shouldAppend bool) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -261,10 +248,10 @@ func (r *Route) GetRuleTag() string {
 }
 
 func init() {
-	common.Must(common.RegisterConfig((*Config)(nil), func(ctx context.Context, config any) (any, error) {
+	common.Must(common.RegisterConfig((*RuntimeConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		r := new(Router)
 		if err := core.RequireFeatures(ctx, func(d dns.Client, ohm outbound.Manager, dispatcher routing.Dispatcher) error {
-			return r.Init(ctx, config.(*Config), d, ohm, dispatcher)
+			return r.Init(ctx, config.(*RuntimeConfig), d, ohm, dispatcher)
 		}); err != nil {
 			return nil, err
 		}

@@ -84,7 +84,7 @@ func TestXrayConfig(t *testing.T) {
 			&dispatcher.Config{},
 			&proxyman.InboundConfig{},
 			&proxyman.OutboundConfig{},
-			&router.Config{
+			&router.RuntimeConfig{
 				DomainStrategy: router.Config_AsIs,
 				Rule: []*router.RoutingRule{
 					{

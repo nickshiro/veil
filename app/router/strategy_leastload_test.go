@@ -8,7 +8,7 @@ import (
 Split into multiple package, need to be tested separately
 
 	func TestSelectLeastLoad(t *testing.T) {
-		settings := &StrategyLeastLoadConfig{
+		settings := &LeastLoadConfig{
 			HealthCheck: &HealthPingConfig{
 				SamplingCount: 10,
 			},
@@ -39,11 +39,11 @@ Split into multiple package, need to be tested separately
 	}
 
 	func TestSelectLeastLoadWithCost(t *testing.T) {
-		settings := &StrategyLeastLoadConfig{
+		settings := &LeastLoadConfig{
 			HealthCheck: &HealthPingConfig{
 				SamplingCount: 10,
 			},
-			Costs: []*StrategyWeight{
+			Costs: []*Weight{
 				{Match: "a", Value: 9},
 			},
 			Expected: 1,
@@ -68,7 +68,7 @@ Split into multiple package, need to be tested separately
 */
 func TestSelectLeastExpected(t *testing.T) {
 	strategy := &LeastLoadStrategy{
-		settings: &StrategyLeastLoadConfig{
+		settings: &LeastLoadConfig{
 			Baselines: nil,
 			Expected:  3,
 		},
@@ -88,7 +88,7 @@ func TestSelectLeastExpected(t *testing.T) {
 
 func TestSelectLeastExpected2(t *testing.T) {
 	strategy := &LeastLoadStrategy{
-		settings: &StrategyLeastLoadConfig{
+		settings: &LeastLoadConfig{
 			Baselines: nil,
 			Expected:  3,
 		},
@@ -106,7 +106,7 @@ func TestSelectLeastExpected2(t *testing.T) {
 
 func TestSelectLeastExpectedAndBaselines(t *testing.T) {
 	strategy := &LeastLoadStrategy{
-		settings: &StrategyLeastLoadConfig{
+		settings: &LeastLoadConfig{
 			Baselines: []int64{200, 300, 400},
 			Expected:  3,
 		},
@@ -127,7 +127,7 @@ func TestSelectLeastExpectedAndBaselines(t *testing.T) {
 
 func TestSelectLeastExpectedAndBaselines2(t *testing.T) {
 	strategy := &LeastLoadStrategy{
-		settings: &StrategyLeastLoadConfig{
+		settings: &LeastLoadConfig{
 			Baselines: []int64{200, 300, 400},
 			Expected:  3,
 		},
@@ -148,7 +148,7 @@ func TestSelectLeastExpectedAndBaselines2(t *testing.T) {
 
 func TestSelectLeastLoadBaselines(t *testing.T) {
 	strategy := &LeastLoadStrategy{
-		settings: &StrategyLeastLoadConfig{
+		settings: &LeastLoadConfig{
 			Baselines: []int64{200, 400, 600},
 			Expected:  0,
 		},
@@ -167,7 +167,7 @@ func TestSelectLeastLoadBaselines(t *testing.T) {
 
 func TestSelectLeastLoadBaselinesNoQualified(t *testing.T) {
 	strategy := &LeastLoadStrategy{
-		settings: &StrategyLeastLoadConfig{
+		settings: &LeastLoadConfig{
 			Baselines: []int64{200, 400, 600},
 			Expected:  0,
 		},

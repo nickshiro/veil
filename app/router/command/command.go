@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	routerconfig "github.com/nickshiro/veil/app/router"
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/core"
@@ -54,8 +55,14 @@ func (s *routingServer) OverrideBalancerTarget(ctx context.Context, request *Ove
 }
 
 func (s *routingServer) AddRule(ctx context.Context, request *AddRuleRequest) (*AddRuleResponse, error) {
-	if bo, ok := s.router.(routing.Router); ok {
-		return &AddRuleResponse{}, bo.AddRule(request.Config, request.ShouldAppend)
+	if bo, ok := s.router.(interface {
+		ReloadRules(*routerconfig.RuntimeConfig, bool) error
+	}); ok {
+		config, err := decodeRuntimeConfig(request.Config)
+		if err != nil {
+			return nil, err
+		}
+		return &AddRuleResponse{}, bo.ReloadRules(config, request.ShouldAppend)
 	}
 	return nil, errors.New("unsupported router implementation")
 }

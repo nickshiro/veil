@@ -508,7 +508,7 @@ func masqueServerConfig(serverPort net.Port, certificate *tls.Certificate, h2 bo
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{Networks: []net.Network{net.Network_TCP}, TargetTag: &router.RoutingRule_Tag{Tag: "tcp"}},
 					{Networks: []net.Network{net.Network_UDP}, TargetTag: &router.RoutingRule_Tag{Tag: "udp"}},

@@ -16,22 +16,9 @@ const (
 	strategyLeastLoad  string = "leastload"
 )
 
-var strategyConfigLoader = NewJSONConfigLoader(ConfigFactories{
-	strategyRandom:     func() Buildable { return new(strategyEmptyConfig) },
-	strategyLeastPing:  func() Buildable { return new(strategyEmptyConfig) },
-	strategyRoundRobin: func() Buildable { return new(strategyEmptyConfig) },
-	strategyLeastLoad:  func() Buildable { return new(strategyLeastLoadConfig) },
-}, "type")
-
-type strategyEmptyConfig struct{}
-
-func (v *strategyEmptyConfig) Build() (proto.Message, error) {
-	return nil, nil
-}
-
 type strategyLeastLoadConfig struct {
 	// weight settings
-	Costs []*router.StrategyWeight `json:"costs,omitempty"`
+	Costs []*router.Weight `json:"costs,omitempty"`
 	// ping rtt baselines
 	Baselines []Duration `json:"baselines,omitempty"`
 	// expected nodes count to select
@@ -69,9 +56,9 @@ func (h HealthCheckSettings) Build() (proto.Message, error) {
 	}, nil
 }
 
-// Build implements Buildable.
-func (v *strategyLeastLoadConfig) Build() (proto.Message, error) {
-	config := &router.StrategyLeastLoadConfig{}
+// Build normalizes least-load strategy settings.
+func (v *strategyLeastLoadConfig) Build() (*router.LeastLoadConfig, error) {
+	config := &router.LeastLoadConfig{}
 	config.Costs = v.Costs
 	config.Tolerance = float32(v.Tolerance)
 	if config.Tolerance < 0 {

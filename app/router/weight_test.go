@@ -9,7 +9,7 @@ import (
 
 func TestWeight(t *testing.T) {
 	manager := router.NewWeightManager(
-		[]*router.StrategyWeight{
+		[]*router.Weight{
 			{
 				Match: "x5",
 				Value: 100,

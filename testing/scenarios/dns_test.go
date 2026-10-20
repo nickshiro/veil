@@ -39,7 +39,7 @@ func TestResolveIP(t *testing.T) {
 					},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				DomainStrategy: router.Config_IpIfNonMatch,
 				Rule: []*router.RoutingRule{
 					{

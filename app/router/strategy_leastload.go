@@ -17,7 +17,7 @@ import (
 
 // LeastLoadStrategy represents a least load balancing strategy
 type LeastLoadStrategy struct {
-	settings *StrategyLeastLoadConfig
+	settings *LeastLoadConfig
 	costs    *WeightManager
 
 	observer extension.Observatory
@@ -35,7 +35,7 @@ func (l *LeastLoadStrategy) GetPrincipleTarget(strings []string) []string {
 }
 
 // NewLeastLoadStrategy creates a new LeastLoadStrategy with settings
-func NewLeastLoadStrategy(settings *StrategyLeastLoadConfig) *LeastLoadStrategy {
+func NewLeastLoadStrategy(settings *LeastLoadConfig) *LeastLoadStrategy {
 	return &LeastLoadStrategy{
 		settings: settings,
 		costs: NewWeightManager(

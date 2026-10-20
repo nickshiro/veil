@@ -50,7 +50,7 @@ func TestReverseProxy(t *testing.T) {
 					},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -116,7 +116,7 @@ func TestReverseProxy(t *testing.T) {
 					},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -225,7 +225,7 @@ func TestReverseProxyLongRunning(t *testing.T) {
 					},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -305,7 +305,7 @@ func TestReverseProxyLongRunning(t *testing.T) {
 					},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{

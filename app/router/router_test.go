@@ -22,7 +22,7 @@ type mockOutboundManager struct {
 }
 
 func TestSimpleRouter(t *testing.T) {
-	config := &Config{
+	config := &RuntimeConfig{
 		Rule: []*RoutingRule{
 			{
 				TargetTag: &RoutingRule_Tag{
@@ -57,7 +57,7 @@ func TestSimpleRouter(t *testing.T) {
 }
 
 func TestSimpleBalancer(t *testing.T) {
-	config := &Config{
+	config := &RuntimeConfig{
 		Rule: []*RoutingRule{
 			{
 				TargetTag: &RoutingRule_BalancingTag{
@@ -66,7 +66,7 @@ func TestSimpleBalancer(t *testing.T) {
 				Networks: []net.Network{net.Network_TCP},
 			},
 		},
-		BalancingRule: []*BalancingRule{
+		BalancingRule: []*BalancerConfig{
 			{
 				Tag:              "balance",
 				OutboundSelector: []string{"test-"},
@@ -104,7 +104,7 @@ func TestSimpleBalancer(t *testing.T) {
 Do not work right now: need a full client setup
 
 func TestLeastLoadBalancer(t *testing.T) {
-	config := &Config{
+	config := &RuntimeConfig{
 		Rule: []*RoutingRule{
 			{
 				TargetTag: &RoutingRule_BalancingTag{
@@ -113,15 +113,15 @@ func TestLeastLoadBalancer(t *testing.T) {
 				Networks: []net.Network{net.Network_TCP},
 			},
 		},
-		BalancingRule: []*BalancingRule{
+		BalancingRule: []*BalancerConfig{
 			{
 				Tag:              "balance",
 				OutboundSelector: []string{"test-"},
 				Strategy:         "leastLoad",
-				StrategySettings: serial.ToTypedMessage(&StrategyLeastLoadConfig{
+				StrategySettings: &LeastLoadConfig{
 					Baselines:   nil,
 					Expected:    1,
-				}),
+				},
 			},
 		},
 	}
@@ -149,7 +149,7 @@ func TestLeastLoadBalancer(t *testing.T) {
 }*/
 
 func TestIPOnDemand(t *testing.T) {
-	config := &Config{
+	config := &RuntimeConfig{
 		DomainStrategy: Config_IpOnDemand,
 		Rule: []*RoutingRule{
 			{
@@ -193,7 +193,7 @@ func TestIPOnDemand(t *testing.T) {
 }
 
 func TestIPIfNonMatchDomain(t *testing.T) {
-	config := &Config{
+	config := &RuntimeConfig{
 		DomainStrategy: Config_IpIfNonMatch,
 		Rule: []*RoutingRule{
 			{
@@ -237,7 +237,7 @@ func TestIPIfNonMatchDomain(t *testing.T) {
 }
 
 func TestIPIfNonMatchIP(t *testing.T) {
-	config := &Config{
+	config := &RuntimeConfig{
 		DomainStrategy: Config_IpIfNonMatch,
 		Rule: []*RoutingRule{
 			{

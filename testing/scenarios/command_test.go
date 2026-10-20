@@ -149,7 +149,7 @@ func TestCommanderRemoveHandler(t *testing.T) {
 					&command.Config{},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -244,7 +244,7 @@ func TestCommanderListHandlers(t *testing.T) {
 					&command.Config{},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -379,7 +379,7 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 					&command.Config{},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -555,7 +555,7 @@ func TestCommanderStats(t *testing.T) {
 					&statscmd.Config{},
 				},
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},

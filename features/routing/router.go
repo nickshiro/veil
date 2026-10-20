@@ -2,7 +2,6 @@ package routing
 
 import (
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/features"
 )
 
@@ -12,7 +11,6 @@ type Router interface {
 
 	// PickRoute returns a route decision based on the given routing context.
 	PickRoute(ctx Context) (Route, error)
-	AddRule(config *serial.TypedMessage, shouldAppend bool) error
 	RemoveRule(tag string) error
 	ListRule() []Route
 }
@@ -48,11 +46,6 @@ func (DefaultRouter) Type() any {
 // PickRoute implements Router.
 func (DefaultRouter) PickRoute(ctx Context) (Route, error) {
 	return nil, common.ErrNoClue
-}
-
-// AddRule implements Router.
-func (DefaultRouter) AddRule(config *serial.TypedMessage, shouldAppend bool) error {
-	return common.ErrNoClue
 }
 
 // RemoveRule implements Router.

@@ -7,7 +7,6 @@ import (
 	"github.com/nickshiro/veil/app/router"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/geodata"
-	"github.com/nickshiro/veil/common/serial"
 )
 
 // StrategyConfig represents a strategy config
@@ -24,7 +23,7 @@ type BalancingRule struct {
 }
 
 // Build builds the balancing rule
-func (r *BalancingRule) Build() (*router.BalancingRule, error) {
+func (r *BalancingRule) Build() (*router.BalancerConfig, error) {
 	if r.Tag == "" {
 		return nil, errors.New("empty balancer tag")
 	}
@@ -32,31 +31,41 @@ func (r *BalancingRule) Build() (*router.BalancingRule, error) {
 		return nil, errors.New("empty selector list")
 	}
 
-	r.Strategy.Type = strings.ToLower(r.Strategy.Type)
-	switch r.Strategy.Type {
+	strategy := strings.ToLower(r.Strategy.Type)
+	switch strategy {
 	case "":
-		r.Strategy.Type = strategyRandom
+		strategy = strategyRandom
 	case strategyRandom, strategyLeastLoad, strategyLeastPing, strategyRoundRobin:
 	default:
-		return nil, errors.New("unknown balancing strategy: " + r.Strategy.Type)
+		return nil, errors.New("unknown balancing strategy: " + strategy)
 	}
 
 	settings := []byte("{}")
 	if r.Strategy.Settings != nil {
 		settings = ([]byte)(*r.Strategy.Settings)
 	}
-	rawConfig, err := strategyConfigLoader.LoadWithID(settings, r.Strategy.Type)
-	if err != nil {
-		return nil, errors.New("failed to parse to strategy config.").Base(err)
-	}
-	ts, err := rawConfig.Build()
-	if err != nil {
-		return nil, err
+	var ts *router.LeastLoadConfig
+	if strategy == strategyLeastLoad {
+		var rawConfig strategyLeastLoadConfig
+		if err := json.Unmarshal(settings, &rawConfig); err != nil {
+			return nil, errors.New("failed to parse to strategy config.").Base(err)
+		}
+		var err error
+		ts, err = rawConfig.Build()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// Preserve validation of settings even for strategies without options.
+		var empty struct{}
+		if err := json.Unmarshal(settings, &empty); err != nil {
+			return nil, errors.New("failed to parse to strategy config.").Base(err)
+		}
 	}
 
-	return &router.BalancingRule{
-		Strategy:         r.Strategy.Type,
-		StrategySettings: serial.ToTypedMessage(ts),
+	return &router.BalancerConfig{
+		Strategy:         strategy,
+		StrategySettings: ts,
 		FallbackTag:      r.FallbackTag,
 		OutboundSelector: r.Selectors,
 		Tag:              r.Tag,
@@ -85,8 +94,8 @@ func (c *RouterConfig) getDomainStrategy() router.Config_DomainStrategy {
 	}
 }
 
-func (c *RouterConfig) Build() (*router.Config, error) {
-	config := new(router.Config)
+func (c *RouterConfig) Build() (*router.RuntimeConfig, error) {
+	config := new(router.RuntimeConfig)
 
 	config.DomainStrategy = c.getDomainStrategy()
 

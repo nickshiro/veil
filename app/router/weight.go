@@ -15,7 +15,7 @@ type weightScaler func(value, weight float64) float64
 var numberFinder = regexp.MustCompile(`\d+(\.\d+)?`)
 
 // NewWeightManager creates a new WeightManager with settings
-func NewWeightManager(s []*StrategyWeight, defaultWeight float64, scaler weightScaler) *WeightManager {
+func NewWeightManager(s []*Weight, defaultWeight float64, scaler weightScaler) *WeightManager {
 	return &WeightManager{
 		settings:      s,
 		cache:         make(map[string]float64),
@@ -26,7 +26,7 @@ func NewWeightManager(s []*StrategyWeight, defaultWeight float64, scaler weightS
 
 // WeightManager manages weights for specific settings
 type WeightManager struct {
-	settings      []*StrategyWeight
+	settings      []*Weight
 	cache         map[string]float64
 	scaler        weightScaler
 	defaultWeight float64

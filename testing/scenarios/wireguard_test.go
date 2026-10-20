@@ -72,7 +72,7 @@ func TestWireguard(t *testing.T) {
 				ErrorLogLevel: clog.Severity_Warning,
 				ErrorLogType:  log.LogType_Console,
 			},
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{Networks: []net.Network{net.Network_TCP}, TargetTag: &router.RoutingRule_Tag{Tag: "tcp"}},
 					{Networks: []net.Network{net.Network_UDP}, TargetTag: &router.RoutingRule_Tag{Tag: "udp"}},

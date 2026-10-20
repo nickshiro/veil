@@ -410,7 +410,7 @@ func TestBlackhole(t *testing.T) {
 			},
 		},
 		App: []any{
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						TargetTag: &router.RoutingRule_Tag{
@@ -586,7 +586,7 @@ func TestDomainSniffing(t *testing.T) {
 			},
 		},
 		App: []any{
-			&router.Config{
+			&router.RuntimeConfig{
 				Rule: []*router.RoutingRule{
 					{
 						TargetTag: &router.RoutingRule_Tag{

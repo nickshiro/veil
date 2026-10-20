@@ -292,7 +292,7 @@ func TestSocksBridageUDPWithRouting(t *testing.T) {
 	for {
 		serverConfig := &core.Config{
 			App: []any{
-				&router.Config{
+				&router.RuntimeConfig{
 					Rule: []*router.RoutingRule{
 						{
 							TargetTag: &router.RoutingRule_Tag{

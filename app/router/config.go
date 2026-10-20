@@ -122,7 +122,7 @@ func (rr *RoutingRule) BuildCondition() (Condition, error) {
 }
 
 // Build builds the balancing rule
-func (br *BalancingRule) Build(ohm outbound.Manager, dispatcher routing.Dispatcher) (*Balancer, error) {
+func (br *BalancerConfig) Build(ohm outbound.Manager, dispatcher routing.Dispatcher) (*Balancer, error) {
 	switch strings.ToLower(br.Strategy) {
 	case "leastping":
 		return &Balancer{
@@ -139,13 +139,9 @@ func (br *BalancingRule) Build(ohm outbound.Manager, dispatcher routing.Dispatch
 			ohm:         ohm,
 		}, nil
 	case "leastload":
-		i, err := br.StrategySettings.GetInstance()
-		if err != nil {
-			return nil, err
-		}
-		s, ok := i.(*StrategyLeastLoadConfig)
-		if !ok {
-			return nil, errors.New("not a StrategyLeastLoadConfig")
+		s := br.StrategySettings
+		if s == nil {
+			return nil, errors.New("missing leastload settings")
 		}
 		leastLoadStrategy := NewLeastLoadStrategy(s)
 		return &Balancer{

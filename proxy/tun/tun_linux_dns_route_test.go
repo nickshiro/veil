@@ -61,7 +61,7 @@ func newRouteTestContext(t *testing.T, withDNSApp bool, nameServers []*appdns.Na
 		&dispatcher.Config{},
 		&proxyman.InboundConfig{},
 		&proxyman.OutboundConfig{},
-		&router.Config{Rule: rules},
+		&router.RuntimeConfig{Rule: rules},
 	}
 	if withDNSApp {
 		apps = append(apps, &appdns.Config{NameServer: nameServers})
