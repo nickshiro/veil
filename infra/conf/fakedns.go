@@ -68,9 +68,7 @@ func (f *FakeDNSConfig) Build() (*fakedns.FakeDnsPoolMulti, error) {
 	return nil, errors.New("no valid FakeDNS config")
 }
 
-type FakeDNSPostProcessingStage struct{}
-
-func (FakeDNSPostProcessingStage) Process(config *Config) error {
+func normalizeFakeDNS(config *Config) {
 	fakeDNSInUse := false
 	isIPv4Enable, isIPv6Enable := true, true
 
@@ -123,13 +121,11 @@ func (FakeDNSPostProcessingStage) Process(config *Config) error {
 			if v.SniffingConfig != nil && v.SniffingConfig.Enabled {
 				for _, d := range v.SniffingConfig.DestOverride {
 					if strings.EqualFold(d, "fakedns") || strings.EqualFold(d, "fakedns+others") {
-						return nil
+						return
 					}
 				}
 			}
 		}
 		errors.LogWarning(context.Background(), "Defined FakeDNS but haven't enabled FakeDNS destOverride at any inbound.")
 	}
-
-	return nil
 }

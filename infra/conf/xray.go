@@ -477,9 +477,7 @@ func (c *Config) Build() (*core.Config, error) {
 		}
 	}
 
-	if err := PostProcessConfigureFile(c); err != nil {
-		return nil, errors.New("failed to post-process configuration file").Base(err)
-	}
+	normalizeFakeDNS(c)
 
 	config := &core.Config{
 		App: []any{
