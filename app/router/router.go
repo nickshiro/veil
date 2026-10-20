@@ -2,7 +2,6 @@ package router
 
 import (
 	"context"
-	"maps"
 	"sync"
 	"sync/atomic"
 
@@ -46,7 +45,7 @@ func (r *Router) Init(ctx context.Context, config *RuntimeConfig, d dns.Client, 
 
 	r.rules.Store(new([]*Rule))
 	r.balancers.Store(&map[string]*Balancer{})
-	return r.ReloadRules(config, false)
+	return r.loadRules(config)
 }
 
 // PickRoute implements routing.Router.
@@ -66,23 +65,14 @@ func (r *Router) PickRoute(ctx routing.Context) (routing.Route, error) {
 	return &Route{Context: ctx, outboundTag: tag, ruleTag: rule.RuleTag}, nil
 }
 
-func (r *Router) ReloadRules(config *RuntimeConfig, shouldAppend bool) error {
+func (r *Router) loadRules(config *RuntimeConfig) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	oldRules := *r.rules.Load()
-	oldBalancers := *r.balancers.Load()
-
 	var newRules []*Rule
 	newBalancers := make(map[string]*Balancer)
-	existTags := make(map[string]bool, len(oldRules)+len(config.Rule))
-	if shouldAppend {
-		newRules = append(newRules, oldRules...)
-		maps.Copy(newBalancers, oldBalancers)
-		for _, rule := range oldRules {
-			existTags[rule.RuleTag] = true
-		}
-	}
+	existTags := make(map[string]bool, len(config.Rule))
 
 	for _, rule := range config.BalancingRule {
 		if _, found := newBalancers[rule.Tag]; found {
@@ -129,47 +119,8 @@ func (r *Router) ReloadRules(config *RuntimeConfig, shouldAppend bool) error {
 
 	r.balancers.Store(&newBalancers)
 	r.rules.Store(&newRules)
-	if !shouldAppend {
-		closeWebhooks(oldRules)
-	}
+	closeWebhooks(oldRules)
 	return nil
-}
-
-// RemoveRule implements routing.Router.
-func (r *Router) RemoveRule(tag string) error {
-	if tag == "" {
-		return errors.New("empty tag name!")
-	}
-
-	r.mu.Lock()
-	defer r.mu.Unlock()
-
-	oldRules := *r.rules.Load()
-	newRules := make([]*Rule, 0, len(oldRules))
-	var removed []*Rule
-	for _, rule := range oldRules {
-		if rule.RuleTag != tag {
-			newRules = append(newRules, rule)
-		} else {
-			removed = append(removed, rule)
-		}
-	}
-	r.rules.Store(&newRules)
-	closeWebhooks(removed)
-	return nil
-}
-
-// ListRule implements routing.Router
-func (r *Router) ListRule() []routing.Route {
-	rules := *r.rules.Load()
-	ruleList := make([]routing.Route, 0, len(rules))
-	for _, rule := range rules {
-		ruleList = append(ruleList, &Route{
-			outboundTag: rule.Tag,
-			ruleTag:     rule.RuleTag,
-		})
-	}
-	return ruleList
 }
 
 func (r *Router) pickRouteInternal(ctx routing.Context) (*Rule, routing.Context, error) {

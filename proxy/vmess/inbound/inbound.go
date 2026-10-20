@@ -155,18 +155,6 @@ func (h *Handler) GetOrGenerateUser(email string) *protocol.MemoryUser {
 	return user
 }
 
-func (h *Handler) GetUser(ctx context.Context, email string) *protocol.MemoryUser {
-	return h.usersByEmail.Get(email)
-}
-
-func (h *Handler) GetUsers(ctx context.Context) []*protocol.MemoryUser {
-	return h.clients.GetUsers()
-}
-
-func (h *Handler) GetUsersCount(context.Context) int64 {
-	return h.clients.GetCount()
-}
-
 func (h *Handler) AddUser(ctx context.Context, user *protocol.MemoryUser) error {
 	if len(user.Email) > 0 && !h.usersByEmail.Add(user) {
 		return errors.New("User ", user.Email, " already exists.")

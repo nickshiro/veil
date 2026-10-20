@@ -5,6 +5,12 @@ import (
 	"github.com/nickshiro/veil/common/session"
 )
 
+// InboundConfig enables the inbound manager.
+type InboundConfig struct{}
+
+// OutboundConfig enables the outbound manager.
+type OutboundConfig struct{}
+
 func BuildSniffingRequest(config *SniffingConfig) (session.SniffingRequest, error) {
 	if config == nil {
 		return session.SniffingRequest{}, nil

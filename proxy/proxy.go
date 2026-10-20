@@ -20,7 +20,6 @@ import (
 	"github.com/nickshiro/veil/common/buf"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/protocol"
 	"github.com/nickshiro/veil/common/session"
 	"github.com/nickshiro/veil/common/signal"
 	"github.com/nickshiro/veil/features/routing"
@@ -72,32 +71,6 @@ type Inbound interface {
 type Outbound interface {
 	// Process processes the given connection. The given dialer may be used to dial a system outbound connection.
 	Process(context.Context, *transport.Link, internet.Dialer) error
-}
-
-// UserManager is the interface for Inbounds and Outbounds that can manage their users.
-type UserManager interface {
-	// AddUser adds a new user.
-	AddUser(context.Context, *protocol.MemoryUser) error
-
-	// RemoveUser removes a user by email.
-	RemoveUser(context.Context, string) error
-
-	// Get user by email.
-	GetUser(context.Context, string) *protocol.MemoryUser
-
-	// Get all users.
-	GetUsers(context.Context) []*protocol.MemoryUser
-
-	// Get users count.
-	GetUsersCount(context.Context) int64
-}
-
-type GetInbound interface {
-	GetInbound() Inbound
-}
-
-type GetOutbound interface {
-	GetOutbound() Outbound
 }
 
 // TrafficState is used to track uplink and downlink of one connection

@@ -28,10 +28,6 @@ func (s *RandomStrategy) InjectContext(ctx context.Context) {
 	}
 }
 
-func (s *RandomStrategy) GetPrincipleTarget(strings []string) []string {
-	return strings
-}
-
 func (s *RandomStrategy) PickOutbound(candidates []string) string {
 	if s.observatory != nil {
 		observeReport, err := s.observatory.GetObservation(s.ctx)

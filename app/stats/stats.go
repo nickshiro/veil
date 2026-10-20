@@ -74,17 +74,6 @@ func (m *Manager) UnregisterCounter(name string) error {
 	return nil
 }
 
-// GetCounter implements stats.Manager.
-func (m *Manager) GetCounter(name string) stats.Counter {
-	m.access.RLock()
-	defer m.access.RUnlock()
-
-	if c, found := m.counters[name]; found {
-		return c
-	}
-	return nil
-}
-
 // VisitCounters calls visitor function on all managed counters.
 func (m *Manager) VisitCounters(visitor func(string, stats.Counter) bool) {
 	m.access.RLock()
@@ -135,29 +124,6 @@ func (m *Manager) UnregisterOnlineMap(name string) error {
 		delete(m.onlineMaps, name)
 	}
 	return nil
-}
-
-// GetOnlineMap implements stats.Manager.
-func (m *Manager) GetOnlineMap(name string) stats.OnlineMap {
-	m.access.RLock()
-	defer m.access.RUnlock()
-
-	if om, found := m.onlineMaps[name]; found {
-		return om
-	}
-	return nil
-}
-
-// VisitOnlineMaps calls visitor function on all managed online maps.
-// The visitor runs under a read lock; it must not call RegisterOnlineMap or UnregisterOnlineMap (would deadlock).
-func (m *Manager) VisitOnlineMaps(visitor func(string, stats.OnlineMap) bool) {
-	m.access.RLock()
-	defer m.access.RUnlock()
-	for name, om := range m.onlineMaps {
-		if !visitor(name, om) {
-			break
-		}
-	}
 }
 
 // RegisterChannel implements stats.Manager.
@@ -219,21 +185,6 @@ func (m *Manager) GetChannel(name string) stats.Channel {
 		return c
 	}
 	return nil
-}
-
-// GetAllOnlineUsers implements stats.Manager.
-func (m *Manager) GetAllOnlineUsers() []string {
-	m.access.RLock()
-	defer m.access.RUnlock()
-
-	usersOnline := make([]string, 0, len(m.onlineMaps))
-	for user, om := range m.onlineMaps {
-		if om.Count() > 0 {
-			usersOnline = append(usersOnline, user)
-		}
-	}
-
-	return usersOnline
 }
 
 // Start implements common.Runnable.

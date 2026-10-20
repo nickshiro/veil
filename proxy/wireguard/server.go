@@ -204,22 +204,6 @@ func (s *Server) GetUserByAddr(ctx context.Context, addr netip.Addr) (user *prot
 	return
 }
 
-func (s *Server) GetUsers(ctx context.Context) (users []*protocol.MemoryUser) {
-	s.users.Range(func(key, value any) bool {
-		users = append(users, value.(*protocol.MemoryUser))
-		return true
-	})
-	return
-}
-
-func (s *Server) GetUsersCount(context.Context) (count int64) {
-	s.users.Range(func(key, value any) bool {
-		count++
-		return true
-	})
-	return
-}
-
 // Network implements proxy.Inbound.Network.
 func (*Server) Network() []net.Network {
 	return []net.Network{}

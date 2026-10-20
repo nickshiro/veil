@@ -11,8 +11,6 @@ type Router interface {
 
 	// PickRoute returns a route decision based on the given routing context.
 	PickRoute(ctx Context) (Route, error)
-	RemoveRule(tag string) error
-	ListRule() []Route
 }
 
 // Route is the routing result of Router feature.
@@ -46,16 +44,6 @@ func (DefaultRouter) Type() any {
 // PickRoute implements Router.
 func (DefaultRouter) PickRoute(ctx Context) (Route, error) {
 	return nil, common.ErrNoClue
-}
-
-// RemoveRule implements Router.
-func (DefaultRouter) RemoveRule(tag string) error {
-	return common.ErrNoClue
-}
-
-// ListRule implements Router.
-func (DefaultRouter) ListRule() []Route {
-	return nil
 }
 
 // Start implements common.Runnable.

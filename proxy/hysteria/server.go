@@ -67,18 +67,6 @@ func (s *Server) RemoveUser(ctx context.Context, email string) error {
 	return s.validator.DelByEmail(email)
 }
 
-func (s *Server) GetUser(ctx context.Context, email string) *protocol.MemoryUser {
-	return s.validator.GetByEmail(email)
-}
-
-func (s *Server) GetUsers(ctx context.Context) []*protocol.MemoryUser {
-	return s.validator.GetAll()
-}
-
-func (s *Server) GetUsersCount(context.Context) int64 {
-	return s.validator.GetCount()
-}
-
 func (s *Server) Network() []net.Network {
 	return []net.Network{net.Network_TCP}
 }

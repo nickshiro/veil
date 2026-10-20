@@ -327,11 +327,6 @@ func (h *Handler) getStatCouterConnection(conn stat.Connection) stat.Connection 
 	return conn
 }
 
-// GetOutbound implements proxy.GetOutbound.
-func (h *Handler) GetOutbound() proxy.Outbound {
-	return h.proxy
-}
-
 // Start implements common.Runnable.
 func (h *Handler) Start() error {
 	return nil

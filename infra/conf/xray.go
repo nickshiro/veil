@@ -459,7 +459,6 @@ type Config struct {
 	InboundConfigs   []InboundDetourConfig   `json:"inbounds"`
 	OutboundConfigs  []OutboundDetourConfig  `json:"outbounds"`
 	Policy           *PolicyConfig           `json:"policy"`
-	API              *APIConfig              `json:"api"`
 	Metrics          *MetricsConfig          `json:"metrics"`
 	Stats            *StatsConfig            `json:"stats"`
 	Reverse          json.RawMessage         `json:"reverse"` // Retained to reject removed legacy reverse configuration.
@@ -467,6 +466,7 @@ type Config struct {
 	Observatory      *ObservatoryConfig      `json:"observatory"`
 	BurstObservatory *BurstObservatoryConfig `json:"burstObservatory"`
 	Geodata          *GeodataConfig          `json:"geodata"`
+	API              json.RawMessage         `json:"api"` // Retained to reject removed management gRPC API configuration.
 }
 
 // Build implements Buildable.
@@ -487,13 +487,6 @@ func (c *Config) Build() (*core.Config, error) {
 		},
 	}
 
-	if c.API != nil {
-		apiConf, err := c.API.Build()
-		if err != nil {
-			return nil, errors.New("failed to build API configuration").Base(err)
-		}
-		config.App = append(config.App, apiConf)
-	}
 	if c.Metrics != nil {
 		metricsConf, err := c.Metrics.Build()
 		if err != nil {
@@ -545,6 +538,9 @@ func (c *Config) Build() (*core.Config, error) {
 
 	if c.Reverse != nil {
 		return nil, errors.PrintRemovedFeatureError(`"legacy reverse"`, `"VLESS Reverse Proxy"`)
+	}
+	if c.API != nil {
+		return nil, errors.PrintRemovedFeatureError(`"api" management service`, `no management gRPC API`)
 	}
 
 	if c.FakeDNS != nil {

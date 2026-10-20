@@ -16,10 +16,6 @@ type BalancingStrategy interface {
 	PickOutbound([]string) string
 }
 
-type BalancingPrincipleTarget interface {
-	GetPrincipleTarget([]string) []string
-}
-
 type RoundRobinStrategy struct {
 	FallbackTag string
 
@@ -37,10 +33,6 @@ func (s *RoundRobinStrategy) InjectContext(ctx context.Context) {
 			return nil
 		}))
 	}
-}
-
-func (s *RoundRobinStrategy) GetPrincipleTarget(strings []string) []string {
-	return strings
 }
 
 func (s *RoundRobinStrategy) PickOutbound(tags []string) string {
@@ -87,8 +79,6 @@ type Balancer struct {
 	strategy    BalancingStrategy
 	ohm         outbound.Manager
 	fallbackTag string
-
-	override override
 }
 
 // PickOutbound picks the tag of a outbound
@@ -101,12 +91,7 @@ func (b *Balancer) PickOutbound() (string, error) {
 		}
 		return "", err
 	}
-	var tag string
-	if o := b.override.Get(); o != "" {
-		tag = o
-	} else {
-		tag = b.strategy.PickOutbound(candidates)
-	}
+	tag := b.strategy.PickOutbound(candidates)
 	if tag == "" {
 		if b.fallbackTag != "" {
 			errors.LogInfo(context.Background(), "fallback to [", b.fallbackTag, "], due to empty tag returned")
@@ -132,36 +117,4 @@ func (b *Balancer) SelectOutbounds() ([]string, error) {
 	}
 	tags := hs.Select(b.selectors)
 	return tags, nil
-}
-
-// GetPrincipleTarget implements routing.BalancerPrincipleTarget
-func (r *Router) GetPrincipleTarget(tag string) ([]string, error) {
-	if b, ok := (*r.balancers.Load())[tag]; ok {
-		if s, ok := b.strategy.(BalancingPrincipleTarget); ok {
-			candidates, err := b.SelectOutbounds()
-			if err != nil {
-				return nil, errors.New("unable to select outbounds").Base(err)
-			}
-			return s.GetPrincipleTarget(candidates), nil
-		}
-		return nil, errors.New("unsupported GetPrincipleTarget")
-	}
-	return nil, errors.New("cannot find tag")
-}
-
-// SetOverrideTarget implements routing.BalancerOverrider
-func (r *Router) SetOverrideTarget(tag, target string) error {
-	if b, ok := (*r.balancers.Load())[tag]; ok {
-		b.override.Put(target)
-		return nil
-	}
-	return errors.New("cannot find tag")
-}
-
-// GetOverrideTarget implements routing.BalancerOverrider
-func (r *Router) GetOverrideTarget(tag string) (string, error) {
-	if b, ok := (*r.balancers.Load())[tag]; ok {
-		return b.override.Get(), nil
-	}
-	return "", errors.New("cannot find tag")
 }

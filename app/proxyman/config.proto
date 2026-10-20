@@ -9,10 +9,7 @@ option java_multiple_files = true;
 import "common/net/address.proto";
 import "common/net/port.proto";
 import "transport/internet/config.proto";
-import "common/serial/typed_message.proto";
 import "common/geodata/geodat.proto";
-
-message InboundConfig {}
 
 message SniffingConfig {
   // Whether or not to enable content sniffing on an inbound connection.
@@ -44,14 +41,6 @@ message ReceiverConfig {
   reserved 5;
   SniffingConfig sniffing_settings = 6;
 }
-
-message InboundHandlerConfig {
-  string tag = 1;
-  xray.common.serial.TypedMessage receiver_settings = 2;
-  xray.common.serial.TypedMessage proxy_settings = 3;
-}
-
-message OutboundConfig {}
 
 message SenderConfig {
   // Send traffic through the given IP. Only IP is allowed.

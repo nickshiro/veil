@@ -25,15 +25,6 @@ type LeastLoadStrategy struct {
 	ctx context.Context
 }
 
-func (l *LeastLoadStrategy) GetPrincipleTarget(strings []string) []string {
-	var ret []string
-	nodes := l.pickOutbounds(strings)
-	for _, v := range nodes {
-		ret = append(ret, v.Tag)
-	}
-	return ret
-}
-
 // NewLeastLoadStrategy creates a new LeastLoadStrategy with settings
 func NewLeastLoadStrategy(settings *LeastLoadConfig) *LeastLoadStrategy {
 	return &LeastLoadStrategy{

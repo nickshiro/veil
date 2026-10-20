@@ -16,10 +16,6 @@ type LeastPingStrategy struct {
 	observatory extension.Observatory
 }
 
-func (l *LeastPingStrategy) GetPrincipleTarget(strings []string) []string {
-	return []string{l.PickOutbound(strings)}
-}
-
 func (l *LeastPingStrategy) InjectContext(ctx context.Context) {
 	l.ctx = ctx
 	common.Must(core.RequireFeatures(l.ctx, func(observatory extension.Observatory) error {

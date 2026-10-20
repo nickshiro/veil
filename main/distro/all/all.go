@@ -8,15 +8,6 @@ import (
 	_ "github.com/nickshiro/veil/app/proxyman/inbound"
 	_ "github.com/nickshiro/veil/app/proxyman/outbound"
 
-	// Default commander and all its services. This is an optional feature.
-	_ "github.com/nickshiro/veil/app/commander"
-	_ "github.com/nickshiro/veil/app/log/command"
-	_ "github.com/nickshiro/veil/app/proxyman/command"
-	_ "github.com/nickshiro/veil/app/stats/command"
-
-	// Developer preview services
-	_ "github.com/nickshiro/veil/app/observatory/command"
-
 	// Other optional features.
 	_ "github.com/nickshiro/veil/app/dns"
 	_ "github.com/nickshiro/veil/app/dns/fakedns"

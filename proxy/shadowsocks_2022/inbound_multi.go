@@ -103,7 +103,7 @@ func NewMultiServer(ctx context.Context, config *MultiUserServerConfig) (*MultiU
 	return i, nil
 }
 
-// AddUser implements proxy.UserManager.AddUser()
+// AddUser adds a user.
 func (i *MultiUserInbound) AddUser(ctx context.Context, u *protocol.MemoryUser) error {
 	i.Lock()
 	defer i.Unlock()
@@ -135,7 +135,7 @@ func (i *MultiUserInbound) AddUser(ctx context.Context, u *protocol.MemoryUser) 
 	return nil
 }
 
-// RemoveUser implements proxy.UserManager.RemoveUser()
+// RemoveUser removes a user.
 func (i *MultiUserInbound) RemoveUser(ctx context.Context, email string) error {
 	if email == "" {
 		return errors.New("email must not be empty")
@@ -157,7 +157,7 @@ func (i *MultiUserInbound) RemoveUser(ctx context.Context, email string) error {
 	return nil
 }
 
-// GetUser implements proxy.UserManager.GetUser()
+// GetUser returns a user by email.
 func (i *MultiUserInbound) GetUser(ctx context.Context, email string) *protocol.MemoryUser {
 	if email == "" {
 		return nil
@@ -166,7 +166,7 @@ func (i *MultiUserInbound) GetUser(ctx context.Context, email string) *protocol.
 	return u
 }
 
-// GetUsers implements proxy.UserManager.GetUsers()
+// GetUsers returns all users.
 func (i *MultiUserInbound) GetUsers(ctx context.Context) []*protocol.MemoryUser {
 	var users []*protocol.MemoryUser
 	i.usersByEmail.Range(func(_ string, user *protocol.MemoryUser) bool {
@@ -176,7 +176,7 @@ func (i *MultiUserInbound) GetUsers(ctx context.Context) []*protocol.MemoryUser 
 	return users
 }
 
-// GetUsersCount implements proxy.UserManager.GetUsersCount()
+// GetUsersCount returns the user count.
 func (i *MultiUserInbound) GetUsersCount(context.Context) int64 {
 	return i.userCount.Load()
 }

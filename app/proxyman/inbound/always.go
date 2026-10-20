@@ -203,10 +203,6 @@ func (h *AlwaysOnInboundHandler) Tag() string {
 	return h.tag
 }
 
-func (h *AlwaysOnInboundHandler) GetInbound() proxy.Inbound {
-	return h.proxy
-}
-
 // ReceiverSettings implements inbound.Handler.
 func (h *AlwaysOnInboundHandler) ReceiverSettings() any {
 	return h.receiverConfig

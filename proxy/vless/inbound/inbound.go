@@ -233,30 +233,15 @@ func (h *Handler) Close() error {
 	return errors.Combine(common.Close(h.validator))
 }
 
-// AddUser implements proxy.UserManager.AddUser().
+// AddUser adds a user.
 func (h *Handler) AddUser(ctx context.Context, u *protocol.MemoryUser) error {
 	return h.validator.Add(u)
 }
 
-// RemoveUser implements proxy.UserManager.RemoveUser().
+// RemoveUser removes a user.
 func (h *Handler) RemoveUser(ctx context.Context, e string) error {
 	h.RemoveReverse(h.validator.GetByEmail(e))
 	return h.validator.Del(e)
-}
-
-// GetUser implements proxy.UserManager.GetUser().
-func (h *Handler) GetUser(ctx context.Context, email string) *protocol.MemoryUser {
-	return h.validator.GetByEmail(email)
-}
-
-// GetUsers implements proxy.UserManager.GetUsers().
-func (h *Handler) GetUsers(ctx context.Context) []*protocol.MemoryUser {
-	return h.validator.GetAll()
-}
-
-// GetUsersCount implements proxy.UserManager.GetUsersCount().
-func (h *Handler) GetUsersCount(context.Context) int64 {
-	return h.validator.GetCount()
 }
 
 // Network implements proxy.Inbound.Network().

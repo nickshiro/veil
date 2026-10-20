@@ -15,7 +15,6 @@ type Validator interface {
 	Del(email string) error
 	GetByEmail(email string) *protocol.MemoryUser
 	GetAll() []*protocol.MemoryUser
-	GetCount() int64
 }
 
 func ProcessUUID(id [16]byte) [16]byte {
@@ -85,14 +84,4 @@ func (v *MemoryValidator) GetAll() []*protocol.MemoryUser {
 		return true
 	})
 	return u
-}
-
-// Get users count
-func (v *MemoryValidator) GetCount() int64 {
-	var c int64 = 0
-	v.email.Range(func(key, value any) bool {
-		c++
-		return true
-	})
-	return c
 }

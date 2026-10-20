@@ -119,22 +119,6 @@ func (v *Validator) GetByEmail(email string) (user *protocol.MemoryUser) {
 	return
 }
 
-func (v *Validator) GetAll() (users []*protocol.MemoryUser) {
-	v.users.Range(func(key, value any) bool {
-		users = append(users, value.(*protocol.MemoryUser))
-		return true
-	})
-	return
-}
-
-func (v *Validator) GetCount() (count int64) {
-	v.users.Range(func(key, value any) bool {
-		count++
-		return true
-	})
-	return
-}
-
 func (v *Validator) NotEmpty() (not_empty bool) {
 	v.users.Range(func(key, value any) bool {
 		not_empty = true
