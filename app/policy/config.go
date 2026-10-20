@@ -6,6 +6,52 @@ import (
 	"github.com/nickshiro/veil/features/policy"
 )
 
+// Second is an optional timeout value in seconds. A nil *Second leaves the
+// default timeout unchanged; a non-nil value explicitly sets it, including zero.
+type Second struct {
+	Value uint32
+}
+
+type Policy_Timeout struct {
+	Handshake      *Second
+	ConnectionIdle *Second
+	UplinkOnly     *Second
+	DownlinkOnly   *Second
+}
+
+type Policy_Stats struct {
+	UserUplink   bool
+	UserDownlink bool
+	UserOnline   bool
+}
+
+type Policy_Buffer struct {
+	// Connection is the per-connection buffer size in bytes; -1 means unlimited.
+	Connection int32
+}
+
+type Policy struct {
+	Timeout *Policy_Timeout
+	Stats   *Policy_Stats
+	Buffer  *Policy_Buffer
+}
+
+type SystemPolicy_Stats struct {
+	InboundUplink    bool
+	InboundDownlink  bool
+	OutboundUplink   bool
+	OutboundDownlink bool
+}
+
+type SystemPolicy struct {
+	Stats *SystemPolicy_Stats
+}
+
+type Config struct {
+	Level  map[uint32]*Policy
+	System *SystemPolicy
+}
+
 // Duration converts Second to time.Duration.
 func (s *Second) Duration() time.Duration {
 	if s == nil {
