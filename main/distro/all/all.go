@@ -70,7 +70,4 @@ import (
 
 	// JSON
 	_ "github.com/nickshiro/veil/main/json"
-
-	// Load config from file or http(s)
-	_ "github.com/nickshiro/veil/main/confloader/external"
 )

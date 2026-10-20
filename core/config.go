@@ -1,5 +1,7 @@
 package core
 
+import "io"
+
 // Config is the master config of Xray. Xray takes this config as input and
 // functions accordingly.
 type Config struct {
@@ -17,10 +19,11 @@ type Config struct {
 	App []any `json:"app,omitempty"`
 }
 
-// ConfigLoader loads a config from a filename or an io.Reader.
+// ConfigLoader loads a config from an io.Reader.
 // It is registered by the JSON configuration package to avoid an import cycle.
-var ConfigLoader func(input any) (*Config, error)
+var ConfigLoader func(input io.Reader) (*Config, error)
 
-func LoadConfig(input any) (*Config, error) {
+func LoadConfig(input io.Reader) (*Config, error) {
+	// TODO(arkriny): resolve cycle dependency, then inline
 	return ConfigLoader(input)
 }

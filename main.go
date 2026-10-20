@@ -9,7 +9,6 @@ import (
 	"syscall"
 
 	"github.com/nickshiro/veil/common/errors"
-	"github.com/nickshiro/veil/common/platform"
 	"github.com/nickshiro/veil/core"
 	_ "github.com/nickshiro/veil/main/distro/all"
 )
@@ -47,43 +46,36 @@ func main() {
 	<-osSignals
 }
 
-func fileExists(file string) bool {
-	info, err := os.Stat(file)
-	return err == nil && !info.IsDir()
-}
-
-func getConfigFilePath(verbose bool) string {
+func openConfig() (*os.File, error) {
 	if configFile != "" {
-		return configFile
+		return os.Open(configFile)
 	}
 
-	configFile = "config.json"
-	if fileExists(configFile) {
-		if verbose {
-			log.Println("Using default config: ", configFile)
-		}
-		return configFile
+	defaultConfigName := "config.json"
+	if f, err := os.Open(defaultConfigName); err == nil {
+		log.Println("Using default config: ", defaultConfigName)
+		return f, nil
 	}
 
-	if configFile = platform.GetConfigurationPath(); fileExists(configFile) {
-		if verbose {
-			log.Println("Using config from env: ", configFile)
-		}
-		return configFile
+	envConfigName := os.Getenv("XRAY_LOCATION_CONFIG")
+	if f, err := os.Open(envConfigName); err == nil {
+		log.Println("Using config from env: ", envConfigName)
+		return f, nil
 	}
 
-	if verbose {
-		log.Println("Using config from STDIN")
-	}
-	return "stdin:"
+	log.Println("Using config from STDIN")
+	return os.Stdin, nil
 }
 
 func startXray() (core.Server, error) {
-	configFile := getConfigFilePath(true)
-
-	c, err := core.LoadConfig(configFile)
+	f, err := openConfig()
 	if err != nil {
-		return nil, errors.New("failed to load config: ", configFile).Base(err)
+		return nil, err
+	}
+
+	c, err := core.LoadConfig(f)
+	if err != nil {
+		return nil, err
 	}
 
 	server, err := core.New(c)
