@@ -11,7 +11,6 @@ import (
 	"github.com/nickshiro/veil/common"
 	clog "github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/proxy/dokodemo"
 	"github.com/nickshiro/veil/proxy/freedom"
@@ -75,24 +74,24 @@ func testShadowsocks2022Tcp(t *testing.T, method string, password string) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&shadowsocks_2022.ServerConfig{
+				},
+				ProxySettings: &shadowsocks_2022.ServerConfig{
 					Method:  method,
 					Key:     password,
 					Network: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -105,27 +104,27 @@ func testShadowsocks2022Tcp(t *testing.T, method string, password string) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&shadowsocks_2022.ClientConfig{
+				ProxySettings: &shadowsocks_2022.ClientConfig{
 					Address: net.NewIPOrDomain(net.LocalHostIP),
 					Port:    uint32(serverPort),
 					Method:  method,
 					Key:     password,
-				}),
+				},
 			},
 		},
 	}
@@ -160,24 +159,24 @@ func testShadowsocks2022Udp(t *testing.T, method string, password string) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&shadowsocks_2022.ServerConfig{
+				},
+				ProxySettings: &shadowsocks_2022.ServerConfig{
 					Method:  method,
 					Key:     password,
 					Network: []net.Network{net.Network_UDP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -190,27 +189,27 @@ func testShadowsocks2022Udp(t *testing.T, method string, password string) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(udpClientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(udpDest.Address),
 					RewritePort:     uint32(udpDest.Port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&shadowsocks_2022.ClientConfig{
+				ProxySettings: &shadowsocks_2022.ClientConfig{
 					Address: net.NewIPOrDomain(net.LocalHostIP),
 					Port:    uint32(serverPort),
 					Method:  method,
 					Key:     password,
-				}),
+				},
 			},
 		},
 	}

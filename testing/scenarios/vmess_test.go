@@ -42,13 +42,13 @@ func TestVMessGCM(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -56,14 +56,14 @@ func TestVMessGCM(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -76,22 +76,22 @@ func TestVMessGCM(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -104,7 +104,7 @@ func TestVMessGCM(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -142,13 +142,13 @@ func TestVMessGCMReadv(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -156,14 +156,14 @@ func TestVMessGCMReadv(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -176,22 +176,22 @@ func TestVMessGCMReadv(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -204,7 +204,7 @@ func TestVMessGCMReadv(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -245,13 +245,13 @@ func TestVMessGCMUDP(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -259,14 +259,14 @@ func TestVMessGCMUDP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -279,22 +279,22 @@ func TestVMessGCMUDP(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -307,7 +307,7 @@ func TestVMessGCMUDP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -342,13 +342,13 @@ func TestVMessChacha20(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -356,14 +356,14 @@ func TestVMessChacha20(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -376,22 +376,22 @@ func TestVMessChacha20(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -404,7 +404,7 @@ func TestVMessChacha20(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -440,16 +440,16 @@ func TestVMessKCP(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "mkcp",
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -457,14 +457,14 @@ func TestVMessKCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -477,22 +477,22 @@ func TestVMessKCP(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -505,12 +505,12 @@ func TestVMessKCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "mkcp",
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -545,16 +545,16 @@ func TestVMessKCPLarge(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "mkcp",
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -562,14 +562,14 @@ func TestVMessKCPLarge(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -582,22 +582,22 @@ func TestVMessKCPLarge(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -610,12 +610,12 @@ func TestVMessKCPLarge(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "mkcp",
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -654,13 +654,13 @@ func TestVMessGCMMux(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -668,14 +668,14 @@ func TestVMessGCMMux(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -688,28 +688,28 @@ func TestVMessGCMMux(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				SenderSettings: &proxyman.SenderConfig{
 					MultiplexSettings: &proxyman.MultiplexingConfig{
 						Enabled:     true,
 						Concurrency: 4,
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				},
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -722,7 +722,7 @@ func TestVMessGCMMux(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -767,13 +767,13 @@ func TestVMessGCMMuxUDP(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -781,14 +781,14 @@ func TestVMessGCMMuxUDP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -802,39 +802,39 @@ func TestVMessGCMMuxUDP(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientUDPPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(udpDest.Address),
 					RewritePort:     uint32(udpDest.Port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				SenderSettings: &proxyman.SenderConfig{
 					MultiplexSettings: &proxyman.MultiplexingConfig{
 						Enabled:     true,
 						Concurrency: 4,
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				},
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -847,7 +847,7 @@ func TestVMessGCMMuxUDP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -890,13 +890,13 @@ func TestVMessGCMLengthAuth(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -904,14 +904,14 @@ func TestVMessGCMLengthAuth(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -924,22 +924,22 @@ func TestVMessGCMLengthAuth(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -953,7 +953,7 @@ func TestVMessGCMLengthAuth(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -991,13 +991,13 @@ func TestVMessGCMLengthAuthPlusNoTerminationSignal(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -1006,14 +1006,14 @@ func TestVMessGCMLengthAuthPlusNoTerminationSignal(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -1026,22 +1026,22 @@ func TestVMessGCMLengthAuthPlusNoTerminationSignal(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -1055,7 +1055,7 @@ func TestVMessGCMLengthAuthPlusNoTerminationSignal(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}

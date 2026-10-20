@@ -51,10 +51,10 @@ func TestWireguard(t *testing.T) {
 	clientPrivate, _ := conf.ParseWireGuardKey("CPQSpgxgdQRZa5SUbT3HLv+mmDVHLW5YR/rQlzum/2I=")
 
 	// What the client asks for is somewhere else, the stack of the server takes nothing that is for this machine.
-	redirect := func(tag string, dest net.Destination) *core.OutboundHandlerConfig {
-		return &core.OutboundHandlerConfig{
+	redirect := func(tag string, dest net.Destination) *core.OutboundConfig {
+		return &core.OutboundConfig{
 			Tag: tag,
-			ProxySettings: serial.ToTypedMessage(&freedom.Config{
+			ProxySettings: &freedom.Config{
 				DestinationOverride: &freedom.DestinationOverride{
 					Server: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(dest.Address),
@@ -62,7 +62,7 @@ func TestWireguard(t *testing.T) {
 					},
 				},
 				FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-			}),
+			},
 		}
 	}
 	serverPort := udp.PickPort()
@@ -79,13 +79,13 @@ func TestWireguard(t *testing.T) {
 				},
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&wireguard.DeviceConfig{
+				},
+				ProxySettings: &wireguard.DeviceConfig{
 					IsClient:  false,
 					Endpoint:  []string{"10.0.0.1", "fd00::1"},
 					Mtu:       1420,
@@ -97,10 +97,10 @@ func TestWireguard(t *testing.T) {
 							AllowedIps: []string{"10.0.0.2/32", "fd00::2/128"},
 						}),
 					}},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			redirect("tcp", dest),
 			redirect("udp", udpDest),
 		},
@@ -109,17 +109,17 @@ func TestWireguard(t *testing.T) {
 	clientPort := tcp.PickPort()
 	client6Port := tcp.PickPort()
 	clientUDPPort := udp.PickPort()
-	dokodemoInbound := func(port net.Port, dest net.Destination) *core.InboundHandlerConfig {
-		return &core.InboundHandlerConfig{
-			ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+	dokodemoInbound := func(port net.Port, dest net.Destination) *core.InboundConfig {
+		return &core.InboundConfig{
+			ReceiverSettings: &proxyman.ReceiverConfig{
 				PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(port)}},
 				Listen:   net.NewIPOrDomain(net.LocalHostIP),
-			}),
-			ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+			},
+			ProxySettings: &dokodemo.Config{
 				RewriteAddress:  net.NewIPOrDomain(dest.Address),
 				RewritePort:     uint32(dest.Port),
 				AllowedNetworks: []net.Network{dest.Network},
-			}),
+			},
 		}
 	}
 	clientConfig := &core.Config{
@@ -129,14 +129,14 @@ func TestWireguard(t *testing.T) {
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			dokodemoInbound(clientPort, net.TCPDestination(net.ParseAddress("192.0.2.1"), 7)),
 			dokodemoInbound(client6Port, net.TCPDestination(net.ParseAddress("2001:db8::1"), 7)),
 			dokodemoInbound(clientUDPPort, net.UDPDestination(net.ParseAddress("192.0.2.1"), 7)),
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&wireguard.DeviceConfig{
+				ProxySettings: &wireguard.DeviceConfig{
 					IsClient:    true,
 					NoKernelTun: true,
 					Endpoint:    []string{"10.0.0.2", "fd00::2"},
@@ -147,8 +147,8 @@ func TestWireguard(t *testing.T) {
 						PublicKey:  wireguardPublicKey(serverPrivate),
 						AllowedIps: []string{"0.0.0.0/0", "::0/0"},
 					}},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{}),
+				},
+				SenderSettings: &proxyman.SenderConfig{},
 			},
 		},
 	}

@@ -12,7 +12,6 @@ import (
 	"github.com/nickshiro/veil/app/proxyman"
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	core "github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/proxy/freedom"
 	"github.com/nickshiro/veil/testing/servers/tcp"
@@ -49,11 +48,11 @@ func TestXrayDial(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&proxyman.OutboundConfig{},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -99,11 +98,11 @@ func TestXrayDialUDPConn(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&proxyman.OutboundConfig{},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
@@ -166,11 +165,11 @@ func TestXrayDialUDP(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&proxyman.OutboundConfig{},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}

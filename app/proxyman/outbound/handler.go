@@ -14,7 +14,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/mux"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/session"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/features/outbound"
@@ -24,7 +23,6 @@ import (
 	"github.com/nickshiro/veil/transport"
 	"github.com/nickshiro/veil/transport/internet"
 	"github.com/nickshiro/veil/transport/internet/stat"
-	"google.golang.org/protobuf/proto"
 )
 
 func getStatCounter(v *core.Instance, tag string) (stats.Counter, stats.Counter) {
@@ -57,7 +55,7 @@ type Handler struct {
 	tag             string
 	senderSettings  *proxyman.SenderConfig
 	streamSettings  *internet.MemoryStreamConfig
-	proxyConfig     proto.Message
+	proxyConfig     any
 	proxy           proxy.Outbound
 	mux             *mux.ClientManager
 	xudp            *mux.ClientManager
@@ -67,7 +65,10 @@ type Handler struct {
 }
 
 // NewHandler creates a new Handler based on the given configuration.
-func NewHandler(ctx context.Context, config *core.OutboundHandlerConfig) (outbound.Handler, error) {
+func NewHandler(ctx context.Context, config *core.OutboundConfig) (outbound.Handler, error) {
+	if config == nil {
+		return nil, errors.New("missing outbound config")
+	}
 	v := core.MustFromContext(ctx)
 	uplinkCounter, downlinkCounter := getStatCounter(v, config.Tag)
 	h := &Handler{
@@ -77,13 +78,23 @@ func NewHandler(ctx context.Context, config *core.OutboundHandlerConfig) (outbou
 	}
 
 	if config.SenderSettings != nil {
-		senderSettings, err := config.SenderSettings.GetInstance()
-		if err != nil {
-			return nil, err
-		}
+		senderSettings := config.SenderSettings
 		switch s := senderSettings.(type) {
 		case *proxyman.SenderConfig:
-			h.senderSettings = s
+			if s == nil {
+				return nil, errors.New("nil SenderConfig")
+			}
+			// Keep handler defaults local instead of modifying caller-owned settings.
+			h.senderSettings = &proxyman.SenderConfig{
+				Via: s.Via, StreamSettings: s.StreamSettings, ViaCidr: s.ViaCidr,
+				TargetStrategy: s.TargetStrategy,
+			}
+			if m := s.MultiplexSettings; m != nil {
+				h.senderSettings.MultiplexSettings = &proxyman.MultiplexingConfig{
+					Enabled: m.Enabled, Concurrency: m.Concurrency,
+					XudpConcurrency: m.XudpConcurrency, XudpProxyUDP443: m.XudpProxyUDP443,
+				}
+			}
 			mss, err := internet.ToMemoryStreamConfig(s.StreamSettings)
 			if err != nil {
 				return nil, errors.New("failed to parse stream settings").Base(err)
@@ -94,9 +105,9 @@ func NewHandler(ctx context.Context, config *core.OutboundHandlerConfig) (outbou
 		}
 	}
 
-	proxyConfig, err := config.ProxySettings.GetInstance()
-	if err != nil {
-		return nil, err
+	proxyConfig := config.ProxySettings
+	if proxyConfig == nil {
+		return nil, errors.New("missing outbound proxy settings")
 	}
 	h.proxyConfig = proxyConfig
 
@@ -334,13 +345,13 @@ func (h *Handler) Close() error {
 }
 
 // SenderSettings implements outbound.Handler.
-func (h *Handler) SenderSettings() *serial.TypedMessage {
-	return serial.ToTypedMessage(h.senderSettings)
+func (h *Handler) SenderSettings() any {
+	return h.senderSettings
 }
 
 // ProxySettings implements outbound.Handler.
-func (h *Handler) ProxySettings() *serial.TypedMessage {
-	return serial.ToTypedMessage(h.proxyConfig)
+func (h *Handler) ProxySettings() any {
+	return h.proxyConfig
 }
 
 func ParseRandomIP(addr net.Address, prefix string) net.Address {

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/features"
 )
 
@@ -13,10 +12,10 @@ type Handler interface {
 	common.Runnable
 	// The tag of this handler.
 	Tag() string
-	// Returns the active receiver settings.
-	ReceiverSettings() *serial.TypedMessage
-	// Returns the active proxy settings.
-	ProxySettings() *serial.TypedMessage
+	// Returns the active receiver settings. The returned value is read-only.
+	ReceiverSettings() any
+	// Returns the active proxy settings. The returned value is read-only.
+	ProxySettings() any
 }
 
 // Manager is a feature that manages InboundHandlers.

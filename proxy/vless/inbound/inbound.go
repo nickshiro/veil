@@ -20,7 +20,6 @@ import (
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/protocol"
 	"github.com/nickshiro/veil/common/retry"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/session"
 	"github.com/nickshiro/veil/common/signal"
 	"github.com/nickshiro/veil/common/task"
@@ -681,10 +680,10 @@ func (r *Reverse) Close() error {
 	return nil
 }
 
-func (r *Reverse) SenderSettings() *serial.TypedMessage {
+func (r *Reverse) SenderSettings() any {
 	return nil
 }
 
-func (r *Reverse) ProxySettings() *serial.TypedMessage {
+func (r *Reverse) ProxySettings() any {
 	return nil
 }

@@ -104,9 +104,9 @@ func TestXrayConfig(t *testing.T) {
 				},
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{{
 						From: 443,
 						To:   500,
@@ -128,8 +128,8 @@ func TestXrayConfig(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Level: 0,
@@ -141,7 +141,7 @@ func TestXrayConfig(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}

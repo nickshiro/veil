@@ -360,17 +360,17 @@ func TestMasqueHTTP2(t *testing.T) {
 	testMasque(t, true)
 }
 
-func masqueDokodemo(port net.Port, addr netip.Addr, network net.Network) *core.InboundHandlerConfig {
-	return &core.InboundHandlerConfig{
-		ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+func masqueDokodemo(port net.Port, addr netip.Addr, network net.Network) *core.InboundConfig {
+	return &core.InboundConfig{
+		ReceiverSettings: &proxyman.ReceiverConfig{
 			PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(port)}},
 			Listen:   net.NewIPOrDomain(net.LocalHostIP),
-		}),
-		ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+		},
+		ProxySettings: &dokodemo.Config{
 			RewriteAddress:  net.NewIPOrDomain(net.IPAddress(addr.AsSlice())),
 			RewritePort:     masqueEchoPort,
 			AllowedNetworks: []net.Network{network},
-		}),
+		},
 	}
 }
 
@@ -396,24 +396,24 @@ func masqueClientTLS(certHash [32]byte, alpn ...string) *tls.Config {
 	}
 }
 
-func masqueOutbound(serverPort net.Port, certHash [32]byte, h2 bool, authorization string) *core.OutboundHandlerConfig {
+func masqueOutbound(serverPort net.Port, certHash [32]byte, h2 bool, authorization string) *core.OutboundConfig {
 	tlsConfig := masqueClientTLS(certHash)
 	if h2 {
 		tlsConfig.NextProtocol = []string{http2.NextProtoTLS}
 	}
-	return &core.OutboundHandlerConfig{
-		ProxySettings: serial.ToTypedMessage(&masque.ClientConfig{
+	return &core.OutboundConfig{
+		ProxySettings: &masque.ClientConfig{
 			Server: &protocol.ServerEndpoint{
 				Address: net.NewIPOrDomain(net.LocalHostIP),
 				Port:    uint32(serverPort),
 			},
-		}),
-		SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+		},
+		SenderSettings: &proxyman.SenderConfig{
 			StreamSettings: masqueStreamSettings(tlsConfig, &transmasque.Config{
 				Path:    transmasque.DefaultPath,
 				Headers: map[string]string{"Authorization": authorization},
 			}),
-		}),
+		},
 	}
 }
 
@@ -425,12 +425,12 @@ func masqueClientConfig(serverPort net.Port, certHash [32]byte, h2 bool, authori
 				ErrorLogType:  log.LogType_Console,
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			masqueDokodemo(tcpPort, v4, net.Network_TCP),
 			masqueDokodemo(tcp6Port, v6, net.Network_TCP),
 			masqueDokodemo(udpPort, v4, net.Network_UDP),
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			masqueOutbound(serverPort, certHash, h2, authorization),
 		},
 	}
@@ -463,23 +463,23 @@ func testMasque(t *testing.T, h2 bool) {
 	testMasqueTraffic(t, tcpPort, tcp6Port, udpPort)
 }
 
-func masqueServerInbound(serverPort net.Port, certificate *tls.Certificate, alpn ...string) *core.InboundHandlerConfig {
-	return &core.InboundHandlerConfig{
-		ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+func masqueServerInbound(serverPort net.Port, certificate *tls.Certificate, alpn ...string) *core.InboundConfig {
+	return &core.InboundConfig{
+		ReceiverSettings: &proxyman.ReceiverConfig{
 			PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 			Listen:   net.NewIPOrDomain(net.LocalHostIP),
 			StreamSettings: masqueStreamSettings(&tls.Config{
 				Certificate:  []*tls.Certificate{certificate},
 				NextProtocol: alpn,
 			}, &transmasque.Config{Path: transmasque.DefaultPath}),
-		}),
-		ProxySettings: serial.ToTypedMessage(&masque.ServerConfig{
+		},
+		ProxySettings: &masque.ServerConfig{
 			Users: []*protocol.User{{
 				Email:   "u@example.com",
 				Account: serial.ToTypedMessage(&masque.Account{Password: "p"}),
 			}},
 			Address: []string{"10.14.0.1/24", "fd14::1/64"},
-		}),
+		},
 	}
 }
 
@@ -488,10 +488,10 @@ func masqueServerConfig(serverPort net.Port, certificate *tls.Certificate, h2 bo
 	if h2 {
 		alpn = []string{http2.NextProtoTLS}
 	}
-	redirect := func(tag string, dest net.Destination) *core.OutboundHandlerConfig {
-		return &core.OutboundHandlerConfig{
+	redirect := func(tag string, dest net.Destination) *core.OutboundConfig {
+		return &core.OutboundConfig{
 			Tag: tag,
-			ProxySettings: serial.ToTypedMessage(&freedom.Config{
+			ProxySettings: &freedom.Config{
 				DestinationOverride: &freedom.DestinationOverride{
 					Server: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(dest.Address),
@@ -499,7 +499,7 @@ func masqueServerConfig(serverPort net.Port, certificate *tls.Certificate, h2 bo
 					},
 				},
 				FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-			}),
+			},
 		}
 	}
 	return &core.Config{
@@ -515,10 +515,10 @@ func masqueServerConfig(serverPort net.Port, certificate *tls.Certificate, h2 bo
 				},
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			masqueServerInbound(serverPort, certificate, alpn...),
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			redirect("tcp", tcpDest),
 			redirect("udp", udpDest),
 		},
@@ -605,11 +605,11 @@ func TestMasqueServerClientToClient(t *testing.T) {
 	ct, ctHash := cert.MustGenerate(nil, cert.CommonName("localhost"))
 	serverPort := udp.PickPort()
 	servers, err := InitializeServerConfigs(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			masqueServerInbound(serverPort, tls.ParseCertificate(ct), http3.NextProtoH3, http2.NextProtoTLS),
 		},
-		Outbound: []*core.OutboundHandlerConfig{
-			{ProxySettings: serial.ToTypedMessage(&freedom.Config{})},
+		Outbound: []*core.OutboundConfig{
+			{ProxySettings: &freedom.Config{}},
 		},
 	})
 	common.Must(err)

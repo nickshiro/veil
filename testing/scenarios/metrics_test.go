@@ -12,7 +12,6 @@ import (
 	"github.com/nickshiro/veil/app/router"
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/proxy/dokodemo"
 	"github.com/nickshiro/veil/proxy/freedom"
@@ -46,24 +45,24 @@ func TestMetrics(t *testing.T) {
 				},
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
 				Tag: "metrics_in",
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(metricsPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
 				Tag:           "default-outbound",
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
+				ProxySettings: &freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}},
 			},
 		},
 	}

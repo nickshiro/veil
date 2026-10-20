@@ -71,7 +71,11 @@ type handlerServer struct {
 }
 
 func (s *handlerServer) AddInbound(ctx context.Context, request *AddInboundRequest) (*AddInboundResponse, error) {
-	if err := core.AddInboundHandler(s.s, request.Inbound); err != nil {
+	config, err := decodeInbound(request.Inbound)
+	if err != nil {
+		return nil, err
+	}
+	if err := core.AddInboundHandler(s.s, config); err != nil {
 		return nil, err
 	}
 
@@ -111,10 +115,18 @@ func (s *handlerServer) ListInbounds(ctx context.Context, request *ListInboundsR
 		}
 	} else {
 		for _, handler := range handlers {
+			receiver, err := encodeSettings(handler.ReceiverSettings())
+			if err != nil {
+				return nil, err
+			}
+			proxy, err := encodeSettings(handler.ProxySettings())
+			if err != nil {
+				return nil, err
+			}
 			response.Inbounds = append(response.Inbounds, &core.InboundHandlerConfig{
 				Tag:              handler.Tag(),
-				ReceiverSettings: handler.ReceiverSettings(),
-				ProxySettings:    handler.ProxySettings(),
+				ReceiverSettings: receiver,
+				ProxySettings:    proxy,
 			})
 		}
 	}
@@ -163,7 +175,11 @@ func (s *handlerServer) GetInboundUsersCount(ctx context.Context, request *GetIn
 }
 
 func (s *handlerServer) AddOutbound(ctx context.Context, request *AddOutboundRequest) (*AddOutboundResponse, error) {
-	if err := core.AddOutboundHandler(s.s, request.Outbound); err != nil {
+	config, err := decodeOutbound(request.Outbound)
+	if err != nil {
+		return nil, err
+	}
+	if err := core.AddOutboundHandler(s.s, config); err != nil {
 		return nil, err
 	}
 	return &AddOutboundResponse{}, nil
@@ -195,10 +211,18 @@ func (s *handlerServer) ListOutbounds(ctx context.Context, request *ListOutbound
 		if _, ok := handler.(*commander.Outbound); ok {
 			continue
 		}
+		sender, err := encodeSettings(handler.SenderSettings())
+		if err != nil {
+			return nil, err
+		}
+		proxy, err := encodeSettings(handler.ProxySettings())
+		if err != nil {
+			return nil, err
+		}
 		response.Outbounds = append(response.Outbounds, &core.OutboundHandlerConfig{
 			Tag:            handler.Tag(),
-			SenderSettings: handler.SenderSettings(),
-			ProxySettings:  handler.ProxySettings(),
+			SenderSettings: sender,
+			ProxySettings:  proxy,
 		})
 	}
 	return response, nil

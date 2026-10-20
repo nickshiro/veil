@@ -44,24 +44,24 @@ func TestXrayClose(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&proxyman.OutboundConfig{},
 		},
-		Inbound: []*InboundHandlerConfig{
+		Inbound: []*InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{
 						Range: []*net.PortRange{net.SinglePortRange(port)},
 					},
 					Listen: net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(net.LocalHostIP),
 					RewritePort:     uint32(0),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*OutboundHandlerConfig{
+		Outbound: []*OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(0),
@@ -71,7 +71,7 @@ func TestXrayClose(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}

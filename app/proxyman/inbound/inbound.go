@@ -152,21 +152,16 @@ func (m *Manager) Close() error {
 }
 
 // NewHandler creates a new inbound.Handler based on the given config.
-func NewHandler(ctx context.Context, config *core.InboundHandlerConfig) (inbound.Handler, error) {
-	rawReceiverSettings, err := config.ReceiverSettings.GetInstance()
-	if err != nil {
-		return nil, err
+func NewHandler(ctx context.Context, config *core.InboundConfig) (inbound.Handler, error) {
+	if config == nil || config.ProxySettings == nil {
+		return nil, errors.New("missing inbound settings")
 	}
-	proxySettings, err := config.ProxySettings.GetInstance()
-	if err != nil {
-		return nil, err
-	}
-	tag := config.Tag
-
-	receiverSettings, ok := rawReceiverSettings.(*proxyman.ReceiverConfig)
-	if !ok {
+	receiverSettings, ok := config.ReceiverSettings.(*proxyman.ReceiverConfig)
+	if !ok || receiverSettings == nil {
 		return nil, errors.New("not a ReceiverConfig")
 	}
+	proxySettings := config.ProxySettings
+	tag := config.Tag
 
 	streamSettings := receiverSettings.StreamSettings
 	if streamSettings != nil && streamSettings.SocketSettings != nil {
@@ -185,7 +180,7 @@ func init() {
 	common.Must(common.RegisterConfig((*proxyman.InboundConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return New(ctx, config.(*proxyman.InboundConfig))
 	}))
-	common.Must(common.RegisterConfig((*core.InboundHandlerConfig)(nil), func(ctx context.Context, config any) (any, error) {
-		return NewHandler(ctx, config.(*core.InboundHandlerConfig))
+	common.Must(common.RegisterConfig((*core.InboundConfig)(nil), func(ctx context.Context, config any) (any, error) {
+		return NewHandler(ctx, config.(*core.InboundConfig))
 	}))
 }

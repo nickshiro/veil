@@ -13,7 +13,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	core "github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/proxy/freedom"
 	"github.com/nickshiro/veil/proxy/masque"
@@ -142,7 +141,7 @@ type InboundDetourConfig struct {
 }
 
 // Build implements Buildable.
-func (c *InboundDetourConfig) Build() (*core.InboundHandlerConfig, error) {
+func (c *InboundDetourConfig) Build() (*core.InboundConfig, error) {
 	receiverSettings := &proxyman.ReceiverConfig{}
 
 	// TUN inbound doesn't need port configuration as it uses network interface instead
@@ -217,10 +216,10 @@ func (c *InboundDetourConfig) Build() (*core.InboundHandlerConfig, error) {
 		return nil, err
 	}
 
-	return &core.InboundHandlerConfig{
+	return &core.InboundConfig{
 		Tag:              c.Tag,
-		ReceiverSettings: serial.ToTypedMessage(receiverSettings),
-		ProxySettings:    serial.ToTypedMessage(ts),
+		ReceiverSettings: receiverSettings,
+		ProxySettings:    ts,
 	}, nil
 }
 
@@ -318,7 +317,7 @@ func validateXDrive(ts proto.Message, ss *internet.StreamConfig, ms *proxyman.Mu
 }
 
 // Build implements Buildable.
-func (c *OutboundDetourConfig) Build() (*core.OutboundHandlerConfig, error) {
+func (c *OutboundDetourConfig) Build() (*core.OutboundConfig, error) {
 	if c.ProxySettings != nil {
 		return nil, errors.PrintRemovedFeatureError(`outbound "proxySettings"`, `"streamSettings.sockopt.dialerProxy"`)
 	}
@@ -431,10 +430,10 @@ func (c *OutboundDetourConfig) Build() (*core.OutboundHandlerConfig, error) {
 		}
 	}
 
-	return &core.OutboundHandlerConfig{
-		SenderSettings: serial.ToTypedMessage(senderSettings),
+	return &core.OutboundConfig{
+		SenderSettings: senderSettings,
 		Tag:            c.Tag,
-		ProxySettings:  serial.ToTypedMessage(ts),
+		ProxySettings:  ts,
 	}, nil
 }
 

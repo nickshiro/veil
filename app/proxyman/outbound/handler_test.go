@@ -13,7 +13,6 @@ import (
 	. "github.com/nickshiro/veil/app/proxyman/outbound"
 	"github.com/nickshiro/veil/app/stats"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/session"
 	core "github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/features/outbound"
@@ -46,9 +45,9 @@ func TestOutboundWithoutStatCounter(t *testing.T) {
 	v.AddFeature(outbound.Manager(new(Manager)))
 	ctx := context.WithValue(context.Background(), xrayKey, v)
 	ctx = session.ContextWithOutbounds(ctx, []*session.Outbound{{}})
-	h, _ := NewHandler(ctx, &core.OutboundHandlerConfig{
+	h, _ := NewHandler(ctx, &core.OutboundConfig{
 		Tag:           "tag",
-		ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
+		ProxySettings: &freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}},
 	})
 	conn, _ := h.(*Handler).Dial(ctx, net.TCPDestination(net.DomainAddress("localhost"), 13146))
 	_, ok := conn.(*stat.CounterConnection)
@@ -76,9 +75,9 @@ func TestOutboundWithStatCounter(t *testing.T) {
 	v.AddFeature(outbound.Manager(new(Manager)))
 	ctx := context.WithValue(context.Background(), xrayKey, v)
 	ctx = session.ContextWithOutbounds(ctx, []*session.Outbound{{}})
-	h, _ := NewHandler(ctx, &core.OutboundHandlerConfig{
+	h, _ := NewHandler(ctx, &core.OutboundConfig{
 		Tag:           "tag",
-		ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
+		ProxySettings: &freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}},
 	})
 	conn, _ := h.(*Handler).Dial(ctx, net.TCPDestination(net.DomainAddress("localhost"), 13146))
 	_, ok := conn.(*stat.CounterConnection)
@@ -115,9 +114,9 @@ func TestTagsCache(t *testing.T) {
 			time.Sleep(delay)
 			idx := counter.Add(1)
 			tag := fmt.Sprintf("%s%d", tags_prefix, idx)
-			cfg := &core.OutboundHandlerConfig{
+			cfg := &core.OutboundConfig{
 				Tag:           tag,
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
+				ProxySettings: &freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}},
 			}
 			if h, err := NewHandler(ctx, cfg); err == nil {
 				if err := ohm.AddHandler(ctx, h); err == nil {

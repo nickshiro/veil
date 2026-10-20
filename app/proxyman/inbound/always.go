@@ -9,14 +9,12 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/mux"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/session"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/features/policy"
 	"github.com/nickshiro/veil/features/stats"
 	"github.com/nickshiro/veil/proxy"
 	"github.com/nickshiro/veil/transport/internet"
-	"google.golang.org/protobuf/proto"
 )
 
 func getStatCounter(v *core.Instance, tag string) (stats.Counter, stats.Counter) {
@@ -210,14 +208,11 @@ func (h *AlwaysOnInboundHandler) GetInbound() proxy.Inbound {
 }
 
 // ReceiverSettings implements inbound.Handler.
-func (h *AlwaysOnInboundHandler) ReceiverSettings() *serial.TypedMessage {
-	return serial.ToTypedMessage(h.receiverConfig)
+func (h *AlwaysOnInboundHandler) ReceiverSettings() any {
+	return h.receiverConfig
 }
 
 // ProxySettings implements inbound.Handler.
-func (h *AlwaysOnInboundHandler) ProxySettings() *serial.TypedMessage {
-	if v, ok := h.proxyConfig.(proto.Message); ok {
-		return serial.ToTypedMessage(v)
-	}
-	return nil
+func (h *AlwaysOnInboundHandler) ProxySettings() any {
+	return h.proxyConfig
 }

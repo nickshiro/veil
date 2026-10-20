@@ -229,9 +229,9 @@ func runVLESSRealityCase(t *testing.T, mode trafficMode, payloadSize int) caseRe
 	shortID := mustDecodeHex(t, "0123456789abcdef")
 
 	serverConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(serverPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -255,8 +255,8 @@ func runVLESSRealityCase(t *testing.T, mode trafficMode, payloadSize int) caseRe
 						},
 						Tcpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&vin.Config{
+				},
+				ProxySettings: &vin.Config{
 					Users: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vless.Account{
@@ -264,33 +264,33 @@ func runVLESSRealityCase(t *testing.T, mode trafficMode, payloadSize int) caseRe
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
-			{ProxySettings: serial.ToTypedMessage(&freedom.Config{
+		Outbound: []*core.OutboundConfig{
+			{ProxySettings: &freedom.Config{
 				FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-			})},
+			}},
 		},
 	})
 
 	clientConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(clientPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  xnet.NewIPOrDomain(backend.Address()),
 					RewritePort:     uint32(backend.Port()),
 					AllowedNetworks: []xnet.Network{xnet.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&vout.Config{
+				ProxySettings: &vout.Config{
 					Vnext: &protocol.ServerEndpoint{
 						Address: xnet.NewIPOrDomain(xnet.LocalHostIP),
 						Port:    uint32(relayPort),
@@ -300,8 +300,8 @@ func runVLESSRealityCase(t *testing.T, mode trafficMode, payloadSize int) caseRe
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "tcp",
 						TransportSettings: []*internet.TransportConfig{
@@ -323,7 +323,7 @@ func runVLESSRealityCase(t *testing.T, mode trafficMode, payloadSize int) caseRe
 						},
 						Tcpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
+				},
 			},
 		},
 	})
@@ -351,9 +351,9 @@ func runHysteria2Case(t *testing.T, mode trafficMode, payloadSize int) caseResul
 	auth := "hy2-auth-secret"
 
 	serverConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(serverPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -376,40 +376,40 @@ func runHysteria2Case(t *testing.T, mode trafficMode, payloadSize int) caseResul
 						},
 						Udpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&hyproxy.ServerConfig{
+				},
+				ProxySettings: &hyproxy.ServerConfig{
 					Users: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&hyaccount.Account{Auth: auth}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
-			{ProxySettings: serial.ToTypedMessage(&freedom.Config{
+		Outbound: []*core.OutboundConfig{
+			{ProxySettings: &freedom.Config{
 				FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-			})},
+			}},
 		},
 	})
 
 	clientConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(clientPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  xnet.NewIPOrDomain(backend.Address()),
 					RewritePort:     uint32(backend.Port()),
 					AllowedNetworks: []xnet.Network{xnet.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&hyproxy.ClientConfig{
+				ProxySettings: &hyproxy.ClientConfig{
 					Server: &protocol.ServerEndpoint{
 						Address: xnet.NewIPOrDomain(xnet.LocalHostIP),
 						Port:    uint32(relayPort),
@@ -417,8 +417,8 @@ func runHysteria2Case(t *testing.T, mode trafficMode, payloadSize int) caseResul
 							Account: serial.ToTypedMessage(&hyaccount.Account{Auth: auth}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "hysteria",
 						TransportSettings: []*internet.TransportConfig{
@@ -440,7 +440,7 @@ func runHysteria2Case(t *testing.T, mode trafficMode, payloadSize int) caseResul
 						},
 						Udpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
+				},
 			},
 		},
 	})
@@ -474,9 +474,9 @@ func runVLesseEncCase(t *testing.T, mode trafficMode, payloadSize int) caseResul
 	privB64 := base64.RawURLEncoding.EncodeToString(priv)
 
 	serverConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(serverPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -486,8 +486,8 @@ func runVLesseEncCase(t *testing.T, mode trafficMode, payloadSize int) caseResul
 						},
 						Tcpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&vin.Config{
+				},
+				ProxySettings: &vin.Config{
 					Users: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vless.Account{
@@ -499,33 +499,33 @@ func runVLesseEncCase(t *testing.T, mode trafficMode, payloadSize int) caseResul
 					XorMode:     1,
 					SecondsFrom: 0,
 					SecondsTo:   0,
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
-			{ProxySettings: serial.ToTypedMessage(&freedom.Config{
+		Outbound: []*core.OutboundConfig{
+			{ProxySettings: &freedom.Config{
 				FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-			})},
+			}},
 		},
 	})
 
 	clientConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(clientPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  xnet.NewIPOrDomain(backend.Address()),
 					RewritePort:     uint32(backend.Port()),
 					AllowedNetworks: []xnet.Network{xnet.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&vout.Config{
+				ProxySettings: &vout.Config{
 					Vnext: &protocol.ServerEndpoint{
 						Address: xnet.NewIPOrDomain(xnet.LocalHostIP),
 						Port:    uint32(relayPort),
@@ -537,8 +537,8 @@ func runVLesseEncCase(t *testing.T, mode trafficMode, payloadSize int) caseResul
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "tcp",
 						TransportSettings: []*internet.TransportConfig{
@@ -546,7 +546,7 @@ func runVLesseEncCase(t *testing.T, mode trafficMode, payloadSize int) caseResul
 						},
 						Tcpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
+				},
 			},
 		},
 	})
@@ -578,9 +578,9 @@ func runVLESSXHTTPCase(t *testing.T, mode trafficMode, payloadSize int) caseResu
 	}
 
 	serverConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(serverPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -590,8 +590,8 @@ func runVLESSXHTTPCase(t *testing.T, mode trafficMode, payloadSize int) caseResu
 						},
 						Tcpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&vin.Config{
+				},
+				ProxySettings: &vin.Config{
 					Users: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vless.Account{
@@ -599,33 +599,33 @@ func runVLESSXHTTPCase(t *testing.T, mode trafficMode, payloadSize int) caseResu
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
-			{ProxySettings: serial.ToTypedMessage(&freedom.Config{
+		Outbound: []*core.OutboundConfig{
+			{ProxySettings: &freedom.Config{
 				FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-			})},
+			}},
 		},
 	})
 
 	clientConfig := defaultApps(&core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &xnet.PortList{Range: []*xnet.PortRange{xnet.SinglePortRange(clientPort)}},
 					Listen:   xnet.NewIPOrDomain(xnet.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  xnet.NewIPOrDomain(backend.Address()),
 					RewritePort:     uint32(backend.Port()),
 					AllowedNetworks: []xnet.Network{xnet.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&vout.Config{
+				ProxySettings: &vout.Config{
 					Vnext: &protocol.ServerEndpoint{
 						Address: xnet.NewIPOrDomain(xnet.LocalHostIP),
 						Port:    uint32(relayPort),
@@ -635,8 +635,8 @@ func runVLESSXHTTPCase(t *testing.T, mode trafficMode, payloadSize int) caseResu
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "splithttp",
 						TransportSettings: []*internet.TransportConfig{
@@ -644,7 +644,7 @@ func runVLESSXHTTPCase(t *testing.T, mode trafficMode, payloadSize int) caseResu
 						},
 						Tcpmasks: []*serial.TypedMessage{serial.ToTypedMessage(cloneConfig(mode.config))},
 					},
-				}),
+				},
 			},
 		},
 	})

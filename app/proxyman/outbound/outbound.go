@@ -191,7 +191,7 @@ func init() {
 	common.Must(common.RegisterConfig((*proxyman.OutboundConfig)(nil), func(ctx context.Context, config any) (any, error) {
 		return New(ctx, config.(*proxyman.OutboundConfig))
 	}))
-	common.Must(common.RegisterConfig((*core.OutboundHandlerConfig)(nil), func(ctx context.Context, config any) (any, error) {
-		return NewHandler(ctx, config.(*core.OutboundHandlerConfig))
+	common.Must(common.RegisterConfig((*core.OutboundConfig)(nil), func(ctx context.Context, config any) (any, error) {
+		return NewHandler(ctx, config.(*core.OutboundConfig))
 	}))
 }

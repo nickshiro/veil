@@ -11,7 +11,6 @@ import (
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/proxy/blackhole"
 	"github.com/nickshiro/veil/proxy/freedom"
@@ -60,36 +59,36 @@ func TestResolveIP(t *testing.T) {
 				},
 			},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+				},
+				ProxySettings: &socks.ServerConfig{
 					AuthType: socks.AuthType_NO_AUTH,
 					Accounts: map[string]string{
 						"Test Account": "Test Password",
 					},
 					Address:    net.NewIPOrDomain(net.LocalHostIP),
 					UdpEnabled: false,
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&blackhole.Config{}),
+				ProxySettings: &blackhole.Config{},
 			},
 			{
 				Tag: "direct",
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SocketSettings: &internet.SocketConfig{
 							DomainStrategy: internet.DomainStrategy_USE_IP,
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{}),
+				},
+				ProxySettings: &freedom.Config{},
 			},
 		},
 	}

@@ -10,7 +10,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/mux"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/session"
 	"github.com/nickshiro/veil/common/signal"
 	"github.com/nickshiro/veil/common/task"
@@ -127,12 +126,12 @@ func (o *Outbound) Close() error {
 }
 
 // SenderSettings implements outbound.Handler.
-func (o *Outbound) SenderSettings() *serial.TypedMessage {
+func (o *Outbound) SenderSettings() any {
 	return nil
 }
 
 // ProxySettings implements outbound.Handler.
-func (o *Outbound) ProxySettings() *serial.TypedMessage {
+func (o *Outbound) ProxySettings() any {
 	return nil
 }
 

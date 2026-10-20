@@ -16,7 +16,6 @@ import (
 	"github.com/nickshiro/veil/common"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	dns_proxy "github.com/nickshiro/veil/proxy/dns"
 	"github.com/nickshiro/veil/proxy/dokodemo"
@@ -111,22 +110,22 @@ func TestUDPDNSTunnel(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&policy.Config{},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(net.LocalHostIP),
 					RewritePort:     uint32(port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				},
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dns_proxy.Config{}),
+				ProxySettings: &dns_proxy.Config{},
 			},
 		},
 	}
@@ -230,22 +229,22 @@ func TestTCPDNSTunnel(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&policy.Config{},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(net.LocalHostIP),
 					RewritePort:     uint32(port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				},
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dns_proxy.Config{}),
+				ProxySettings: &dns_proxy.Config{},
 			},
 		},
 	}
@@ -316,26 +315,26 @@ func TestUDP2TCPDNSTunnel(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&policy.Config{},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(net.LocalHostIP),
 					RewritePort:     uint32(port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				},
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dns_proxy.Config{
+				ProxySettings: &dns_proxy.Config{
 					RewriteServer: &net.Endpoint{
 						Network: net.Network_TCP,
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -406,22 +405,22 @@ func TestDNSRules(t *testing.T) {
 			&proxyman.InboundConfig{},
 			&policy.Config{},
 		},
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(net.LocalHostIP),
 					RewritePort:     uint32(port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				},
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&dns_proxy.Config{
+				ProxySettings: &dns_proxy.Config{
 					Rule: []*dns_proxy.DNSRuleConfig{
 						{
 							QType: []int32{int32(dns.TypeA)},
@@ -453,7 +452,7 @@ func TestDNSRules(t *testing.T) {
 							RCode:  5,
 						},
 					},
-				}),
+				},
 			},
 		},
 	}

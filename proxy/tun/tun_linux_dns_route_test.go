@@ -15,7 +15,6 @@ import (
 	"github.com/nickshiro/veil/app/router"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/proxy/blackhole"
 	proxydns "github.com/nickshiro/veil/proxy/dns"
@@ -70,10 +69,10 @@ func newRouteTestContext(t *testing.T, withDNSApp bool, nameServers []*appdns.Na
 
 	instance, err := core.New(&core.Config{
 		App: apps,
-		Outbound: []*core.OutboundHandlerConfig{
-			{Tag: "direct", ProxySettings: serial.ToTypedMessage(&freedom.Config{})},
-			{Tag: "dns", ProxySettings: serial.ToTypedMessage(&proxydns.Config{})},
-			{Tag: "block", ProxySettings: serial.ToTypedMessage(&blackhole.Config{})},
+		Outbound: []*core.OutboundConfig{
+			{Tag: "direct", ProxySettings: &freedom.Config{}},
+			{Tag: "dns", ProxySettings: &proxydns.Config{}},
+			{Tag: "block", ProxySettings: &blackhole.Config{}},
 		},
 	})
 	if err != nil {

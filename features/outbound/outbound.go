@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/features"
 	"github.com/nickshiro/veil/transport"
 )
@@ -14,8 +13,9 @@ type Handler interface {
 	common.Runnable
 	Tag() string
 	Dispatch(ctx context.Context, link *transport.Link)
-	SenderSettings() *serial.TypedMessage
-	ProxySettings() *serial.TypedMessage
+	// SenderSettings and ProxySettings return read-only native settings.
+	SenderSettings() any
+	ProxySettings() any
 }
 
 type HandlerSelector interface {

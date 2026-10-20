@@ -8,7 +8,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/net/cnc"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/signal/done"
 	"github.com/nickshiro/veil/transport"
 )
@@ -111,11 +110,11 @@ func (co *Outbound) Close() error {
 }
 
 // SenderSettings implements outbound.Handler.
-func (co *Outbound) SenderSettings() *serial.TypedMessage {
+func (co *Outbound) SenderSettings() any {
 	return nil
 }
 
 // ProxySettings implements outbound.Handler.
-func (co *Outbound) ProxySettings() *serial.TypedMessage {
+func (co *Outbound) ProxySettings() any {
 	return nil
 }

@@ -97,7 +97,7 @@ func (server *Instance) IsRunning() bool {
 	return server.running
 }
 
-func AddInboundHandler(server *Instance, config *InboundHandlerConfig) error {
+func AddInboundHandler(server *Instance, config *InboundConfig) error {
 	inboundManager := server.GetFeature(inbound.ManagerType()).(inbound.Manager)
 	rawHandler, err := CreateObject(server, config)
 	if err != nil {
@@ -113,7 +113,7 @@ func AddInboundHandler(server *Instance, config *InboundHandlerConfig) error {
 	return nil
 }
 
-func addInboundHandlers(server *Instance, configs []*InboundHandlerConfig) error {
+func addInboundHandlers(server *Instance, configs []*InboundConfig) error {
 	for _, inboundConfig := range configs {
 		if err := AddInboundHandler(server, inboundConfig); err != nil {
 			return err
@@ -123,7 +123,7 @@ func addInboundHandlers(server *Instance, configs []*InboundHandlerConfig) error
 	return nil
 }
 
-func AddOutboundHandler(server *Instance, config *OutboundHandlerConfig) error {
+func AddOutboundHandler(server *Instance, config *OutboundConfig) error {
 	outboundManager := server.GetFeature(outbound.ManagerType()).(outbound.Manager)
 	rawHandler, err := CreateObject(server, config)
 	if err != nil {
@@ -139,7 +139,7 @@ func AddOutboundHandler(server *Instance, config *OutboundHandlerConfig) error {
 	return nil
 }
 
-func addOutboundHandlers(server *Instance, configs []*OutboundHandlerConfig) error {
+func addOutboundHandlers(server *Instance, configs []*OutboundConfig) error {
 	for _, outboundConfig := range configs {
 		if err := AddOutboundHandler(server, outboundConfig); err != nil {
 			return err

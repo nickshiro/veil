@@ -9,7 +9,6 @@ import (
 	appdns "github.com/nickshiro/veil/app/dns"
 	"github.com/nickshiro/veil/common/errors"
 	xnet "github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/common/session"
 	"github.com/nickshiro/veil/core"
 	feature_dns "github.com/nickshiro/veil/features/dns"
@@ -89,7 +88,7 @@ var verifyDNSRouting = func(ctx context.Context, inboundTag, source, address str
 	if handler == nil {
 		return errors.New("outbound ", route.GetOutboundTag(), " does not exist")
 	}
-	if settings := handler.ProxySettings(); settings == nil || settings.Type != serial.GetMessageType(&dns.Config{}) {
+	if _, ok := handler.ProxySettings().(*dns.Config); !ok {
 		return errors.New("outbound ", route.GetOutboundTag(), " does not handle DNS")
 	}
 	return nil

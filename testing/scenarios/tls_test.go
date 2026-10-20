@@ -41,9 +41,9 @@ func TestSimpleTLSConnection(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -54,8 +54,8 @@ func TestSimpleTLSConnection(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -63,36 +63,36 @@ func TestSimpleTLSConnection(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -102,8 +102,8 @@ func TestSimpleTLSConnection(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SecurityType: serial.GetMessageType(&tls.Config{}),
 						SecuritySettings: []*serial.TypedMessage{
@@ -112,7 +112,7 @@ func TestSimpleTLSConnection(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -150,9 +150,9 @@ func TestAutoIssuingCertificate(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -167,8 +167,8 @@ func TestAutoIssuingCertificate(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -176,36 +176,36 @@ func TestAutoIssuingCertificate(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -215,8 +215,8 @@ func TestAutoIssuingCertificate(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SecurityType: serial.GetMessageType(&tls.Config{}),
 						SecuritySettings: []*serial.TypedMessage{
@@ -229,7 +229,7 @@ func TestAutoIssuingCertificate(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -258,9 +258,9 @@ func TestTLSOverKCP(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := udp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -272,8 +272,8 @@ func TestTLSOverKCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -281,36 +281,36 @@ func TestTLSOverKCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -320,8 +320,8 @@ func TestTLSOverKCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "mkcp",
 						SecurityType: serial.GetMessageType(&tls.Config{}),
@@ -331,7 +331,7 @@ func TestTLSOverKCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -358,9 +358,9 @@ func TestTLSOverWebSocket(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -372,8 +372,8 @@ func TestTLSOverWebSocket(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -381,36 +381,36 @@ func TestTLSOverWebSocket(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -420,8 +420,8 @@ func TestTLSOverWebSocket(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "websocket",
 						TransportSettings: []*internet.TransportConfig{
@@ -437,7 +437,7 @@ func TestTLSOverWebSocket(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -468,9 +468,9 @@ func TestGRPC(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -488,8 +488,8 @@ func TestGRPC(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -497,36 +497,36 @@ func TestGRPC(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -536,8 +536,8 @@ func TestGRPC(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "grpc",
 						TransportSettings: []*internet.TransportConfig{
@@ -553,7 +553,7 @@ func TestGRPC(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -584,9 +584,9 @@ func TestGRPCMultiMode(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -604,8 +604,8 @@ func TestGRPCMultiMode(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -613,36 +613,36 @@ func TestGRPCMultiMode(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -652,8 +652,8 @@ func TestGRPCMultiMode(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						ProtocolName: "grpc",
 						TransportSettings: []*internet.TransportConfig{
@@ -669,7 +669,7 @@ func TestGRPCMultiMode(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -700,9 +700,9 @@ func TestSimpleTLSConnectionPinned(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -713,8 +713,8 @@ func TestSimpleTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -722,36 +722,36 @@ func TestSimpleTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -761,8 +761,8 @@ func TestSimpleTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SecurityType: serial.GetMessageType(&tls.Config{}),
 						SecuritySettings: []*serial.TypedMessage{
@@ -771,7 +771,7 @@ func TestSimpleTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -799,9 +799,9 @@ func TestSimpleTLSConnectionPinnedWrongCert(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -812,8 +812,8 @@ func TestSimpleTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -821,36 +821,36 @@ func TestSimpleTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -860,8 +860,8 @@ func TestSimpleTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SecurityType: serial.GetMessageType(&tls.Config{}),
 						SecuritySettings: []*serial.TypedMessage{
@@ -870,7 +870,7 @@ func TestSimpleTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -897,9 +897,9 @@ func TestUTLSConnectionPinned(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -910,8 +910,8 @@ func TestUTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -919,36 +919,36 @@ func TestUTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -958,8 +958,8 @@ func TestUTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SecurityType: serial.GetMessageType(&tls.Config{}),
 						SecuritySettings: []*serial.TypedMessage{
@@ -969,7 +969,7 @@ func TestUTLSConnectionPinned(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -997,9 +997,9 @@ func TestUTLSConnectionPinnedWrongCert(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
 					StreamSettings: &internet.StreamConfig{
@@ -1010,8 +1010,8 @@ func TestUTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				ProxySettings: serial.ToTypedMessage(&inbound.Config{
+				},
+				ProxySettings: &inbound.Config{
 					User: []*protocol.User{
 						{
 							Account: serial.ToTypedMessage(&vmess.Account{
@@ -1019,36 +1019,36 @@ func TestUTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&outbound.Config{
+				ProxySettings: &outbound.Config{
 					Receiver: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -1058,8 +1058,8 @@ func TestUTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
-				SenderSettings: serial.ToTypedMessage(&proxyman.SenderConfig{
+				},
+				SenderSettings: &proxyman.SenderConfig{
 					StreamSettings: &internet.StreamConfig{
 						SecurityType: serial.GetMessageType(&tls.Config{}),
 						SecuritySettings: []*serial.TypedMessage{
@@ -1069,7 +1069,7 @@ func TestUTLSConnectionPinnedWrongCert(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}

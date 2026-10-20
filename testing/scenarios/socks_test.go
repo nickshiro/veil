@@ -32,49 +32,49 @@ func TestSocksBridgeTCP(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+				},
+				ProxySettings: &socks.ServerConfig{
 					AuthType: socks.AuthType_PASSWORD,
 					Accounts: map[string]string{
 						"Test Account": "Test Password",
 					},
 					Address:    net.NewIPOrDomain(net.LocalHostIP),
 					UdpEnabled: false,
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&socks.ClientConfig{
+				ProxySettings: &socks.ClientConfig{
 					Server: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -85,7 +85,7 @@ func TestSocksBridgeTCP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -109,49 +109,49 @@ func TestSocksWithHttpRequest(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+				},
+				ProxySettings: &socks.ServerConfig{
 					AuthType: socks.AuthType_PASSWORD,
 					Accounts: map[string]string{
 						"Test Account": "Test Password",
 					},
 					Address:    net.NewIPOrDomain(net.LocalHostIP),
 					UdpEnabled: false,
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_TCP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&http.ClientConfig{
+				ProxySettings: &http.ClientConfig{
 					Server: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -162,7 +162,7 @@ func TestSocksWithHttpRequest(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -188,36 +188,36 @@ func TestSocksBridageUDP(t *testing.T) {
 	serverPort := tcp.PickPort()
 	for {
 		serverConfig := &core.Config{
-			Inbound: []*core.InboundHandlerConfig{
+			Inbound: []*core.InboundConfig{
 				{
-					ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+					ReceiverSettings: &proxyman.ReceiverConfig{
 						PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 						Listen:   net.NewIPOrDomain(net.LocalHostIP),
-					}),
-					ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+					},
+					ProxySettings: &socks.ServerConfig{
 						AuthType: socks.AuthType_PASSWORD,
 						Accounts: map[string]string{
 							"Test Account": "Test Password",
 						},
 						Address:    net.NewIPOrDomain(net.LocalHostIP),
 						UdpEnabled: true,
-					}),
+					},
 				},
 				{
-					ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+					ReceiverSettings: &proxyman.ReceiverConfig{
 						PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort + 1)}},
 						Listen:   net.NewIPOrDomain(net.LocalHostIP),
-					}),
-					ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+					},
+					ProxySettings: &dokodemo.Config{
 						RewriteAddress:  net.NewIPOrDomain(dest.Address),
 						RewritePort:     uint32(dest.Port),
 						AllowedNetworks: []net.Network{net.Network_UDP},
-					}),
+					},
 				},
 			},
-			Outbound: []*core.OutboundHandlerConfig{
+			Outbound: []*core.OutboundConfig{
 				{
-					ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
+					ProxySettings: &freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}},
 				},
 			},
 		}
@@ -239,22 +239,22 @@ func TestSocksBridageUDP(t *testing.T) {
 
 	clientPort := udp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&socks.ClientConfig{
+				ProxySettings: &socks.ClientConfig{
 					Server: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
@@ -265,7 +265,7 @@ func TestSocksBridageUDP(t *testing.T) {
 							}),
 						},
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -303,39 +303,39 @@ func TestSocksBridageUDPWithRouting(t *testing.T) {
 					},
 				},
 			},
-			Inbound: []*core.InboundHandlerConfig{
+			Inbound: []*core.InboundConfig{
 				{
 					Tag: "socks",
-					ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+					ReceiverSettings: &proxyman.ReceiverConfig{
 						PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort)}},
 						Listen:   net.NewIPOrDomain(net.LocalHostIP),
-					}),
-					ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+					},
+					ProxySettings: &socks.ServerConfig{
 						AuthType:   socks.AuthType_NO_AUTH,
 						Address:    net.NewIPOrDomain(net.LocalHostIP),
 						UdpEnabled: true,
-					}),
+					},
 				},
 				{
 					Tag: "dokodemo",
-					ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+					ReceiverSettings: &proxyman.ReceiverConfig{
 						PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(serverPort + 1)}},
 						Listen:   net.NewIPOrDomain(net.LocalHostIP),
-					}),
-					ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+					},
+					ProxySettings: &dokodemo.Config{
 						RewriteAddress:  net.NewIPOrDomain(dest.Address),
 						RewritePort:     uint32(dest.Port),
 						AllowedNetworks: []net.Network{net.Network_UDP},
-					}),
+					},
 				},
 			},
-			Outbound: []*core.OutboundHandlerConfig{
+			Outbound: []*core.OutboundConfig{
 				{
-					ProxySettings: serial.ToTypedMessage(&blackhole.Config{}),
+					ProxySettings: &blackhole.Config{},
 				},
 				{
 					Tag:           "out",
-					ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
+					ProxySettings: &freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}},
 				},
 			},
 		}
@@ -357,27 +357,27 @@ func TestSocksBridageUDPWithRouting(t *testing.T) {
 
 	clientPort := udp.PickPort()
 	clientConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(clientPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&dokodemo.Config{
+				},
+				ProxySettings: &dokodemo.Config{
 					RewriteAddress:  net.NewIPOrDomain(dest.Address),
 					RewritePort:     uint32(dest.Port),
 					AllowedNetworks: []net.Network{net.Network_UDP},
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&socks.ClientConfig{
+				ProxySettings: &socks.ClientConfig{
 					Server: &protocol.ServerEndpoint{
 						Address: net.NewIPOrDomain(net.LocalHostIP),
 						Port:    uint32(serverPort),
 					},
-				}),
+				},
 			},
 		},
 	}
@@ -402,41 +402,41 @@ func TestSocksConformanceMod(t *testing.T) {
 	authPort := tcp.PickPort()
 	noAuthPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		Inbound: []*core.InboundHandlerConfig{
+		Inbound: []*core.InboundConfig{
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(authPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+				},
+				ProxySettings: &socks.ServerConfig{
 					AuthType: socks.AuthType_PASSWORD,
 					Accounts: map[string]string{
 						"Test Account": "Test Password",
 					},
 					Address:    net.NewIPOrDomain(net.LocalHostIP),
 					UdpEnabled: false,
-				}),
+				},
 			},
 			{
-				ReceiverSettings: serial.ToTypedMessage(&proxyman.ReceiverConfig{
+				ReceiverSettings: &proxyman.ReceiverConfig{
 					PortList: &net.PortList{Range: []*net.PortRange{net.SinglePortRange(noAuthPort)}},
 					Listen:   net.NewIPOrDomain(net.LocalHostIP),
-				}),
-				ProxySettings: serial.ToTypedMessage(&socks.ServerConfig{
+				},
+				ProxySettings: &socks.ServerConfig{
 					AuthType: socks.AuthType_NO_AUTH,
 					Accounts: map[string]string{
 						"Test Account": "Test Password",
 					},
 					Address:    net.NewIPOrDomain(net.LocalHostIP),
 					UdpEnabled: false,
-				}),
+				},
 			},
 		},
-		Outbound: []*core.OutboundHandlerConfig{
+		Outbound: []*core.OutboundConfig{
 			{
-				ProxySettings: serial.ToTypedMessage(&freedom.Config{
+				ProxySettings: &freedom.Config{
 					FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}},
-				}),
+				},
 			},
 		},
 	}
