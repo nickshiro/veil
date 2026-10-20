@@ -7,7 +7,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/platform/filesystem"
 	"github.com/robfig/cron/v3"
-	"google.golang.org/protobuf/proto"
 )
 
 type GeodataAssetConfig struct {
@@ -45,7 +44,7 @@ type GeodataConfig struct {
 	Assets   []*GeodataAssetConfig `json:"assets"`
 }
 
-func (c *GeodataConfig) Build() (proto.Message, error) {
+func (c *GeodataConfig) Build() (*geodata.Config, error) {
 	config := &geodata.Config{}
 
 	if c.Cron != nil {

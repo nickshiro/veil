@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/nickshiro/veil/app/dispatcher"
+	"github.com/nickshiro/veil/app/log"
 	"github.com/nickshiro/veil/app/proxyman"
 	"github.com/nickshiro/veil/app/stats"
 	"github.com/nickshiro/veil/common/errors"
@@ -508,7 +509,7 @@ func (c *Config) Build() (*core.Config, error) {
 		config.App = append(config.App, statsConf)
 	}
 
-	var logConfMsg proto.Message
+	var logConfMsg *log.Config
 	if c.LogConfig != nil {
 		logConfMsg = c.LogConfig.Build()
 	} else {

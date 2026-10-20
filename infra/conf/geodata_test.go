@@ -1,47 +1,57 @@
 package conf_test
 
 import (
+	"encoding/json"
+	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/nickshiro/veil/app/geodata"
 	. "github.com/nickshiro/veil/infra/conf"
 )
 
 func TestGeodataConfig(t *testing.T) {
-	t.Skip("requires resources/geoip.dat and resources/geosite.dat")
-	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
-
-	creator := func() Buildable {
-		return new(GeodataConfig)
+	dir := t.TempDir()
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
+	for _, name := range []string{"geoip.dat", "geosite.dat"} {
+		if err := os.WriteFile(filepath.Join(dir, name), nil, 0600); err != nil {
+			t.Fatal(err)
+		}
 	}
-
-	runMultiTestCase(t, []TestCase{
-		{
-			Input: `{
-				"cron": "0 4 * * *",
-				"outbound": "proxy",
-				"assets": [
-					{"url": "https://example.com/geoip.dat", "file": "geoip.dat"},
-					{"url": "https://example.com/geosite.dat", "file": "geosite.dat"}
-				]
-			}`,
-			Parser: loadJSON(creator),
-			Output: &geodata.Config{
-				Cron:     "0 4 * * *",
-				Outbound: "proxy",
-				Assets: []*geodata.Asset{
-					{Url: "https://example.com/geoip.dat", File: "geoip.dat"},
-					{Url: "https://example.com/geosite.dat", File: "geosite.dat"},
-				},
-			},
+	var input GeodataConfig
+	if err := json.Unmarshal([]byte(`{
+		"cron": "0 4 * * *",
+		"outbound": "proxy",
+		"assets": [
+			{"url": "https://example.com/geoip.dat", "file": "geoip.dat"},
+			{"url": "https://example.com/geosite.dat", "file": "geosite.dat"}
+		]
+	}`), &input); err != nil {
+		t.Fatal(err)
+	}
+	got, err := input.Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := &geodata.Config{
+		Cron: "0 4 * * *", Outbound: "proxy",
+		Assets: []*geodata.Asset{
+			{Url: "https://example.com/geoip.dat", File: "geoip.dat"},
+			{Url: "https://example.com/geosite.dat", File: "geosite.dat"},
 		},
-	})
+	}
+	if diff := cmp.Diff(want, got); diff != "" {
+		t.Fatalf("config mismatch (-want +got):\n%s", diff)
+	}
 }
 
 func TestGeodataAssetConfig(t *testing.T) {
-	t.Skip("requires resources/geoip.dat")
-	t.Setenv("XRAY_LOCATION_ASSET", filepath.Join("..", "..", "resources"))
+	dir := t.TempDir()
+	t.Setenv("XRAY_LOCATION_ASSET", dir)
+	if err := os.WriteFile(filepath.Join(dir, "geoip.dat"), nil, 0600); err != nil {
+		t.Fatal(err)
+	}
 
 	if _, err := (&GeodataAssetConfig{
 		URL:  "https://example.com/geoip.dat",
