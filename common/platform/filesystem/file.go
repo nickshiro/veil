@@ -10,14 +10,8 @@ import (
 	"github.com/nickshiro/veil/common/platform"
 )
 
-type FileReaderFunc func(path string) (io.ReadCloser, error)
-
-var NewFileReader FileReaderFunc = func(path string) (io.ReadCloser, error) {
-	return os.Open(path)
-}
-
 func ReadFile(path string) ([]byte, error) {
-	reader, err := NewFileReader(path)
+	reader, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +25,7 @@ func OpenAsset(file string) (io.ReadCloser, int64, error) {
 	if err != nil {
 		return nil, 0, err
 	}
-	r, err := NewFileReader(path)
+	r, err := os.Open(path)
 	return r, info.Size(), err
 }
 
