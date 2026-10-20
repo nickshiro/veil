@@ -11,15 +11,6 @@ type ConfigCreator func() any
 
 type ConfigCreatorCache map[string]ConfigCreator
 
-func (v ConfigCreatorCache) RegisterCreator(id string, creator ConfigCreator) error {
-	if _, found := v[id]; found {
-		return errors.New(id, " already registered.")
-	}
-
-	v[id] = creator
-	return nil
-}
-
 func (v ConfigCreatorCache) CreateConfig(id string) (any, error) {
 	creator, found := v[id]
 	if !found {
