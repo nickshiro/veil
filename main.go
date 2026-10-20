@@ -9,16 +9,13 @@ import (
 	"syscall"
 
 	"github.com/nickshiro/veil/common/errors"
-	clog "github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/platform"
 	"github.com/nickshiro/veil/core"
-	"github.com/nickshiro/veil/infra/conf/serial"
 	_ "github.com/nickshiro/veil/main/distro/all"
 )
 
 var (
 	configFile string
-	dump       = flag.Bool("dump", false, "Dump config only, without launching Xray server.")
 	test       = flag.Bool("test", false, "Test config file only, without launching Xray server.")
 )
 
@@ -27,12 +24,6 @@ func main() {
 	flag.StringVar(&configFile, "config", "", "Config path for Xray.")
 	flag.StringVar(&configFile, "c", "", "Short alias of -config")
 	flag.Parse()
-
-	if *dump {
-		clog.ReplaceWithSeverityLogger(clog.Severity_Warning)
-		errCode := dumpConfig()
-		os.Exit(errCode)
-	}
 
 	server, err := startXray()
 	if err != nil {
@@ -54,17 +45,6 @@ func main() {
 	osSignals := make(chan os.Signal, 1)
 	signal.Notify(osSignals, os.Interrupt, syscall.SIGTERM)
 	<-osSignals
-}
-
-func dumpConfig() int {
-	file := getConfigFilePath(false)
-	config, err := serial.DumpConfig(file)
-	if err != nil {
-		fmt.Println(err)
-		return 1
-	}
-	fmt.Print(config)
-	return 0
 }
 
 func fileExists(file string) bool {
