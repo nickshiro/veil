@@ -36,12 +36,8 @@ func NewCommander(ctx context.Context, config *Config) (*Commander, error) {
 		c.ohm = om
 	}))
 
-	for _, rawConfig := range config.Service {
-		config, err := rawConfig.GetInstance()
-		if err != nil {
-			return nil, err
-		}
-		rawService, err := common.CreateObject(ctx, config)
+	for _, serviceConfig := range config.Service {
+		rawService, err := common.CreateObject(ctx, serviceConfig)
 		if err != nil {
 			return nil, err
 		}

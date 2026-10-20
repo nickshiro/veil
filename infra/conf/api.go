@@ -10,7 +10,6 @@ import (
 	routerservice "github.com/nickshiro/veil/app/router/command"
 	statsservice "github.com/nickshiro/veil/app/stats/command"
 	"github.com/nickshiro/veil/common/errors"
-	"github.com/nickshiro/veil/common/serial"
 )
 
 type APIConfig struct {
@@ -24,21 +23,21 @@ func (c *APIConfig) Build() (*commander.Config, error) {
 		return nil, errors.New("API tag can't be empty.")
 	}
 
-	services := make([]*serial.TypedMessage, 0, 16)
+	services := make([]any, 0, len(c.Services))
 	for _, s := range c.Services {
 		switch strings.ToLower(s) {
 		case "reflectionservice":
-			services = append(services, serial.ToTypedMessage(&commander.ReflectionConfig{}))
+			services = append(services, &commander.ReflectionConfig{})
 		case "handlerservice":
-			services = append(services, serial.ToTypedMessage(&handlerservice.Config{}))
+			services = append(services, &handlerservice.Config{})
 		case "loggerservice":
-			services = append(services, serial.ToTypedMessage(&loggerservice.Config{}))
+			services = append(services, &loggerservice.Config{})
 		case "statsservice":
-			services = append(services, serial.ToTypedMessage(&statsservice.Config{}))
+			services = append(services, &statsservice.Config{})
 		case "observatoryservice":
-			services = append(services, serial.ToTypedMessage(&observatoryservice.Config{}))
+			services = append(services, &observatoryservice.Config{})
 		case "routingservice":
-			services = append(services, serial.ToTypedMessage(&routerservice.Config{}))
+			services = append(services, &routerservice.Config{})
 		}
 	}
 

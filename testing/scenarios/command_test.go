@@ -31,6 +31,7 @@ import (
 	"github.com/nickshiro/veil/testing/servers/tcp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	reflectionpb "google.golang.org/grpc/reflection/grpc_reflection_v1"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/testing/protocmp"
 )
@@ -50,8 +51,9 @@ func TestCommanderListenConfigurationItem(t *testing.T) {
 			&commander.Config{
 				Tag:    "api",
 				Listen: fmt.Sprintf("127.0.0.1:%d", cmdPort),
-				Service: []*serial.TypedMessage{
-					serial.ToTypedMessage(&command.Config{}),
+				Service: []any{
+					&command.Config{},
+					&commander.ReflectionConfig{},
 				},
 			},
 		},
@@ -89,6 +91,26 @@ func TestCommanderListenConfigurationItem(t *testing.T) {
 	common.Must(err)
 	defer cmdConn.Close()
 
+	reflectionCtx, cancelReflection := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelReflection()
+	stream, err := reflectionpb.NewServerReflectionClient(cmdConn).ServerReflectionInfo(reflectionCtx)
+	common.Must(err)
+	common.Must(stream.Send(&reflectionpb.ServerReflectionRequest{
+		MessageRequest: &reflectionpb.ServerReflectionRequest_ListServices{ListServices: ""},
+	}))
+	reflectionResponse, err := stream.Recv()
+	common.Must(err)
+	foundHandlerService := false
+	for _, service := range reflectionResponse.GetListServicesResponse().GetService() {
+		if service.Name == "xray.app.proxyman.command.HandlerService" {
+			foundHandlerService = true
+		}
+	}
+	if !foundHandlerService {
+		t.Fatal("reflection did not expose HandlerService")
+	}
+	common.Must(stream.CloseSend())
+
 	hsClient := command.NewHandlerServiceClient(cmdConn)
 	resp, err := hsClient.RemoveInbound(context.Background(), &command.RemoveInboundRequest{
 		Tag: "d",
@@ -123,8 +145,8 @@ func TestCommanderRemoveHandler(t *testing.T) {
 		App: []any{
 			&commander.Config{
 				Tag: "api",
-				Service: []*serial.TypedMessage{
-					serial.ToTypedMessage(&command.Config{}),
+				Service: []any{
+					&command.Config{},
 				},
 			},
 			&router.Config{
@@ -218,8 +240,8 @@ func TestCommanderListHandlers(t *testing.T) {
 		App: []any{
 			&commander.Config{
 				Tag: "api",
-				Service: []*serial.TypedMessage{
-					serial.ToTypedMessage(&command.Config{}),
+				Service: []any{
+					&command.Config{},
 				},
 			},
 			&router.Config{
@@ -353,8 +375,8 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 		App: []any{
 			&commander.Config{
 				Tag: "api",
-				Service: []*serial.TypedMessage{
-					serial.ToTypedMessage(&command.Config{}),
+				Service: []any{
+					&command.Config{},
 				},
 			},
 			&router.Config{
@@ -529,8 +551,8 @@ func TestCommanderStats(t *testing.T) {
 			&stats.Config{},
 			&commander.Config{
 				Tag: "api",
-				Service: []*serial.TypedMessage{
-					serial.ToTypedMessage(&statscmd.Config{}),
+				Service: []any{
+					&statscmd.Config{},
 				},
 			},
 			&router.Config{
