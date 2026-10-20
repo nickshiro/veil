@@ -11,17 +11,16 @@ import (
 	_ "github.com/nickshiro/veil/app/proxyman/inbound"
 	_ "github.com/nickshiro/veil/app/proxyman/outbound"
 	"github.com/nickshiro/veil/common"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 )
 
 func TestLoggerRestart(t *testing.T) {
 	v, err := core.New(&core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&log.Config{},
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 	})
 	common.Must(err)

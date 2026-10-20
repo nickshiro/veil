@@ -44,10 +44,10 @@ func TestXrayDial(t *testing.T) {
 	defer tcpServer.Close()
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -94,10 +94,10 @@ func TestXrayDialUDPConn(t *testing.T) {
 	defer udpServer.Close()
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -161,10 +161,10 @@ func TestXrayDialUDP(t *testing.T) {
 	defer udpServer2.Close()
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{

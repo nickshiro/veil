@@ -58,14 +58,14 @@ func sourceBlockRule(ip []byte) *router.RoutingRule {
 func newRouteTestContext(t *testing.T, withDNSApp bool, nameServers []*appdns.NameServer, rules []*router.RoutingRule) context.Context {
 	t.Helper()
 
-	apps := []*serial.TypedMessage{
-		serial.ToTypedMessage(&dispatcher.Config{}),
-		serial.ToTypedMessage(&proxyman.InboundConfig{}),
-		serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-		serial.ToTypedMessage(&router.Config{Rule: rules}),
+	apps := []any{
+		&dispatcher.Config{},
+		&proxyman.InboundConfig{},
+		&proxyman.OutboundConfig{},
+		&router.Config{Rule: rules},
 	}
 	if withDNSApp {
-		apps = append(apps, serial.ToTypedMessage(&appdns.Config{NameServer: nameServers}))
+		apps = append(apps, &appdns.Config{NameServer: nameServers})
 	}
 
 	instance, err := core.New(&core.Config{

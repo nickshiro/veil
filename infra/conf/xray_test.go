@@ -73,18 +73,18 @@ func TestXrayConfig(t *testing.T) {
 	common.Must(err)
 
 	expected := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogType:  log.LogType_File,
 				ErrorLogPath:  "/var/log/xray/error.log",
 				ErrorLogLevel: clog.Severity_Error,
 				AccessLogType: log.LogType_File,
 				AccessLogPath: "/var/log/xray/access.log",
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
+			&router.Config{
 				DomainStrategy: router.Config_AsIs,
 				Rule: []*router.RoutingRule{
 					{
@@ -102,7 +102,7 @@ func TestXrayConfig(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

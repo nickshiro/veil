@@ -53,8 +53,8 @@ func TestVMessClosing(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&policy.Config{
+		App: []any{
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -63,7 +63,7 @@ func TestVMessClosing(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -93,8 +93,8 @@ func TestVMessClosing(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&policy.Config{
+		App: []any{
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -103,7 +103,7 @@ func TestVMessClosing(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -158,8 +158,8 @@ func TestZeroBuffer(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&policy.Config{
+		App: []any{
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -171,7 +171,7 @@ func TestZeroBuffer(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -201,11 +201,11 @@ func TestZeroBuffer(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

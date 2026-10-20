@@ -923,13 +923,13 @@ func cloneConfig(cfg *Config) *Config {
 func defaultApps(cfg *core.Config) *core.Config {
 	cfg.App = append(
 		cfg.App,
-		serial.ToTypedMessage(&log.Config{
+		&log.Config{
 			ErrorLogLevel: clog.Severity_Warning,
 			ErrorLogType:  log.LogType_Console,
-		}),
-		serial.ToTypedMessage(&dispatcher.Config{}),
-		serial.ToTypedMessage(&proxyman.InboundConfig{}),
-		serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		},
+		&dispatcher.Config{},
+		&proxyman.InboundConfig{},
+		&proxyman.OutboundConfig{},
 	)
 	return cfg
 }

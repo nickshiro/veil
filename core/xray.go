@@ -196,11 +196,7 @@ func initInstanceWithConfig(config *Config, server *Instance) (bool, error) {
 		platform.NewEnvFlag(platform.UseCone).GetValue(func() string { return "" }) != "true")
 
 	for _, appSettings := range config.App {
-		settings, err := appSettings.GetInstance()
-		if err != nil {
-			return true, err
-		}
-		obj, err := CreateObject(server, settings)
+		obj, err := CreateObject(server, appSettings)
 		if err != nil {
 			return true, err
 		}

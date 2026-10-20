@@ -39,10 +39,10 @@ func TestXrayClose(t *testing.T) {
 
 	userID := uuid.NewV4()
 	config := &Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 		Inbound: []*InboundHandlerConfig{
 			{

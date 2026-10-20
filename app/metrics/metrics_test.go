@@ -13,7 +13,6 @@ import (
 	_ "github.com/nickshiro/veil/app/proxyman/inbound"
 	_ "github.com/nickshiro/veil/app/proxyman/outbound"
 	appstats "github.com/nickshiro/veil/app/stats"
-	"github.com/nickshiro/veil/common/serial"
 	"github.com/nickshiro/veil/core"
 	feature_outbound "github.com/nickshiro/veil/features/outbound"
 )
@@ -89,12 +88,12 @@ func startMetricsTestServerWithMetricsConfig(t *testing.T, metricsConfig *Config
 
 func metricsTestConfig(metricsConfig *Config) *core.Config {
 	return &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&appstats.Config{}),
-			serial.ToTypedMessage(metricsConfig),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
+			&appstats.Config{},
+			metricsConfig,
 		},
 	}
 }

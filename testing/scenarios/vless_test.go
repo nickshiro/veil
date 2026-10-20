@@ -41,11 +41,11 @@ func TestVless(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -75,11 +75,11 @@ func TestVless(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -137,11 +137,11 @@ func TestVlessTls(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -180,11 +180,11 @@ func TestVlessTls(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -259,11 +259,11 @@ func TestVlessXtlsVision(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -303,11 +303,11 @@ func TestVlessXtlsVision(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -386,11 +386,11 @@ func TestVlessXtlsVisionReality(t *testing.T) {
 	shortIds[0] = make([]byte, 8)
 	hex.Decode(shortIds[0], []byte("0123456789abcdef"))
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -435,11 +435,11 @@ func TestVlessXtlsVisionReality(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -527,10 +527,10 @@ func TestVlessRealityFingerprints(t *testing.T) {
 		shortIds[0] = make([]byte, 8)
 		hex.Decode(shortIds[0], []byte("0123456789abcdef"))
 		serverConfig := &core.Config{
-			App: []*serial.TypedMessage{
-				serial.ToTypedMessage(&log.Config{
+			App: []any{
+				&log.Config{
 					ErrorLogType: log.LogType_None,
-				}),
+				},
 			},
 			Inbound: []*core.InboundHandlerConfig{
 				{
@@ -574,10 +574,10 @@ func TestVlessRealityFingerprints(t *testing.T) {
 
 		clientPort := tcp.PickPort()
 		clientConfig := &core.Config{
-			App: []*serial.TypedMessage{
-				serial.ToTypedMessage(&log.Config{
+			App: []any{
+				&log.Config{
 					ErrorLogType: log.LogType_None,
-				}),
+				},
 			},
 			Inbound: []*core.InboundHandlerConfig{
 				{

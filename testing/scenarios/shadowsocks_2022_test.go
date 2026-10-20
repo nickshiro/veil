@@ -69,11 +69,11 @@ func testShadowsocks2022Tcp(t *testing.T, method string, password string) {
 
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -99,11 +99,11 @@ func testShadowsocks2022Tcp(t *testing.T, method string, password string) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -154,11 +154,11 @@ func testShadowsocks2022Udp(t *testing.T, method string, password string) {
 
 	serverPort := udp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -184,11 +184,11 @@ func testShadowsocks2022Udp(t *testing.T, method string, password string) {
 
 	udpClientPort := udp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

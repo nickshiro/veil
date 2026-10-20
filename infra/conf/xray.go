@@ -600,10 +600,10 @@ func (c *Config) Build() (*core.Config, error) {
 	}
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 	}
 
@@ -612,39 +612,39 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build API configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(apiConf))
+		config.App = append(config.App, apiConf)
 	}
 	if c.Metrics != nil {
 		metricsConf, err := c.Metrics.Build()
 		if err != nil {
 			return nil, errors.New("failed to build metrics configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(metricsConf))
+		config.App = append(config.App, metricsConf)
 	}
 	if c.Stats != nil {
 		statsConf, err := c.Stats.Build()
 		if err != nil {
 			return nil, errors.New("failed to build stats configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(statsConf))
+		config.App = append(config.App, statsConf)
 	}
 
-	var logConfMsg *serial.TypedMessage
+	var logConfMsg proto.Message
 	if c.LogConfig != nil {
-		logConfMsg = serial.ToTypedMessage(c.LogConfig.Build())
+		logConfMsg = c.LogConfig.Build()
 	} else {
-		logConfMsg = serial.ToTypedMessage(DefaultLogConfig())
+		logConfMsg = DefaultLogConfig()
 	}
 	// let logger module be the first App to start,
 	// so that other modules could print log during initiating
-	config.App = append([]*serial.TypedMessage{logConfMsg}, config.App...)
+	config.App = append([]any{logConfMsg}, config.App...)
 
 	if c.RouterConfig != nil {
 		routerConfig, err := c.RouterConfig.Build()
 		if err != nil {
 			return nil, errors.New("failed to build routing configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(routerConfig))
+		config.App = append(config.App, routerConfig)
 	}
 
 	if c.DNSConfig != nil {
@@ -652,7 +652,7 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build DNS configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(dnsApp))
+		config.App = append(config.App, dnsApp)
 	}
 
 	if c.Policy != nil {
@@ -660,7 +660,7 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build policy configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(pc))
+		config.App = append(config.App, pc)
 	}
 
 	if c.Reverse != nil {
@@ -672,7 +672,7 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build fake DNS configuration").Base(err)
 		}
-		config.App = append([]*serial.TypedMessage{serial.ToTypedMessage(r)}, config.App...)
+		config.App = append([]any{r}, config.App...)
 	}
 
 	if c.Observatory != nil {
@@ -680,7 +680,7 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build observatory configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(r))
+		config.App = append(config.App, r)
 	}
 
 	if c.BurstObservatory != nil {
@@ -688,7 +688,7 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build burst observatory configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(r))
+		config.App = append(config.App, r)
 	}
 
 	if c.Geodata != nil {
@@ -696,7 +696,7 @@ func (c *Config) Build() (*core.Config, error) {
 		if err != nil {
 			return nil, errors.New("failed to build geodata configuration").Base(err)
 		}
-		config.App = append(config.App, serial.ToTypedMessage(r))
+		config.App = append(config.App, r)
 	}
 
 	var inbounds []InboundDetourConfig

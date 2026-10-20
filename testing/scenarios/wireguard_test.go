@@ -67,17 +67,17 @@ func TestWireguard(t *testing.T) {
 	}
 	serverPort := udp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Warning,
 				ErrorLogType:  log.LogType_Console,
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{Networks: []net.Network{net.Network_TCP}, TargetTag: &router.RoutingRule_Tag{Tag: "tcp"}},
 					{Networks: []net.Network{net.Network_UDP}, TargetTag: &router.RoutingRule_Tag{Tag: "udp"}},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -123,11 +123,11 @@ func TestWireguard(t *testing.T) {
 		}
 	}
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Warning,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			dokodemoInbound(clientPort, net.TCPDestination(net.ParseAddress("192.0.2.1"), 7)),

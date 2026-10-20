@@ -18,7 +18,10 @@ type Config struct {
 	// App is for configurations of all features in Xray. A feature must
 	// implement the Feature interface, and its config type must be registered
 	// through common.RegisterConfig.
-	App []*serial.TypedMessage `json:"app,omitempty"`
+	// Configurations are passed directly to constructors, without serialization.
+	// Constructors must treat them as read-only; callers must not mutate them
+	// while an instance is using them.
+	App []any `json:"app,omitempty"`
 	// Configuration for extensions. The config may not work if corresponding
 	// extension is not loaded into Xray. Xray will ignore such config during
 	// initialization.

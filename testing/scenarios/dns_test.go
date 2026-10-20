@@ -31,16 +31,16 @@ func TestResolveIP(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dns.Config{
+		App: []any{
+			&dns.Config{
 				StaticHosts: []*dns.Config_HostMapping{
 					{
 						Domain: &geodata.DomainRule{Value: &geodata.DomainRule_Custom{Custom: &geodata.Domain{Type: geodata.Domain_Full, Value: "google.com"}}},
 						Ip:     [][]byte{dest.Address.IP()},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				DomainStrategy: router.Config_IpIfNonMatch,
 				Rule: []*router.RoutingRule{
 					{
@@ -58,7 +58,7 @@ func TestResolveIP(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

@@ -41,16 +41,16 @@ func TestReverseProxy(t *testing.T) {
 	reversePort := tcp.PickPort()
 
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&reverse.Config{
+		App: []any{
+			&reverse.Config{
 				PortalConfig: []*reverse.PortalConfig{
 					{
 						Tag:    "portal",
 						Domain: "test.example.com",
 					},
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -67,7 +67,7 @@ func TestReverseProxy(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -107,16 +107,16 @@ func TestReverseProxy(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&reverse.Config{
+		App: []any{
+			&reverse.Config{
 				BridgeConfig: []*reverse.BridgeConfig{
 					{
 						Tag:    "bridge",
 						Domain: "test.example.com",
 					},
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -133,7 +133,7 @@ func TestReverseProxy(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -202,12 +202,12 @@ func TestReverseProxyLongRunning(t *testing.T) {
 	reversePort := tcp.PickPort()
 
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Warning,
 				ErrorLogType:  log.LogType_Console,
-			}),
-			serial.ToTypedMessage(&policy.Config{
+			},
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -216,16 +216,16 @@ func TestReverseProxyLongRunning(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&reverse.Config{
+			},
+			&reverse.Config{
 				PortalConfig: []*reverse.PortalConfig{
 					{
 						Tag:    "portal",
 						Domain: "test.example.com",
 					},
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -242,7 +242,7 @@ func TestReverseProxyLongRunning(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -282,12 +282,12 @@ func TestReverseProxyLongRunning(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Warning,
 				ErrorLogType:  log.LogType_Console,
-			}),
-			serial.ToTypedMessage(&policy.Config{
+			},
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -296,16 +296,16 @@ func TestReverseProxyLongRunning(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&reverse.Config{
+			},
+			&reverse.Config{
 				BridgeConfig: []*reverse.BridgeConfig{
 					{
 						Tag:    "bridge",
 						Domain: "test.example.com",
 					},
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						Domain: []*geodata.DomainRule{
@@ -322,7 +322,7 @@ func TestReverseProxyLongRunning(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

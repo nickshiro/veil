@@ -90,8 +90,8 @@ func TestUDPDNSTunnel(t *testing.T) {
 
 	serverPort := udp.PickPort()
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dnsapp.Config{
+		App: []any{
+			&dnsapp.Config{
 				NameServer: []*dnsapp.NameServer{
 					{
 						Address: &net.Endpoint{
@@ -105,11 +105,11 @@ func TestUDPDNSTunnel(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&proxyman.InboundConfig{},
+			&policy.Config{},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -209,8 +209,8 @@ func TestTCPDNSTunnel(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dnsapp.Config{
+		App: []any{
+			&dnsapp.Config{
 				NameServer: []*dnsapp.NameServer{
 					{
 						Address: &net.Endpoint{
@@ -224,11 +224,11 @@ func TestTCPDNSTunnel(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&proxyman.InboundConfig{},
+			&policy.Config{},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -295,8 +295,8 @@ func TestUDP2TCPDNSTunnel(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dnsapp.Config{
+		App: []any{
+			&dnsapp.Config{
 				NameServer: []*dnsapp.NameServer{
 					{
 						Address: &net.Endpoint{
@@ -310,11 +310,11 @@ func TestUDP2TCPDNSTunnel(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&proxyman.InboundConfig{},
+			&policy.Config{},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -385,8 +385,8 @@ func TestDNSRules(t *testing.T) {
 
 	serverPort := udp.PickPort()
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dnsapp.Config{
+		App: []any{
+			&dnsapp.Config{
 				NameServer: []*dnsapp.NameServer{
 					{
 						Address: &net.Endpoint{
@@ -400,11 +400,11 @@ func TestDNSRules(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&proxyman.InboundConfig{},
+			&policy.Config{},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

@@ -31,11 +31,11 @@ func TestMetrics(t *testing.T) {
 
 	metricsPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&metrics.Config{
+		App: []any{
+			&metrics.Config{
 				Tag: "metrics_out",
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"metrics_in"},
@@ -44,7 +44,7 @@ func TestMetrics(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

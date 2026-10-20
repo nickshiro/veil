@@ -15,7 +15,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/net"
-	"github.com/nickshiro/veil/common/serial"
 	core "github.com/nickshiro/veil/core"
 	_ "github.com/nickshiro/veil/main/distro/all"
 )
@@ -95,9 +94,9 @@ func CloseServer(server *core.Instance) {
 }
 
 func withDefaultApps(config *core.Config) *core.Config {
-	config.App = append(config.App, serial.ToTypedMessage(&dispatcher.Config{}))
-	config.App = append(config.App, serial.ToTypedMessage(&proxyman.InboundConfig{}))
-	config.App = append(config.App, serial.ToTypedMessage(&proxyman.OutboundConfig{}))
+	config.App = append(config.App, &dispatcher.Config{})
+	config.App = append(config.App, &proxyman.InboundConfig{})
+	config.App = append(config.App, &proxyman.OutboundConfig{})
 	return config
 }
 

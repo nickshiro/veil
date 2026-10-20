@@ -291,8 +291,8 @@ func TestSocksBridageUDPWithRouting(t *testing.T) {
 	serverPort := tcp.PickPort()
 	for {
 		serverConfig := &core.Config{
-			App: []*serial.TypedMessage{
-				serial.ToTypedMessage(&router.Config{
+			App: []any{
+				&router.Config{
 					Rule: []*router.RoutingRule{
 						{
 							TargetTag: &router.RoutingRule_Tag{
@@ -301,7 +301,7 @@ func TestSocksBridageUDPWithRouting(t *testing.T) {
 							InboundTag: []string{"socks", "dokodemo"},
 						},
 					},
-				}),
+				},
 			},
 			Inbound: []*core.InboundHandlerConfig{
 				{

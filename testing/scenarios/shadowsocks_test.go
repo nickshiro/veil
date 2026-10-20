@@ -117,11 +117,11 @@ func TestShadowsocksAES256GCMTCP(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -149,11 +149,11 @@ func TestShadowsocksAES256GCMTCP(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -212,11 +212,11 @@ func TestShadowsocksAES128GCMUDP(t *testing.T) {
 
 	serverPort := udp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -244,11 +244,11 @@ func TestShadowsocksAES128GCMUDP(t *testing.T) {
 
 	clientPort := udp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -306,11 +306,11 @@ func TestShadowsocksAES128GCMUDPMux(t *testing.T) {
 
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -338,11 +338,11 @@ func TestShadowsocksAES128GCMUDPMux(t *testing.T) {
 
 	clientPort := udp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

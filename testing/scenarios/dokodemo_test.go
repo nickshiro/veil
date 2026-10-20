@@ -34,11 +34,11 @@ func TestDokodemoTCP(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -74,11 +74,11 @@ func TestDokodemoTCP(t *testing.T) {
 	clientPort := uint32(tcp.PickPort())
 	for {
 		clientConfig := &core.Config{
-			App: []*serial.TypedMessage{
-				serial.ToTypedMessage(&log.Config{
+			App: []any{
+				&log.Config{
 					ErrorLogLevel: clog.Severity_Debug,
 					ErrorLogType:  log.LogType_Console,
-				}),
+				},
 			},
 			Inbound: []*core.InboundHandlerConfig{
 				{

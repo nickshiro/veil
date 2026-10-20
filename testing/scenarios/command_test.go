@@ -45,14 +45,14 @@ func TestCommanderListenConfigurationItem(t *testing.T) {
 	clientPort := tcp.PickPort()
 	cmdPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&commander.Config{
+		App: []any{
+			&commander.Config{
 				Tag:    "api",
 				Listen: fmt.Sprintf("127.0.0.1:%d", cmdPort),
 				Service: []*serial.TypedMessage{
 					serial.ToTypedMessage(&command.Config{}),
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -119,14 +119,14 @@ func TestCommanderRemoveHandler(t *testing.T) {
 	clientPort := tcp.PickPort()
 	cmdPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&commander.Config{
+		App: []any{
+			&commander.Config{
 				Tag: "api",
 				Service: []*serial.TypedMessage{
 					serial.ToTypedMessage(&command.Config{}),
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -135,7 +135,7 @@ func TestCommanderRemoveHandler(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -214,14 +214,14 @@ func TestCommanderListHandlers(t *testing.T) {
 	clientPort := tcp.PickPort()
 	cmdPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&commander.Config{
+		App: []any{
+			&commander.Config{
 				Tag: "api",
 				Service: []*serial.TypedMessage{
 					serial.ToTypedMessage(&command.Config{}),
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -230,7 +230,7 @@ func TestCommanderListHandlers(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -329,14 +329,14 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 	cmdPort := tcp.PickPort()
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&commander.Config{
+		App: []any{
+			&commander.Config{
 				Tag: "api",
 				Service: []*serial.TypedMessage{
 					serial.ToTypedMessage(&command.Config{}),
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -345,8 +345,8 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&policy.Config{
+			},
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -355,7 +355,7 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -398,8 +398,8 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 
 	clientPort := tcp.PickPort()
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&policy.Config{
+		App: []any{
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -408,7 +408,7 @@ func TestCommanderAddRemoveUser(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -504,15 +504,15 @@ func TestCommanderStats(t *testing.T) {
 	cmdPort := tcp.PickPort()
 
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&stats.Config{}),
-			serial.ToTypedMessage(&commander.Config{
+		App: []any{
+			&stats.Config{},
+			&commander.Config{
 				Tag: "api",
 				Service: []*serial.TypedMessage{
 					serial.ToTypedMessage(&statscmd.Config{}),
 				},
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						InboundTag: []string{"api"},
@@ -521,8 +521,8 @@ func TestCommanderStats(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&policy.Config{
+			},
+			&policy.Config{
 				Level: map[uint32]*policy.Policy{
 					0: {
 						Timeout: &policy.Policy_Timeout{
@@ -542,7 +542,7 @@ func TestCommanderStats(t *testing.T) {
 						InboundUplink: true,
 					},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{

@@ -124,8 +124,8 @@ func TestUDPServerSubnet(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -140,10 +140,10 @@ func TestUDPServerSubnet(t *testing.T) {
 					},
 				},
 				ClientIp: []byte{7, 8, 9, 10},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -187,8 +187,8 @@ func TestUDPServer(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -202,10 +202,10 @@ func TestUDPServer(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -311,8 +311,8 @@ func TestPrioritizedDomain(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -342,10 +342,10 @@ func TestPrioritizedDomain(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -398,8 +398,8 @@ func TestUDPServerIPv6(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -413,10 +413,10 @@ func TestUDPServerIPv6(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -461,8 +461,8 @@ func TestStaticHostDomain(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -482,10 +482,10 @@ func TestStaticHostDomain(t *testing.T) {
 						ProxiedDomain: "google.com",
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -533,8 +533,8 @@ func TestIPMatch(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					// private dns, not match
 					{
@@ -569,10 +569,10 @@ func TestIPMatch(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -625,8 +625,8 @@ func TestLocalDomain(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -688,10 +688,10 @@ func TestLocalDomain(t *testing.T) {
 						ProxiedDomain: "hostname.localdomain",
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{
@@ -849,8 +849,8 @@ func TestMultiMatchPrioritizedDomain(t *testing.T) {
 	time.Sleep(time.Second)
 
 	config := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&Config{
+		App: []any{
+			&Config{
 				NameServer: []*NameServer{
 					{
 						Address: &net.Endpoint{
@@ -945,10 +945,10 @@ func TestMultiMatchPrioritizedDomain(t *testing.T) {
 						},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
-			serial.ToTypedMessage(&policy.Config{}),
+			},
+			&dispatcher.Config{},
+			&proxyman.OutboundConfig{},
+			&policy.Config{},
 		},
 		Outbound: []*core.OutboundHandlerConfig{
 			{

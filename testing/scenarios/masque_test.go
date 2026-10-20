@@ -419,11 +419,11 @@ func masqueOutbound(serverPort net.Port, certHash [32]byte, h2 bool, authorizati
 
 func masqueClientConfig(serverPort net.Port, certHash [32]byte, h2 bool, authorization string, tcpPort, tcp6Port, udpPort net.Port, v4, v6 netip.Addr) *core.Config {
 	return &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			masqueDokodemo(tcpPort, v4, net.Network_TCP),
@@ -503,17 +503,17 @@ func masqueServerConfig(serverPort net.Port, certificate *tls.Certificate, h2 bo
 		}
 	}
 	return &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
-			serial.ToTypedMessage(&router.Config{
+			},
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{Networks: []net.Network{net.Network_TCP}, TargetTag: &router.RoutingRule_Tag{Tag: "tcp"}},
 					{Networks: []net.Network{net.Network_UDP}, TargetTag: &router.RoutingRule_Tag{Tag: "udp"}},
 				},
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			masqueServerInbound(serverPort, certificate, alpn...),

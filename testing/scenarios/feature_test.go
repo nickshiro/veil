@@ -409,8 +409,8 @@ func TestBlackhole(t *testing.T) {
 				ProxySettings: serial.ToTypedMessage(&blackhole.Config{}),
 			},
 		},
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&router.Config{
+		App: []any{
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						TargetTag: &router.RoutingRule_Tag{
@@ -421,7 +421,7 @@ func TestBlackhole(t *testing.T) {
 						},
 					},
 				},
-			}),
+			},
 		},
 	}
 
@@ -585,8 +585,8 @@ func TestDomainSniffing(t *testing.T) {
 				ProxySettings: serial.ToTypedMessage(&freedom.Config{FinalRules: []*freedom.FinalRuleConfig{{Action: freedom.RuleAction_Allow}}}),
 			},
 		},
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&router.Config{
+		App: []any{
+			&router.Config{
 				Rule: []*router.RoutingRule{
 					{
 						TargetTag: &router.RoutingRule_Tag{
@@ -600,11 +600,11 @@ func TestDomainSniffing(t *testing.T) {
 						InboundTag: []string{"http"},
 					},
 				},
-			}),
-			serial.ToTypedMessage(&log.Config{
+			},
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 	}
 
@@ -643,11 +643,11 @@ func TestDialXray(t *testing.T) {
 	userID := protocol.NewID(uuid.NewV4())
 	serverPort := tcp.PickPort()
 	serverConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&log.Config{
+		App: []any{
+			&log.Config{
 				ErrorLogLevel: clog.Severity_Debug,
 				ErrorLogType:  log.LogType_Console,
-			}),
+			},
 		},
 		Inbound: []*core.InboundHandlerConfig{
 			{
@@ -676,10 +676,10 @@ func TestDialXray(t *testing.T) {
 	}
 
 	clientConfig := &core.Config{
-		App: []*serial.TypedMessage{
-			serial.ToTypedMessage(&dispatcher.Config{}),
-			serial.ToTypedMessage(&proxyman.InboundConfig{}),
-			serial.ToTypedMessage(&proxyman.OutboundConfig{}),
+		App: []any{
+			&dispatcher.Config{},
+			&proxyman.InboundConfig{},
+			&proxyman.OutboundConfig{},
 		},
 		Inbound: []*core.InboundHandlerConfig{},
 		Outbound: []*core.OutboundHandlerConfig{
