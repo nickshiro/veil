@@ -14,13 +14,6 @@ import (
 
 type BytesGenerator func() []byte
 
-func GenerateEmptyBytes() BytesGenerator {
-	var b [1]byte
-	return func() []byte {
-		return b[:0]
-	}
-}
-
 func GenerateStaticBytes(content []byte) BytesGenerator {
 	return func() []byte {
 		return content
@@ -88,25 +81,23 @@ func (v *AEADAuthenticator) Seal(dst, plainText []byte) ([]byte, error) {
 }
 
 type AuthenticationReader struct {
-	auth         Authenticator
-	reader       *buf.BufferedReader
-	sizeParser   ChunkSizeDecoder
-	sizeBytes    []byte
-	transferType protocol.TransferType
-	padding      PaddingLengthGenerator
-	size         uint16
-	paddingLen   uint16
-	hasSize      bool
-	done         bool
+	auth       Authenticator
+	reader     *buf.BufferedReader
+	sizeParser ChunkSizeDecoder
+	sizeBytes  []byte
+	padding    PaddingLengthGenerator
+	size       uint16
+	paddingLen uint16
+	hasSize    bool
+	done       bool
 }
 
-func NewAuthenticationReader(auth Authenticator, sizeParser ChunkSizeDecoder, reader io.Reader, transferType protocol.TransferType, paddingLen PaddingLengthGenerator) *AuthenticationReader {
+func NewAuthenticationReader(auth Authenticator, sizeParser ChunkSizeDecoder, reader io.Reader, paddingLen PaddingLengthGenerator) *AuthenticationReader {
 	r := &AuthenticationReader{
-		auth:         auth,
-		sizeParser:   sizeParser,
-		transferType: transferType,
-		padding:      paddingLen,
-		sizeBytes:    make([]byte, sizeParser.SizeBytes()),
+		auth:       auth,
+		sizeParser: sizeParser,
+		padding:    paddingLen,
+		sizeBytes:  make([]byte, sizeParser.SizeBytes()),
 	}
 	if breader, ok := reader.(*buf.BufferedReader); ok {
 		r.reader = breader

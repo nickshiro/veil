@@ -119,18 +119,16 @@ func (c *ClientSession) EncodeRequestBody(request *protocol.RequestHeader, write
 	case protocol.SecurityType_AES128_GCM:
 		aead := crypto.NewAesGcm(c.requestBodyKey[:])
 		auth := &crypto.AEADAuthenticator{
-			AEAD:                    aead,
-			NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
-			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+			AEAD:           aead,
+			NonceGenerator: GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 		}
 		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
 			AuthenticatedLengthKeyAEAD := crypto.NewAesGcm(AuthenticatedLengthKey)
 
 			lengthAuth := &crypto.AEADAuthenticator{
-				AEAD:                    AuthenticatedLengthKeyAEAD,
-				NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
-				AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+				AEAD:           AuthenticatedLengthKeyAEAD,
+				NonceGenerator: GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 			}
 			sizeParser = NewAEADSizeParser(lengthAuth)
 		}
@@ -140,9 +138,8 @@ func (c *ClientSession) EncodeRequestBody(request *protocol.RequestHeader, write
 		common.Must(err)
 
 		auth := &crypto.AEADAuthenticator{
-			AEAD:                    aead,
-			NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
-			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+			AEAD:           aead,
+			NonceGenerator: GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 		}
 		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
@@ -150,9 +147,8 @@ func (c *ClientSession) EncodeRequestBody(request *protocol.RequestHeader, write
 			common.Must(err)
 
 			lengthAuth := &crypto.AEADAuthenticator{
-				AEAD:                    AuthenticatedLengthKeyAEAD,
-				NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
-				AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+				AEAD:           AuthenticatedLengthKeyAEAD,
+				NonceGenerator: GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 			}
 			sizeParser = NewAEADSizeParser(lengthAuth)
 		}
@@ -257,29 +253,26 @@ func (c *ClientSession) DecodeResponseBody(request *protocol.RequestHeader, read
 		aead := crypto.NewAesGcm(c.responseBodyKey[:])
 
 		auth := &crypto.AEADAuthenticator{
-			AEAD:                    aead,
-			NonceGenerator:          GenerateChunkNonce(c.responseBodyIV[:], uint32(aead.NonceSize())),
-			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+			AEAD:           aead,
+			NonceGenerator: GenerateChunkNonce(c.responseBodyIV[:], uint32(aead.NonceSize())),
 		}
 		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
 			AuthenticatedLengthKeyAEAD := crypto.NewAesGcm(AuthenticatedLengthKey)
 
 			lengthAuth := &crypto.AEADAuthenticator{
-				AEAD:                    AuthenticatedLengthKeyAEAD,
-				NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
-				AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+				AEAD:           AuthenticatedLengthKeyAEAD,
+				NonceGenerator: GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 			}
 			sizeParser = NewAEADSizeParser(lengthAuth)
 		}
-		return crypto.NewAuthenticationReader(auth, sizeParser, reader, request.Command.TransferType(), padding), nil
+		return crypto.NewAuthenticationReader(auth, sizeParser, reader, padding), nil
 	case protocol.SecurityType_CHACHA20_POLY1305:
 		aead, _ := chacha20poly1305.New(GenerateChacha20Poly1305Key(c.responseBodyKey[:]))
 
 		auth := &crypto.AEADAuthenticator{
-			AEAD:                    aead,
-			NonceGenerator:          GenerateChunkNonce(c.responseBodyIV[:], uint32(aead.NonceSize())),
-			AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+			AEAD:           aead,
+			NonceGenerator: GenerateChunkNonce(c.responseBodyIV[:], uint32(aead.NonceSize())),
 		}
 		if request.Option&protocol.RequestOptionAuthenticatedLength != 0 {
 			AuthenticatedLengthKey := vmessaead.KDF16(c.requestBodyKey[:], "auth_len")
@@ -287,13 +280,12 @@ func (c *ClientSession) DecodeResponseBody(request *protocol.RequestHeader, read
 			common.Must(err)
 
 			lengthAuth := &crypto.AEADAuthenticator{
-				AEAD:                    AuthenticatedLengthKeyAEAD,
-				NonceGenerator:          GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
-				AdditionalDataGenerator: crypto.GenerateEmptyBytes(),
+				AEAD:           AuthenticatedLengthKeyAEAD,
+				NonceGenerator: GenerateChunkNonce(c.requestBodyIV[:], uint32(aead.NonceSize())),
 			}
 			sizeParser = NewAEADSizeParser(lengthAuth)
 		}
-		return crypto.NewAuthenticationReader(auth, sizeParser, reader, request.Command.TransferType(), padding), nil
+		return crypto.NewAuthenticationReader(auth, sizeParser, reader, padding), nil
 	default:
 		return nil, errors.New("invalid option: Security")
 	}

@@ -30,9 +30,8 @@ func TestAuthenticationReaderWriter(t *testing.T) {
 	rand.Read(iv)
 
 	writer := NewAuthenticationWriter(&AEADAuthenticator{
-		AEAD:                    aead,
-		NonceGenerator:          GenerateStaticBytes(iv),
-		AdditionalDataGenerator: GenerateEmptyBytes(),
+		AEAD:           aead,
+		NonceGenerator: GenerateStaticBytes(iv),
 	}, PlainChunkSizeParser{}, cache, protocol.TransferTypeStream, nil)
 
 	common.Must(writer.WriteMultiBuffer(payload))
@@ -42,10 +41,9 @@ func TestAuthenticationReaderWriter(t *testing.T) {
 	common.Must(writer.WriteMultiBuffer(buf.MultiBuffer{}))
 
 	reader := NewAuthenticationReader(&AEADAuthenticator{
-		AEAD:                    aead,
-		NonceGenerator:          GenerateStaticBytes(iv),
-		AdditionalDataGenerator: GenerateEmptyBytes(),
-	}, PlainChunkSizeParser{}, cache, protocol.TransferTypeStream, nil)
+		AEAD:           aead,
+		NonceGenerator: GenerateStaticBytes(iv),
+	}, PlainChunkSizeParser{}, cache, nil)
 
 	var mb buf.MultiBuffer
 
@@ -83,9 +81,8 @@ func TestAuthenticationReaderWriterPacket(t *testing.T) {
 	rand.Read(iv)
 
 	writer := NewAuthenticationWriter(&AEADAuthenticator{
-		AEAD:                    aead,
-		NonceGenerator:          GenerateStaticBytes(iv),
-		AdditionalDataGenerator: GenerateEmptyBytes(),
+		AEAD:           aead,
+		NonceGenerator: GenerateStaticBytes(iv),
 	}, PlainChunkSizeParser{}, cache, protocol.TransferTypePacket, nil)
 
 	var payload buf.MultiBuffer
@@ -105,10 +102,9 @@ func TestAuthenticationReaderWriterPacket(t *testing.T) {
 	common.Must(writer.WriteMultiBuffer(buf.MultiBuffer{}))
 
 	reader := NewAuthenticationReader(&AEADAuthenticator{
-		AEAD:                    aead,
-		NonceGenerator:          GenerateStaticBytes(iv),
-		AdditionalDataGenerator: GenerateEmptyBytes(),
-	}, PlainChunkSizeParser{}, cache, protocol.TransferTypePacket, nil)
+		AEAD:           aead,
+		NonceGenerator: GenerateStaticBytes(iv),
+	}, PlainChunkSizeParser{}, cache, nil)
 
 	mb, err := reader.ReadMultiBuffer()
 	common.Must(err)

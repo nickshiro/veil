@@ -92,7 +92,7 @@ func ReadTCPSession(validator *Validator, reader io.Reader) (*protocol.RequestHe
 			}
 			r = crypto.NewAuthenticationReader(auth, &crypto.AEADChunkSizeParser{
 				Auth: auth,
-			}, reader, protocol.TransferTypeStream, nil)
+			}, reader, nil)
 		} else {
 			account := user.Account.(*MemoryAccount)
 			iv := append([]byte(nil), buffer.BytesTo(ivLen)...)

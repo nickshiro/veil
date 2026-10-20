@@ -155,7 +155,7 @@ func (c *AEADCipher) NewDecryptionReader(key []byte, iv []byte, reader io.Reader
 	auth := c.createAuthenticator(key, iv)
 	return crypto.NewAuthenticationReader(auth, &crypto.AEADChunkSizeParser{
 		Auth: auth,
-	}, reader, protocol.TransferTypeStream, nil), nil
+	}, reader, nil), nil
 }
 
 func (c *AEADCipher) EncodePacket(key []byte, b *buf.Buffer) error {
