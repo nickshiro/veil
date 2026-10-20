@@ -1,10 +1,11 @@
 package dns
 
 import (
+	"uuid"
+
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/net"
-	"uuid"
 )
 
 // References:

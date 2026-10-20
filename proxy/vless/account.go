@@ -1,8 +1,9 @@
 package vless
 
 import (
-	"google.golang.org/protobuf/proto"
 	"uuid"
+
+	"google.golang.org/protobuf/proto"
 
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/protocol"
