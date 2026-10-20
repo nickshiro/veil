@@ -18,9 +18,9 @@ const (
 	// TCP_FASTOPEN_SERVER is the value to enable TCP fast open on darwin for server connections.
 	TCP_FASTOPEN_SERVER = 0x01
 	// TCP_FASTOPEN_CLIENT is the value to enable TCP fast open on darwin for client connections.
-	TCP_FASTOPEN_CLIENT = 0x02 // nolint: revive,stylecheck
+	TCP_FASTOPEN_CLIENT = 0x02
 	// syscall.TCP_KEEPINTVL is missing on some darwin architectures.
-	sysTCP_KEEPINTVL = 0x101 // nolint: revive,stylecheck
+	sysTCP_KEEPINTVL = 0x101
 )
 
 const (

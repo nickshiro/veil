@@ -195,7 +195,6 @@ func (s *ServerSession) handshake5(nMethod byte, reader io.Reader, writer net.Co
 	responseAddress := s.address
 	responsePort := s.port
 	var tempUDPConn *TempUDPConn
-	//nolint:gocritic // Use if else chain for clarity
 	if request.Command == protocol.RequestCommandUDP {
 		if s.config.Address != nil {
 			// Use configured IP as remote address in the response to UDP Associate

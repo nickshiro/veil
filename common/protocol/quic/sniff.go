@@ -230,7 +230,7 @@ func SniffQUIC(b []byte) (*SniffHeader, error) {
 					if _, err = readShortQUICVarint(buffer); err != nil { // Field: ECN Counts -> ECT1 Count
 						return nil, io.ErrUnexpectedEOF
 					}
-					if _, err = readShortQUICVarint(buffer); err != nil { //nolint:misspell // Field: ECN Counts -> ECT-CE Count
+					if _, err = readShortQUICVarint(buffer); err != nil { // Field: ECN Counts -> ECT-CE Count
 						return nil, io.ErrUnexpectedEOF
 					}
 				}
