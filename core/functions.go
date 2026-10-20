@@ -1,7 +1,6 @@
 package core
 
 import (
-	"bytes"
 	"context"
 
 	"github.com/nickshiro/veil/common"
@@ -19,22 +18,6 @@ func CreateObject(v *Instance, config interface{}) (interface{}, error) {
 		ctx = toContext(v.ctx, v)
 	}
 	return common.CreateObject(ctx, config)
-}
-
-// StartInstance starts a new Xray instance with given serialized config.
-func StartInstance(configBytes []byte) (*Instance, error) {
-	config, err := LoadConfig(bytes.NewReader(configBytes))
-	if err != nil {
-		return nil, err
-	}
-	instance, err := New(config)
-	if err != nil {
-		return nil, err
-	}
-	if err := instance.Start(); err != nil {
-		return nil, err
-	}
-	return instance, nil
 }
 
 // Dial provides an easy way for upstream caller to create net.Conn through Xray.
