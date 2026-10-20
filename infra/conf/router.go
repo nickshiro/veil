@@ -8,8 +8,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/geodata"
 	"github.com/nickshiro/veil/common/serial"
-
-	"google.golang.org/protobuf/proto"
 )
 
 // StrategyConfig represents a strategy config
@@ -51,12 +49,9 @@ func (r *BalancingRule) Build() (*router.BalancingRule, error) {
 	if err != nil {
 		return nil, errors.New("failed to parse to strategy config.").Base(err)
 	}
-	var ts proto.Message
-	if builder, ok := rawConfig.(Buildable); ok {
-		ts, err = builder.Build()
-		if err != nil {
-			return nil, err
-		}
+	ts, err := rawConfig.Build()
+	if err != nil {
+		return nil, err
 	}
 
 	return &router.BalancingRule{

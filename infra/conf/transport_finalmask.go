@@ -72,24 +72,24 @@ func PraseByteSlice(data json.RawMessage, typ string) ([]byte, error) {
 var (
 	customVarNamePattern = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
 
-	tcpmaskLoader = NewJSONConfigLoader(ConfigCreatorCache{
-		"header-custom": func() any { return new(HeaderCustomTCP) },
-		"fragment":      func() any { return new(FragmentMask) },
-		"sudoku":        func() any { return new(Sudoku) },
-		"xmc":           func() any { return new(XMC) },
-	}, "type", "settings")
+	tcpmaskLoader = NewJSONConfigLoader(ConfigFactories{
+		"header-custom": func() Buildable { return new(HeaderCustomTCP) },
+		"fragment":      func() Buildable { return new(FragmentMask) },
+		"sudoku":        func() Buildable { return new(Sudoku) },
+		"xmc":           func() Buildable { return new(XMC) },
+	}, "type")
 
-	udpmaskLoader = NewJSONConfigLoader(ConfigCreatorCache{
-		"header-custom": func() any { return new(HeaderCustomUDP) },
-		"mkcp-legacy":   func() any { return new(MkcpLegacy) },
-		"noise":         func() any { return new(NoiseMask) },
-		"salamander":    func() any { return new(Salamander) },
-		"sudoku":        func() any { return new(Sudoku) },
-		"xdns":          func() any { return new(XDNS) },
-		"xicmp":         func() any { return new(Xicmp) },
-		"realm":         func() any { return new(Realm) },
-		"udphop":        func() any { return new(UDPHop) },
-	}, "type", "settings")
+	udpmaskLoader = NewJSONConfigLoader(ConfigFactories{
+		"header-custom": func() Buildable { return new(HeaderCustomUDP) },
+		"mkcp-legacy":   func() Buildable { return new(MkcpLegacy) },
+		"noise":         func() Buildable { return new(NoiseMask) },
+		"salamander":    func() Buildable { return new(Salamander) },
+		"sudoku":        func() Buildable { return new(Sudoku) },
+		"xdns":          func() Buildable { return new(XDNS) },
+		"xicmp":         func() Buildable { return new(Xicmp) },
+		"realm":         func() Buildable { return new(Realm) },
+		"udphop":        func() Buildable { return new(UDPHop) },
+	}, "type")
 )
 
 type TCPItem struct {
@@ -1151,7 +1151,7 @@ func (c *Mask) Build(tcp bool) (proto.Message, error) {
 	if err != nil {
 		return nil, err
 	}
-	ts, err := rawConfig.(Buildable).Build()
+	ts, err := rawConfig.Build()
 	if err != nil {
 		return nil, err
 	}

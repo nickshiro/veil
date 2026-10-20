@@ -16,12 +16,12 @@ const (
 	strategyLeastLoad  string = "leastload"
 )
 
-var strategyConfigLoader = NewJSONConfigLoader(ConfigCreatorCache{
-	strategyRandom:     func() any { return new(strategyEmptyConfig) },
-	strategyLeastPing:  func() any { return new(strategyEmptyConfig) },
-	strategyRoundRobin: func() any { return new(strategyEmptyConfig) },
-	strategyLeastLoad:  func() any { return new(strategyLeastLoadConfig) },
-}, "type", "settings")
+var strategyConfigLoader = NewJSONConfigLoader(ConfigFactories{
+	strategyRandom:     func() Buildable { return new(strategyEmptyConfig) },
+	strategyLeastPing:  func() Buildable { return new(strategyEmptyConfig) },
+	strategyRoundRobin: func() Buildable { return new(strategyEmptyConfig) },
+	strategyLeastLoad:  func() Buildable { return new(strategyLeastLoadConfig) },
+}, "type")
 
 type strategyEmptyConfig struct{}
 

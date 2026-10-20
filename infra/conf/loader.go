@@ -7,11 +7,11 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 )
 
-type ConfigCreator func() any
+type ConfigFactory func() Buildable
 
-type ConfigCreatorCache map[string]ConfigCreator
+type ConfigFactories map[string]ConfigFactory
 
-func (v ConfigCreatorCache) CreateConfig(id string) (any, error) {
+func (v ConfigFactories) CreateConfig(id string) (Buildable, error) {
 	creator, found := v[id]
 	if !found {
 		return nil, errors.New("unknown config id: ", id)
@@ -20,22 +20,20 @@ func (v ConfigCreatorCache) CreateConfig(id string) (any, error) {
 }
 
 type JSONConfigLoader struct {
-	cache     ConfigCreatorCache
+	factories ConfigFactories
 	idKey     string
-	configKey string
 }
 
-func NewJSONConfigLoader(cache ConfigCreatorCache, idKey string, configKey string) *JSONConfigLoader {
+func NewJSONConfigLoader(factories ConfigFactories, idKey string) *JSONConfigLoader {
 	return &JSONConfigLoader{
 		idKey:     idKey,
-		configKey: configKey,
-		cache:     cache,
+		factories: factories,
 	}
 }
 
-func (v *JSONConfigLoader) LoadWithID(raw []byte, id string) (any, error) {
+func (v *JSONConfigLoader) LoadWithID(raw []byte, id string) (Buildable, error) {
 	id = strings.ToLower(id)
-	config, err := v.cache.CreateConfig(id)
+	config, err := v.factories.CreateConfig(id)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +43,7 @@ func (v *JSONConfigLoader) LoadWithID(raw []byte, id string) (any, error) {
 	return config, nil
 }
 
-func (v *JSONConfigLoader) Load(raw []byte) (any, string, error) {
+func (v *JSONConfigLoader) Load(raw []byte) (Buildable, string, error) {
 	var obj map[string]json.RawMessage
 	if err := json.Unmarshal(raw, &obj); err != nil {
 		return nil, "", err
@@ -58,17 +56,7 @@ func (v *JSONConfigLoader) Load(raw []byte) (any, string, error) {
 	if err := json.Unmarshal(rawID, &id); err != nil {
 		return nil, "", err
 	}
-	rawConfig := json.RawMessage(raw)
-	if len(v.configKey) > 0 {
-		configValue, found := obj[v.configKey]
-		if found {
-			rawConfig = configValue
-		} else {
-			// Default to empty json object.
-			rawConfig = json.RawMessage([]byte("{}"))
-		}
-	}
-	config, err := v.LoadWithID([]byte(rawConfig), id)
+	config, err := v.LoadWithID(raw, id)
 	if err != nil {
 		return nil, id, err
 	}

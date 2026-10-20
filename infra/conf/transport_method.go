@@ -233,10 +233,10 @@ func (v *Authenticator) Build() (proto.Message, error) {
 	return config, nil
 }
 
-var tcpHeaderLoader = NewJSONConfigLoader(ConfigCreatorCache{
-	"none": func() any { return new(NoOpConnectionAuthenticator) },
-	"http": func() any { return new(Authenticator) },
-}, "type", "")
+var tcpHeaderLoader = NewJSONConfigLoader(ConfigFactories{
+	"none": func() Buildable { return new(NoOpConnectionAuthenticator) },
+	"http": func() Buildable { return new(Authenticator) },
+}, "type")
 
 type TCPConfig struct {
 	HeaderConfig        json.RawMessage `json:"header"`
@@ -251,7 +251,7 @@ func (c *TCPConfig) Build() (proto.Message, error) {
 		if err != nil {
 			return nil, errors.New("invalid TCP header config").Base(err)
 		}
-		ts, err := headerConfig.(Buildable).Build()
+		ts, err := headerConfig.Build()
 		if err != nil {
 			return nil, errors.New("invalid TCP header config").Base(err)
 		}

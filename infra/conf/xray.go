@@ -25,39 +25,39 @@ import (
 )
 
 var (
-	inboundConfigLoader = NewJSONConfigLoader(ConfigCreatorCache{
-		"tunnel":        func() any { return new(DokodemoConfig) },
-		"dokodemo-door": func() any { return new(DokodemoConfig) },
-		"http":          func() any { return new(HTTPServerConfig) },
-		"shadowsocks":   func() any { return new(ShadowsocksServerConfig) },
-		"mixed":         func() any { return new(SocksServerConfig) },
-		"socks":         func() any { return new(SocksServerConfig) },
-		"vless":         func() any { return new(VLessInboundConfig) },
-		"vmess":         func() any { return new(VMessInboundConfig) },
-		"trojan":        func() any { return new(TrojanServerConfig) },
-		"wireguard":     func() any { return &WireGuardConfig{IsClient: false} },
-		"hysteria":      func() any { return new(HysteriaServerConfig) },
-		"masque":        func() any { return new(MasqueServerConfig) },
-		"tun":           func() any { return new(TunConfig) },
-	}, "protocol", "settings")
+	inboundConfigLoader = NewJSONConfigLoader(ConfigFactories{
+		"tunnel":        func() Buildable { return new(DokodemoConfig) },
+		"dokodemo-door": func() Buildable { return new(DokodemoConfig) },
+		"http":          func() Buildable { return new(HTTPServerConfig) },
+		"shadowsocks":   func() Buildable { return new(ShadowsocksServerConfig) },
+		"mixed":         func() Buildable { return new(SocksServerConfig) },
+		"socks":         func() Buildable { return new(SocksServerConfig) },
+		"vless":         func() Buildable { return new(VLessInboundConfig) },
+		"vmess":         func() Buildable { return new(VMessInboundConfig) },
+		"trojan":        func() Buildable { return new(TrojanServerConfig) },
+		"wireguard":     func() Buildable { return &WireGuardConfig{IsClient: false} },
+		"hysteria":      func() Buildable { return new(HysteriaServerConfig) },
+		"masque":        func() Buildable { return new(MasqueServerConfig) },
+		"tun":           func() Buildable { return new(TunConfig) },
+	}, "protocol")
 
-	outboundConfigLoader = NewJSONConfigLoader(ConfigCreatorCache{
-		"block":       func() any { return new(BlackholeConfig) },
-		"blackhole":   func() any { return new(BlackholeConfig) },
-		"loopback":    func() any { return new(LoopbackConfig) },
-		"direct":      func() any { return new(FreedomConfig) },
-		"freedom":     func() any { return new(FreedomConfig) },
-		"http":        func() any { return new(HTTPClientConfig) },
-		"shadowsocks": func() any { return new(ShadowsocksClientConfig) },
-		"socks":       func() any { return new(SocksClientConfig) },
-		"vless":       func() any { return new(VLessOutboundConfig) },
-		"vmess":       func() any { return new(VMessOutboundConfig) },
-		"trojan":      func() any { return new(TrojanClientConfig) },
-		"hysteria":    func() any { return new(HysteriaClientConfig) },
-		"masque":      func() any { return new(MasqueClientConfig) },
-		"dns":         func() any { return new(DNSOutboundConfig) },
-		"wireguard":   func() any { return &WireGuardConfig{IsClient: true} },
-	}, "protocol", "settings")
+	outboundConfigLoader = NewJSONConfigLoader(ConfigFactories{
+		"block":       func() Buildable { return new(BlackholeConfig) },
+		"blackhole":   func() Buildable { return new(BlackholeConfig) },
+		"loopback":    func() Buildable { return new(LoopbackConfig) },
+		"direct":      func() Buildable { return new(FreedomConfig) },
+		"freedom":     func() Buildable { return new(FreedomConfig) },
+		"http":        func() Buildable { return new(HTTPClientConfig) },
+		"shadowsocks": func() Buildable { return new(ShadowsocksClientConfig) },
+		"socks":       func() Buildable { return new(SocksClientConfig) },
+		"vless":       func() Buildable { return new(VLessOutboundConfig) },
+		"vmess":       func() Buildable { return new(VMessOutboundConfig) },
+		"trojan":      func() Buildable { return new(TrojanClientConfig) },
+		"hysteria":    func() Buildable { return new(HysteriaClientConfig) },
+		"masque":      func() Buildable { return new(MasqueClientConfig) },
+		"dns":         func() Buildable { return new(DNSOutboundConfig) },
+		"wireguard":   func() Buildable { return &WireGuardConfig{IsClient: true} },
+	}, "protocol")
 )
 
 type SniffingConfig struct {
@@ -206,7 +206,7 @@ func (c *InboundDetourConfig) Build() (*core.InboundHandlerConfig, error) {
 	if dokodemoConfig, ok := rawConfig.(*DokodemoConfig); ok {
 		receiverSettings.ReceiveOriginalDestination = dokodemoConfig.FollowRedirect
 	}
-	ts, err := rawConfig.(Buildable).Build()
+	ts, err := rawConfig.Build()
 	if err != nil {
 		return nil, errors.New("failed to build inbound handler for protocol ", c.Protocol).Base(err)
 	}
@@ -391,7 +391,7 @@ func (c *OutboundDetourConfig) Build() (*core.OutboundHandlerConfig, error) {
 	if err != nil {
 		return nil, errors.New("failed to load outbound detour config for protocol ", c.Protocol).Base(err)
 	}
-	ts, err := rawConfig.(Buildable).Build()
+	ts, err := rawConfig.Build()
 	if err != nil {
 		return nil, errors.New("failed to build outbound handler for protocol ", c.Protocol).Base(err)
 	}
