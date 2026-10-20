@@ -3,7 +3,6 @@ package conf
 import (
 	"context"
 	"encoding/json"
-	"maps"
 	"os"
 	"path/filepath"
 	"strings"
@@ -448,10 +447,6 @@ func (c *StatsConfig) Build() (*stats.Config, error) {
 
 type EnvConfig map[string]string
 
-func (c EnvConfig) Override(o EnvConfig) {
-	maps.Copy(c, o)
-}
-
 type Config struct {
 	// Deprecated: Global transport config is no longer used
 	// left for returning error
@@ -472,119 +467,6 @@ type Config struct {
 	Observatory      *ObservatoryConfig      `json:"observatory"`
 	BurstObservatory *BurstObservatoryConfig `json:"burstObservatory"`
 	Geodata          *GeodataConfig          `json:"geodata"`
-}
-
-func (c *Config) findInboundTag(tag string) int {
-	found := -1
-	for idx, ib := range c.InboundConfigs {
-		if ib.Tag == tag {
-			found = idx
-			break
-		}
-	}
-	return found
-}
-
-func (c *Config) findOutboundTag(tag string) int {
-	found := -1
-	for idx, ob := range c.OutboundConfigs {
-		if ob.Tag == tag {
-			found = idx
-			break
-		}
-	}
-	return found
-}
-
-// Override method accepts another Config overrides the current attribute
-func (c *Config) Override(o *Config, fn string) {
-	// only process the non-deprecated members
-
-	if o.LogConfig != nil {
-		c.LogConfig = o.LogConfig
-	}
-	if o.RouterConfig != nil {
-		c.RouterConfig = o.RouterConfig
-	}
-	if o.DNSConfig != nil {
-		c.DNSConfig = o.DNSConfig
-	}
-	if o.Transport != nil {
-		c.Transport = o.Transport
-	}
-	if o.Env != nil {
-		if c.Env == nil {
-			c.Env = EnvConfig{}
-		}
-		c.Env.Override(o.Env)
-	}
-	if o.Policy != nil {
-		c.Policy = o.Policy
-	}
-	if o.API != nil {
-		c.API = o.API
-	}
-	if o.Metrics != nil {
-		c.Metrics = o.Metrics
-	}
-	if o.Stats != nil {
-		c.Stats = o.Stats
-	}
-	if o.Reverse != nil {
-		c.Reverse = o.Reverse
-	}
-
-	if o.FakeDNS != nil {
-		c.FakeDNS = o.FakeDNS
-	}
-
-	if o.Observatory != nil {
-		c.Observatory = o.Observatory
-	}
-
-	if o.BurstObservatory != nil {
-		c.BurstObservatory = o.BurstObservatory
-	}
-
-	if o.Geodata != nil {
-		c.Geodata = o.Geodata
-	}
-
-	// update the Inbound in slice if the only one in override config has same tag
-	if len(o.InboundConfigs) > 0 {
-		for i := range o.InboundConfigs {
-			if idx := c.findInboundTag(o.InboundConfigs[i].Tag); idx > -1 {
-				c.InboundConfigs[idx] = o.InboundConfigs[i]
-				errors.LogInfo(context.Background(), "[", fn, "] updated inbound with tag: ", o.InboundConfigs[i].Tag)
-
-			} else {
-				c.InboundConfigs = append(c.InboundConfigs, o.InboundConfigs[i])
-				errors.LogInfo(context.Background(), "[", fn, "] appended inbound with tag: ", o.InboundConfigs[i].Tag)
-			}
-		}
-	}
-
-	// update the Outbound in slice if the only one in override config has same tag
-	if len(o.OutboundConfigs) > 0 {
-		outboundPrepends := []OutboundDetourConfig{}
-		for i := range o.OutboundConfigs {
-			if idx := c.findOutboundTag(o.OutboundConfigs[i].Tag); idx > -1 {
-				c.OutboundConfigs[idx] = o.OutboundConfigs[i]
-				errors.LogInfo(context.Background(), "[", fn, "] updated outbound with tag: ", o.OutboundConfigs[i].Tag)
-			} else {
-				if strings.Contains(strings.ToLower(fn), "tail") {
-					c.OutboundConfigs = append(c.OutboundConfigs, o.OutboundConfigs[i])
-					errors.LogInfo(context.Background(), "[", fn, "] appended outbound with tag: ", o.OutboundConfigs[i].Tag)
-				} else {
-					outboundPrepends = append(outboundPrepends, o.OutboundConfigs[i])
-					errors.LogInfo(context.Background(), "[", fn, "] prepend outbound with tag: ", o.OutboundConfigs[i].Tag)
-				}
-			}
-		}
-		if !strings.Contains(strings.ToLower(fn), "tail") && len(outboundPrepends) > 0 {
-			c.OutboundConfigs = append(outboundPrepends, c.OutboundConfigs...)
-		}
-	}
 }
 
 // Build implements Buildable.

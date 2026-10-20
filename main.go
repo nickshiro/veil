@@ -12,12 +12,13 @@ import (
 	clog "github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/platform"
 	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/infra/conf/serial"
 	_ "github.com/nickshiro/veil/main/distro/all"
 )
 
 var (
 	configFile string
-	dump       = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
+	dump       = flag.Bool("dump", false, "Dump config only, without launching Xray server.")
 	test       = flag.Bool("test", false, "Test config file only, without launching Xray server.")
 )
 
@@ -56,8 +57,8 @@ func main() {
 }
 
 func dumpConfig() int {
-	files := getConfigFilePath(false)
-	config, err := core.GetMergedConfig(files)
+	file := getConfigFilePath(false)
+	config, err := serial.DumpConfig(file)
 	if err != nil {
 		fmt.Println(err)
 		return 1
@@ -102,7 +103,7 @@ func startXray() (core.Server, error) {
 
 	c, err := core.LoadConfig(configFile)
 	if err != nil {
-		return nil, errors.New("failed to load config files: [", configFile, "]").Base(err)
+		return nil, errors.New("failed to load config: ", configFile).Base(err)
 	}
 
 	server, err := core.New(c)

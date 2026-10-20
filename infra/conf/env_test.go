@@ -34,26 +34,3 @@ func TestRootEnvAppliesArbitraryValues(t *testing.T) {
 		t.Fatalf("env %q = %q, want empty", emptyKey, got)
 	}
 }
-
-func TestEnvConfigOverride(t *testing.T) {
-	base := EnvConfig{
-		"ONE": "one",
-		"TWO": "old",
-	}
-	override := EnvConfig{
-		"TWO":   "new",
-		"THREE": "three",
-	}
-	base.Override(override)
-
-	want := map[string]string{
-		"ONE":   "one",
-		"TWO":   "new",
-		"THREE": "three",
-	}
-	for key, value := range want {
-		if got := base[key]; got != value {
-			t.Fatalf("env %q = %q, want %q", key, got, value)
-		}
-	}
-}
