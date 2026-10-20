@@ -4,7 +4,6 @@ import (
 	"io"
 
 	"github.com/nickshiro/veil/common/errors"
-	"github.com/nickshiro/veil/common/serial"
 )
 
 // Config is the master config of Xray. Xray takes this config as input and
@@ -22,10 +21,6 @@ type Config struct {
 	// Constructors must treat them as read-only; callers must not mutate them
 	// while an instance is using them.
 	App []any `json:"app,omitempty"`
-	// Configuration for extensions. The config may not work if corresponding
-	// extension is not loaded into Xray. Xray will ignore such config during
-	// initialization.
-	Extension []*serial.TypedMessage `json:"extension,omitempty"`
 }
 
 type ConfigSource struct {
