@@ -10,6 +10,7 @@ import (
 
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/core"
+	"github.com/nickshiro/veil/infra/conf/serial"
 	_ "github.com/nickshiro/veil/main/distro/all"
 )
 
@@ -75,7 +76,7 @@ func startXray() (core.Server, error) {
 		return nil, err
 	}
 
-	c, err := core.LoadConfig(f)
+	c, err := serial.LoadJSONConfig(f)
 	if err != nil {
 		return nil, err
 	}

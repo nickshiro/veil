@@ -67,7 +67,4 @@ import (
 	// Transport headers
 	_ "github.com/nickshiro/veil/transport/internet/headers/http"
 	_ "github.com/nickshiro/veil/transport/internet/headers/noop"
-
-	// JSON
-	_ "github.com/nickshiro/veil/main/json"
 )
