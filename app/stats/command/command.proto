@@ -91,5 +91,3 @@ service StatsService {
   rpc GetAllOnlineUsers(GetAllOnlineUsersRequest) returns (GetAllOnlineUsersResponse) {}
   rpc GetUsersStats(GetUsersStatsRequest) returns (GetUsersStatsResponse) {}
 }
-
-message Config {}

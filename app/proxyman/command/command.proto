@@ -104,5 +104,3 @@ service HandlerService {
 
   rpc ListOutbounds(ListOutboundsRequest) returns (ListOutboundsResponse) {}
 }
-
-message Config {}

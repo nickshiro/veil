@@ -19,6 +19,3 @@ service ObservatoryService {
   rpc GetOutboundStatus(GetOutboundStatusRequest)
       returns (GetOutboundStatusResponse) {}
 }
-
-
-message Config {}

@@ -128,5 +128,3 @@ service RoutingService {
 
   rpc ListRule(ListRuleRequest) returns (ListRuleResponse) {}
 }
-
-message Config {}
