@@ -23,6 +23,9 @@ import (
 )
 
 func init() {
+	flag.Var(&configFiles, "config", "Config path for Xray.")
+	flag.Var(&configFiles, "c", "Short alias of -config")
+	flag.StringVar(&configDir, "confdir", "", "A dir with multiple json config")
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
 }
 
@@ -31,17 +34,6 @@ var (
 	configDir   string
 	dump        = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
 	test        = flag.Bool("test", false, "Test config file only, without launching Xray server.")
-
-	/* We have to do this here because Golang's Test will also need to parse flag, before
-	 * main func in this file is run.
-	 */
-	_ = func() bool {
-		flag.Var(&configFiles, "config", "Config path for Xray.")
-		flag.Var(&configFiles, "c", "Short alias of -config")
-		flag.StringVar(&configDir, "confdir", "", "A dir with multiple json config")
-
-		return true
-	}()
 )
 
 func main() {
