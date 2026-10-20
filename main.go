@@ -6,10 +6,8 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"syscall"
 
-	"github.com/nickshiro/veil/common/cmdarg"
 	"github.com/nickshiro/veil/common/errors"
 	clog "github.com/nickshiro/veil/common/log"
 	"github.com/nickshiro/veil/common/platform"
@@ -18,15 +16,15 @@ import (
 )
 
 var (
-	configFiles cmdarg.Arg // "Config file for Xray.", the option is customed type, parse in main
-	dump        = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
-	test        = flag.Bool("test", false, "Test config file only, without launching Xray server.")
+	configFile string
+	dump       = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
+	test       = flag.Bool("test", false, "Test config file only, without launching Xray server.")
 )
 
 func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
-	flag.Var(&configFiles, "config", "Config path for Xray.")
-	flag.Var(&configFiles, "c", "Short alias of -config")
+	flag.StringVar(&configFile, "config", "", "Config path for Xray.")
+	flag.StringVar(&configFile, "c", "", "Short alias of -config")
 	flag.Parse()
 
 	if *dump {
@@ -73,40 +71,38 @@ func fileExists(file string) bool {
 	return err == nil && !info.IsDir()
 }
 
-func getConfigFilePath(verbose bool) cmdarg.Arg {
-	if len(configFiles) > 0 {
-		return configFiles
+func getConfigFilePath(verbose bool) string {
+	if configFile != "" {
+		return configFile
 	}
 
-	if workingDir, err := os.Getwd(); err == nil {
-		configFile := filepath.Join(workingDir, "config.json")
-		if fileExists(configFile) {
-			if verbose {
-				log.Println("Using default config: ", configFile)
-			}
-			return cmdarg.Arg{configFile}
+	configFile = "config.json"
+	if fileExists(configFile) {
+		if verbose {
+			log.Println("Using default config: ", configFile)
 		}
+		return configFile
 	}
 
-	if configFile := platform.GetConfigurationPath(); fileExists(configFile) {
+	if configFile = platform.GetConfigurationPath(); fileExists(configFile) {
 		if verbose {
 			log.Println("Using config from env: ", configFile)
 		}
-		return cmdarg.Arg{configFile}
+		return configFile
 	}
 
 	if verbose {
 		log.Println("Using config from STDIN")
 	}
-	return cmdarg.Arg{"stdin:"}
+	return "stdin:"
 }
 
 func startXray() (core.Server, error) {
-	configFiles := getConfigFilePath(true)
+	configFile := getConfigFilePath(true)
 
-	c, err := core.LoadConfig(configFiles)
+	c, err := core.LoadConfig(configFile)
 	if err != nil {
-		return nil, errors.New("failed to load config files: [", configFiles.String(), "]").Base(err)
+		return nil, errors.New("failed to load config files: [", configFile, "]").Base(err)
 	}
 
 	server, err := core.New(c)

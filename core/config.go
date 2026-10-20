@@ -3,7 +3,6 @@ package core
 import (
 	"io"
 
-	"github.com/nickshiro/veil/common/cmdarg"
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/serial"
 )
@@ -45,24 +44,20 @@ var (
 	ConfigMergedFormFiles ConfigsMerger
 )
 
-func GetMergedConfig(args cmdarg.Arg) (string, error) {
+func GetMergedConfig(file string) (string, error) {
 	var files []*ConfigSource
-	for _, file := range args {
-		files = append(files, &ConfigSource{
-			Name: file,
-		})
-	}
+	files = append(files, &ConfigSource{
+		Name: file,
+	})
 	return ConfigMergedFormFiles(files)
 }
 
 func LoadConfig(input interface{}) (*Config, error) {
 	switch v := input.(type) {
-	case cmdarg.Arg:
-		files := make([]*ConfigSource, len(v))
-		for i, file := range v {
-			files[i] = &ConfigSource{
-				Name: file,
-			}
+	case string:
+		files := make([]*ConfigSource, 1)
+		files[0] = &ConfigSource{
+			Name: v,
 		}
 
 		// to avoid import cycle
