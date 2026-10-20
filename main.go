@@ -20,9 +20,11 @@ var (
 
 func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
-	flag.StringVar(&configFile, "config", "", "Config path for Xray.")
-	flag.StringVar(&configFile, "c", "", "Short alias of -config")
 	flag.Parse()
+
+	if flag.NArg() >= 1 {
+		configFile = flag.Arg(0)
+	}
 
 	server, err := startXray()
 	if err != nil {
