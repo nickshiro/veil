@@ -2,8 +2,6 @@ package core
 
 import (
 	"io"
-	"slices"
-	"strings"
 
 	"github.com/nickshiro/veil/common/cmdarg"
 	"github.com/nickshiro/veil/common/errors"
@@ -28,20 +26,12 @@ type Config struct {
 	Extension []*serial.TypedMessage `json:"extension,omitempty"`
 }
 
-// ConfigFormat is a configurable format of Xray config file.
-type ConfigFormat struct {
-	Name      string
-	Extension []string
-	Loader    ConfigLoader
-}
-
 type ConfigSource struct {
-	Name   string
-	Format string
+	Name string
 }
 
 // ConfigLoader is a utility to load Xray config from external source.
-type ConfigLoader func(input interface{}) (*Config, error)
+type configLoader func(input interface{}) (*Config, error)
 
 // ConfigBuilder is a builder to build core.Config from filenames and formats
 type ConfigBuilder func(files []*ConfigSource) (*Config, error)
@@ -50,101 +40,35 @@ type ConfigBuilder func(files []*ConfigSource) (*Config, error)
 type ConfigsMerger func(files []*ConfigSource) (string, error)
 
 var (
-	configLoaderByName    = make(map[string]*ConfigFormat)
-	configLoaderByExt     = make(map[string]*ConfigFormat)
+	ConfigLoader          configLoader
 	ConfigBuilderForFiles ConfigBuilder
 	ConfigMergedFormFiles ConfigsMerger
 )
 
-// RegisterConfigLoader add a new ConfigLoader.
-func RegisterConfigLoader(format *ConfigFormat) error {
-	name := strings.ToLower(format.Name)
-	if _, found := configLoaderByName[name]; found {
-		return errors.New(format.Name, " already registered.")
-	}
-	configLoaderByName[name] = format
-
-	for _, ext := range format.Extension {
-		lext := strings.ToLower(ext)
-		if f, found := configLoaderByExt[lext]; found {
-			return errors.New(ext, " already registered to ", f.Name)
-		}
-		configLoaderByExt[lext] = format
-	}
-
-	return nil
-}
-
 func GetMergedConfig(args cmdarg.Arg) (string, error) {
 	var files []*ConfigSource
-	supported := []string{"json"}
 	for _, file := range args {
-		format := "json"
-		if file != "stdin:" {
-			format = GetFormat(file)
-		}
-
-		if slices.Contains(supported, format) {
-			files = append(files, &ConfigSource{
-				Name:   file,
-				Format: format,
-			})
-		}
+		files = append(files, &ConfigSource{
+			Name: file,
+		})
 	}
 	return ConfigMergedFormFiles(files)
 }
 
-func GetFormatByExtension(ext string) string {
-	return "json"
-}
-
-func getExtension(filename string) string {
-	idx := strings.LastIndexByte(filename, '.')
-	if idx == -1 {
-		return ""
-	}
-	return filename[idx+1:]
-}
-
-func GetFormat(filename string) string {
-	return GetFormatByExtension(getExtension(filename))
-}
-
-func LoadConfig(formatName string, input interface{}) (*Config, error) {
+func LoadConfig(input interface{}) (*Config, error) {
 	switch v := input.(type) {
 	case cmdarg.Arg:
 		files := make([]*ConfigSource, len(v))
 		for i, file := range v {
-			var f string
-
-			if formatName == "auto" {
-				if file != "stdin:" {
-					f = GetFormat(file)
-				} else {
-					f = "json"
-				}
-			} else {
-				f = formatName
-			}
-
-			if f == "" {
-				return nil, errors.New("Failed to get format of ", file)
-			}
-
 			files[i] = &ConfigSource{
-				Name:   file,
-				Format: f,
+				Name: file,
 			}
 		}
 
 		// to avoid import cycle
 		return ConfigBuilderForFiles(files)
 	case io.Reader:
-		if f, found := configLoaderByName[formatName]; found {
-			return f.Loader(v)
-		} else {
-			return nil, errors.New("Unable to load config in", formatName)
-		}
+		return ConfigLoader(v)
 	}
 
 	return nil, errors.New("Unable to load config")

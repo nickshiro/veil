@@ -22,10 +22,8 @@ func CreateObject(v *Instance, config interface{}) (interface{}, error) {
 }
 
 // StartInstance starts a new Xray instance with given serialized config.
-// The config format must be registered by the caller, e.g. by loading the
-// main/json package to support JSON config.
-func StartInstance(configFormat string, configBytes []byte) (*Instance, error) {
-	config, err := LoadConfig(configFormat, bytes.NewReader(configBytes))
+func StartInstance(configBytes []byte) (*Instance, error) {
+	config, err := LoadConfig(bytes.NewReader(configBytes))
 	if err != nil {
 		return nil, err
 	}

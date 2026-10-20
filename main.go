@@ -31,7 +31,6 @@ var (
 	configDir   string
 	dump        = flag.Bool("dump", false, "Dump merged config only, without launching Xray server.")
 	test        = flag.Bool("test", false, "Test config file only, without launching Xray server.")
-	format      = flag.String("format", "auto", "Format of input file.")
 
 	/* We have to do this here because Golang's Test will also need to parse flag, before
 	 * main func in this file is run.
@@ -171,18 +170,10 @@ func getConfigFilePath(verbose bool) cmdarg.Arg {
 	return cmdarg.Arg{"stdin:"}
 }
 
-func getConfigFormat() string {
-	f := core.GetFormatByExtension(*format)
-	if f == "" {
-		f = "auto"
-	}
-	return f
-}
-
 func startXray() (core.Server, error) {
 	configFiles := getConfigFilePath(true)
 
-	c, err := core.LoadConfig(getConfigFormat(), configFiles)
+	c, err := core.LoadConfig(configFiles)
 	if err != nil {
 		return nil, errors.New("failed to load config files: [", configFiles.String(), "]").Base(err)
 	}
