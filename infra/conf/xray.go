@@ -471,7 +471,6 @@ type Config struct {
 	FakeDNS          *FakeDNSConfig          `json:"fakeDns"`
 	Observatory      *ObservatoryConfig      `json:"observatory"`
 	BurstObservatory *BurstObservatoryConfig `json:"burstObservatory"`
-	Version          *VersionConfig          `json:"version"`
 	Geodata          *GeodataConfig          `json:"geodata"`
 }
 
@@ -545,10 +544,6 @@ func (c *Config) Override(o *Config, fn string) {
 
 	if o.BurstObservatory != nil {
 		c.BurstObservatory = o.BurstObservatory
-	}
-
-	if o.Version != nil {
-		c.Version = o.Version
 	}
 
 	if o.Geodata != nil {
@@ -692,14 +687,6 @@ func (c *Config) Build() (*core.Config, error) {
 		r, err := c.BurstObservatory.Build()
 		if err != nil {
 			return nil, errors.New("failed to build burst observatory configuration").Base(err)
-		}
-		config.App = append(config.App, serial.ToTypedMessage(r))
-	}
-
-	if c.Version != nil {
-		r, err := c.Version.Build()
-		if err != nil {
-			return nil, errors.New("failed to build version configuration").Base(err)
 		}
 		config.App = append(config.App, serial.ToTypedMessage(r))
 	}

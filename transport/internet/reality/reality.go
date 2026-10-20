@@ -28,7 +28,6 @@ import (
 	"github.com/nickshiro/veil/common/errors"
 	"github.com/nickshiro/veil/common/net"
 	"github.com/nickshiro/veil/common/utils"
-	"github.com/nickshiro/veil/core"
 	"github.com/nickshiro/veil/transport/internet/tls"
 	utls "github.com/refraction-networking/utls"
 	"github.com/xtls/reality"
@@ -139,6 +138,12 @@ func (c *UConn) VerifyPeerCertificate(rawCerts [][]byte, verifiedChains [][]*x50
 	return nil
 }
 
+// realityClientVersion is the client version advertised in the REALITY
+// session ID. This is part of the REALITY wire protocol, checked against
+// server-side minClientVer/maxClientVer.
+// TODO(arkriny): investigate server-side check and see if this can be removed
+var realityClientVersion = [3]byte{26, 10, 17}
+
 func UClient(c net.Conn, config *Config, ctx context.Context, dest net.Destination) (net.Conn, error) {
 	localAddr := c.LocalAddr().String()
 	uConn := &UConn{
@@ -165,9 +170,7 @@ func UClient(c net.Conn, config *Config, ctx context.Context, dest net.Destinati
 		hello := uConn.HandshakeState.Hello
 		hello.SessionId = make([]byte, 32)
 		copy(hello.Raw[39:], hello.SessionId) // the fixed location of `Session ID`
-		hello.SessionId[0] = core.Version_x
-		hello.SessionId[1] = core.Version_y
-		hello.SessionId[2] = core.Version_z
+		copy(hello.SessionId[:3], realityClientVersion[:])
 		hello.SessionId[3] = 0 // reserved
 		binary.BigEndian.PutUint32(hello.SessionId[4:], uint32(time.Now().Unix()))
 		copy(hello.SessionId[8:], config.ShortId)
