@@ -479,13 +479,28 @@ func (c *Config) Build() (*core.Config, error) {
 
 	normalizeFakeDNS(c)
 
-	config := &core.Config{
-		App: []any{
-			&dispatcher.Config{},
-			&proxyman.InboundConfig{},
-			&proxyman.OutboundConfig{},
-		},
+	config := &core.Config{}
+
+	// Keep the runtime feature order explicit: FakeDNS, logger, then managers and services.
+	if c.FakeDNS != nil {
+		r, err := c.FakeDNS.Build()
+		if err != nil {
+			return nil, errors.New("failed to build fake DNS configuration").Base(err)
+		}
+		config.App = append(config.App, r)
 	}
+
+	var logConfMsg *log.Config
+	if c.LogConfig != nil {
+		logConfMsg = c.LogConfig.Build()
+	} else {
+		logConfMsg = DefaultLogConfig()
+	}
+	config.App = append(config.App, logConfMsg,
+		&dispatcher.Config{},
+		&proxyman.InboundConfig{},
+		&proxyman.OutboundConfig{},
+	)
 
 	if c.Metrics != nil {
 		metricsConf, err := c.Metrics.Build()
@@ -501,16 +516,6 @@ func (c *Config) Build() (*core.Config, error) {
 		}
 		config.App = append(config.App, statsConf)
 	}
-
-	var logConfMsg *log.Config
-	if c.LogConfig != nil {
-		logConfMsg = c.LogConfig.Build()
-	} else {
-		logConfMsg = DefaultLogConfig()
-	}
-	// let logger module be the first App to start,
-	// so that other modules could print log during initiating
-	config.App = append([]any{logConfMsg}, config.App...)
 
 	if c.RouterConfig != nil {
 		routerConfig, err := c.RouterConfig.Build()
@@ -543,14 +548,6 @@ func (c *Config) Build() (*core.Config, error) {
 		return nil, errors.PrintRemovedFeatureError(`"api" management service`, `no management gRPC API`)
 	}
 
-	if c.FakeDNS != nil {
-		r, err := c.FakeDNS.Build()
-		if err != nil {
-			return nil, errors.New("failed to build fake DNS configuration").Base(err)
-		}
-		config.App = append([]any{r}, config.App...)
-	}
-
 	if c.Observatory != nil {
 		r, err := c.Observatory.Build()
 		if err != nil {
@@ -575,17 +572,11 @@ func (c *Config) Build() (*core.Config, error) {
 		config.App = append(config.App, r)
 	}
 
-	var inbounds []InboundDetourConfig
-
-	if len(c.InboundConfigs) > 0 {
-		inbounds = append(inbounds, c.InboundConfigs...)
-	}
-
 	if len(c.Transport) > 0 {
 		return nil, errors.PrintRemovedFeatureError("Global transport config", "streamSettings in inbounds and outbounds")
 	}
 
-	for _, rawInboundConfig := range inbounds {
+	for _, rawInboundConfig := range c.InboundConfigs {
 		ic, err := rawInboundConfig.Build()
 		if err != nil {
 			return nil, errors.New("failed to build inbound config with tag ", rawInboundConfig.Tag).Base(err)
@@ -593,13 +584,7 @@ func (c *Config) Build() (*core.Config, error) {
 		config.Inbound = append(config.Inbound, ic)
 	}
 
-	var outbounds []OutboundDetourConfig
-
-	if len(c.OutboundConfigs) > 0 {
-		outbounds = append(outbounds, c.OutboundConfigs...)
-	}
-
-	for _, rawOutboundConfig := range outbounds {
+	for _, rawOutboundConfig := range c.OutboundConfigs {
 		oc, err := rawOutboundConfig.Build()
 		if err != nil {
 			return nil, errors.New("failed to build outbound config with tag ", rawOutboundConfig.Tag).Base(err)
