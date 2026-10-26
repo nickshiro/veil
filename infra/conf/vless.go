@@ -104,6 +104,9 @@ func (c *VLessInboundConfig) Build() (proto.Message, error) {
 	}
 
 	config.Decryption = c.Decryption
+	if config.Decryption == "" {
+		config.Decryption = "none"
+	}
 	if !func() bool {
 		s := strings.Split(config.Decryption, ".")
 		if len(s) < 4 || s[0] != "mlkem768x25519plus" {
@@ -148,9 +151,6 @@ func (c *VLessInboundConfig) Build() (proto.Message, error) {
 		}
 		return true
 	}() && config.Decryption != "none" {
-		if config.Decryption == "" {
-			return nil, errors.New(`VLESS settings: please add/set "decryption":"none" to every settings`)
-		}
 		return nil, errors.New(`VLESS settings: unsupported "decryption": ` + config.Decryption)
 	}
 
