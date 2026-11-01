@@ -333,6 +333,9 @@ func (c *VLessOutboundConfig) Build() (proto.Message, error) {
 				return nil, errors.New(`VLESS users: "flow" doesn't support "` + account.Flow + `" in this version`)
 			}
 
+			if account.Encryption == "" {
+				account.Encryption = "none"
+			}
 			if !func() bool {
 				s := strings.Split(account.Encryption, ".")
 				if len(s) < 4 || s[0] != "mlkem768x25519plus" {
@@ -371,9 +374,6 @@ func (c *VLessOutboundConfig) Build() (proto.Message, error) {
 				}
 				return true
 			}() && account.Encryption != "none" {
-				if account.Encryption == "" {
-					return nil, errors.New(`VLESS users: please add/set "encryption":"none" for every user`)
-				}
 				return nil, errors.New(`VLESS users: unsupported "encryption": ` + account.Encryption)
 			}
 
